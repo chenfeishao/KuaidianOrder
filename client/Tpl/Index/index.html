@@ -1,41 +1,252 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-cn">
-<head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-<meta name="author" content="Topthink - <www.thinkphp.cn>" />
-<meta name="Copyright" content="Topthink - <www.topthink.com>" />
-<meta name="description" content="ThinkPHP启动成功欢迎页" />
-<title>^_^  Hello 欢迎使用ThinkPHP!</title>
-<style>
-body{font:400 14px/25px 'Microsoft Yahei',Tahoma,sans-serif;background:#fff;}
-a{text-decoration:none; color:#174B73; padding:0 5px;}
-a:hover{color:#f60;}
-img{border:0}
-em,i {font-style:normal;}
-h1{border-bottom:1px solid #ddd;padding:10px 0;}
-h2{font-size:14px;padding:10px;color:#06f;border:1px solid #e0e0e0;background:#ffd;}
-em{color:red}
-.hello{width:600px;height:100%;padding:10px; margin:50px auto 0; border:1px solid #ddd;overflow:hidden;}
-.link{float:right;}
-.copyright{clear:both;text-align:center;margin-top:10px;}
-.copyright i{color:silver;}
-.copyright sup{font-size:9pt;color:#666;}
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/css/docs.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/js/prettify/prettify.css" rel="stylesheet">
+
+    <!-- Load JavaScript Libraries -->
+    <script src="__PUBLIC__/metro/js/jquery/jquery.min.js"></script>
+    <script src="__PUBLIC__/metro/js/jquery/jquery.widget.min.js"></script>
+    <script src="__PUBLIC__/metro/js/jquery/jquery.mousewheel.js"></script>
+    <script src="__PUBLIC__/metro/js/prettify/prettify.js"></script>
+
+    <!-- Metro UI CSS JavaScript plugins -->
+    <script src="__PUBLIC__/metro/js/load-metro.js"></script>
+    <script src="__PUBLIC__/metro/js/metro/metro-live-tile.js"></script>
+
+    <!-- Local JavaScript -->
+    <script src="__PUBLIC__/metro/js/docs.js"></script>
+    <script src="__PUBLIC__/metro/js/start-screen.js"></script>
+
+    <title>EasyOrder</title>
 </head>
-<body>
-    <div class="hello">
-        <h1><a href="http://thinkphp.cn" target="_blank"  title=""><img src="__APP__/4e5e5d7364f443e28fbf0d3ae744a59a" style=" vertical-align: middle;" />  ThinkPHP </a></h1>
-        <h2><em>^_^</em> Hello &nbsp;&nbsp;欢迎使用ThinkPHP!
-		</h2>
-        <div class="link">
-           [<a href="http://thinkphpsae.sinaapp.com/readme.html" target="_blank" title="">说明文档</a>] [<a href="__URL__/imit" target="_blank" title="">SAE本地环境模拟</a>] [<a href="__URL__/pinghua" target="_blank" title="">平滑性测试</a>] [<a href="__URL__/new_features" target="_blank" title="">新功能测试</a>] [<a href="http://www.thinkphp.cn/" target="_blank" title="">官方网站</a>]  
+<body class="metro">
+<div class="tile-area tile-area-dark">
+    <h1 class="tile-area-title fg-white">欢迎</h1>
+
+    <div class="user-id" id="createLoginWindow">
+        <div class="user-id-image">
+            <if condition="$Think.session.userName eq NULL "><span class="icon-user no-display1"></span>
+			<else/><img src="__PUBLIC__/metro/images/Battlefield_4_Icon.png">
+			</if>
+        </div>
+        <div class="user-id-name">
+            <span class="first-name">
+           	    <if condition="$Think.session.userName eq NULL ">未登录
+   				<else/>{$Think.session.userName}
+   				</if>
+    		</span>
+            <span class="last-name">
+            	<if condition="$Think.session.userPower eq NULL "> 
+   				<else/>{$Think.session.userPower}
+   				</if>
+            </span>
         </div>
     </div>
-    <p class="copyright">
-	注意：你安装的是ThinkPHP{$Think.CONST.THINK_VERSION}版本如果想使用其他版本，请到ThinkPHP官方网站进行下载。<br />
-	<em>ThinkPHP</em>&nbsp;<sup>{$Think.CONST.THINK_VERSION}</sup>&nbsp;<i class="slogan">{  WE CAN DO IT JUST THINK IT }</i><a href="http://sae.sina.com.cn" target="_blank"><img src="http://static.sae.sina.com.cn/image/poweredby/117X12px.gif" title="Powered by Sina App Engine"></a></p>
+	<script>
+	    $(function(){
+	        $("#createLoginWindow").on('click', function(){
+	            $.Dialog({
+	                overlay: true,
+	                shadow: true,
+	                flat: true,
+	                draggable: true,
+	                icon: '<span class="icon-windows"/>',
+	                title: 'Flat window',
+	                content: '',
+	                padding: 10,
+	                onShow: function(_dialog){
+	                    var content = '<form class="user-input" method="post" action="{:U("User/toLogin")}">' +
+	                            '<label>用户名</label>' +
+	                            '<div class="input-control text"><input type="text" name="userName"><button class="btn-clear"></button></div>' +
+	                            '<label>密码</label>'+
+	                            '<div class="input-control password"><input type="password" name="userPassword"><button class="btn-reveal"></button></div>' +
+	                            '<div class="input-control checkbox"><label>请输入用户名和密码</label></div>'+
+	                            '<div class="form-actions">' +
+	                            '<button class="button primary">登录</button>&nbsp;'+
+	                            '<button class="button" type="button" onclick="$.Dialog.close()">取消</button> '+
+	                            '</div>'+
+	                            '</form>';
 	
-	</div>
+	                    $.Dialog.title("用户登录");
+	                    $.Dialog.content(content);
+	                }
+	            });
+	        });
+	    })
+	</script>
+
+    <div class="tile-group two">
+        <div class="tile-group-title">信息</div>
+
+        <a class="tile double bg-lightBlue live" data-role="live-tile" data-effect="slideUp">
+            <div class="tile-content email">
+                <div class="email-image">
+                    <img src="__PUBLIC__/metro/images/obama.jpg">
+                </div>
+                <div class="email-data">
+                    <span class="email-data-title">Barak Obama</span>
+                    <span class="email-data-subtitle">You're invited</span>
+                    <span>这是一个长很长很长很长的文本。</span>
+                </div>
+            </div>
+            <div class="tile-content email">
+                <div class="email-image">
+                    <img src="__PUBLIC__/metro/images/jolie.jpg">
+                </div>
+                <div class="email-data">
+                    <span class="email-data-title">Jolie &amp; Bred</span>
+                    <span class="email-data-subtitle">You're invited</span>
+                    <span class="email-data-text">I hope that you can make and make</span>
+                </div>
+            </div>
+            <div class="tile-content email">
+                <div class="email-image">
+                    <img src="__PUBLIC__/metro/images/shvarcenegger.jpg">
+                </div>
+                <div class="email-data">
+                    <span class="email-data-title">Arny</span>
+                    <span class="email-data-subtitle">You're invited</span>
+                    <span class="email-data-text">I hope that you can make and make</span>
+                </div>
+            </div>
+            <div class="brand">
+                <div class="label"><h3 class="no-margin fg-white"><span class="icon-newspaper"></span></h3></div>
+                <div class="badge">3</div>
+            </div>
+        </a> <!-- end tile -->
+	
+		<a href="#" class="tile double ribbed-amber">
+            <div class="tile-content icon">
+                <span class="icon-search"></span>
+            </div>
+            <div class="brand">
+                <div class="label">快速选择</div>
+            </div>
+        </a>
+        
+        <a href="#" class="tile bg-violet">
+            <div class="tile-content icon">
+                <span class="icon-basket"></span>
+            </div>
+            <div class="brand">
+                <div class="label">已下单的货物</div>
+            </div>
+        </a>
+
+        <a href="#" class="tile bg-darkOrange">
+            <div class="tile-content icon">
+                <span class="icon-help"></span>
+            </div>
+            <div class="brand">
+                <div class="label">关于</div>
+            </div>
+        </a>
+    </div> <!-- End group -->
+
+    <div class="tile-group six">
+        <div class="tile-group-title">货物清单</div>
+
+        <div class="tile double double-vertical image">
+            <div class="tile-content">
+                <img alt="" src="__PUBLIC__/metro/goodsImages/gurouxianglian.jpg">
+            </div>
+            <div class="brand bg-taupe">
+                <p class="text">南瓜饼</p>
+                <div class="badge">0</div>
+            </div>
+        </div>
+
+        <div class="tile image">
+            <div class="tile-content">
+                <img alt="" src="__PUBLIC__/metro/goodsImages/anjingmantou.jpg">
+            </div>
+            <div class="brand bg-orange">
+                <p class="text">安井馒头</p>
+                <div class="badge">10</div>
+            </div>
+        </div>
+
+        <div class="tile double image">
+            <div class="tile-content">
+                <img alt="" src="__PUBLIC__/metro/goodsImages/chizhong.jpg">
+            </div>
+            <div class="brand bg-red">
+                <p class="text">翅中</p>
+                <div class="badge">4</div>
+            </div>
+        </div>
+
+        <div class="tile bg-green">
+            <div class="tile-content icon">
+                <img src="__PUBLIC__/metro/goodsImages/nanguabing.jpg">
+            </div>
+            <div class="brand">
+                <span class="name">骨肉相连</span>
+            </div>
+        </div>
+
+        <a class="tile double bg-lightBlue">
+            <div class="tile-content email">
+                <div class="email-image">
+                    <img src="__PUBLIC__/metro/goodsImages/jizhua.jpg">
+                </div>
+                <div class="email-data">
+                    <span class="email-data-title">鸡爪</span>
+                    <span class="email-data-subtitle">50斤</span>
+                    <span class="email-data-text">9.6/斤bulabulabulabu</span>
+                </div>
+                 <div class="brand">
+                    <div class="label"><h3 class="no-margin fg-white"><span class="icon-heart"></span></h3></div>
+                    <div class="badge">3</div>
+                </div>
+            </div>
+        </a>
+
+        
+        <a href="#" class="tile bg-violet">
+            <div class="tile-content icon">
+                <span class="icon-tag"></span>
+            </div>
+            <div class="brand">
+                <div class="label">翅尖</div>
+            </div>
+        </a>
+
+        <a href="#" class="tile bg-yellow">
+            <div class="tile-content icon">
+                <span class="icon-cart"></span>
+            </div>
+            <div class="brand">
+                <div class="label">带鱼</div>
+            </div>
+        </a>
+
+        <a href="#" class="tile double bg-mauve">
+            <div class="tile-content icon">
+                <span class="icon-cart"></span>
+            </div>
+            <div class="brand">
+                <div class="label">虾仁</div>
+            </div>
+        </a>
+
+        <a href="#" class="tile quadro bg-darkGreen">
+            <div class="tile-content icon">
+                <span class="icon-tag"></span>
+            </div>
+            <div class="brand">
+                <div class="label">鱿鱼</div>
+            </div>
+        </a>
+    </div> <!-- End group -->
+
+</div>
+
 </body>
 </html>
