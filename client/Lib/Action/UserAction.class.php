@@ -43,6 +43,7 @@ class UserAction extends Action
     			default: $userPower = "普通账户";break;
     		}
     		session('userPower',$userPower);
+    		cookie('userName',$result[0]['userName']);
     		
     		$this->success('登陆成功',U('Index/index'));
     	}
@@ -63,6 +64,7 @@ class UserAction extends Action
     	//删除session
     	session('userName',null);
     	session('userPower',null);
+    	cookie('userName',null);
     
     	//再次判断session是否存在
     	if ( (session('?userName')) || (session('?userPower')) )

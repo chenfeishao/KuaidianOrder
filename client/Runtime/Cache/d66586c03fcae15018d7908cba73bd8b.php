@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
     <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
@@ -24,19 +23,85 @@
     <script src="__PUBLIC__/metro/js/start-screen.js"></script>
 
     <title>EasyOrder</title>
+    
+<script>
+//预先加载一遍
+$.get("__PUBLIC__/inputPanel.txt",function(data,status){
+	content = data;
+});
+
+
+$(function(){
+    $("#userWindows").on('click', function(){
+        if ( (getCookie('userName') == "") || (getCookie('userName') == null) )
+        {
+            $.Dialog({
+                shadow: true,
+                overlay: true,
+                draggable: true,
+                icon: '<span class="icon-windows"></span>',
+                title: '用户登录',
+                width: 400,
+                padding: 10,
+                onShow: function(){
+                    var content = '<form class="user-input" method="post" action="<?php echo U("User/toLogin");?>">' +
+                                '<label>用户名</label>' +
+                                '<div class="input-control text"><input type="text" name="userName"><button class="btn-clear"></button></div>' +
+                                '<label>密码</label>'+
+                                '<div class="input-control password"><input type="password" name="userPassword"><button class="btn-reveal"></button></div>' +
+                                '<div class="input-control checkbox"><label>请输入用户名和密码</label></div>'+
+                                '<div class="form-actions">' +
+                                '<button class="button primary">登录</button>&nbsp;'+
+                                '<button class="button" type="button" onclick="$.Dialog.close()">取消</button> '+
+                                '</div>'+
+                                '</form>';
+                    $.Dialog.content(content);
+                }
+            });
+        }
+        else
+        {
+            window.location='<?php echo U("User/logout");?>';
+        }
+    });
+    $(".six").on('click', function(){
+        if ( true )
+        {
+            $.Dialog({
+                shadow: true,
+                overlay: true,
+                draggable: true,
+                icon: '<span class="icon-cart"></span>',
+                title: '详细',
+                width: 800,
+                padding: 10,
+                onShow: function(){
+                	$.get("__PUBLIC__/inputPanel.txt",function(data,status){
+                		content = data;
+                	});
+                	$.Dialog.content(content);
+                }
+            });
+        }
+        else
+        {
+        }
+    });
+});
+</script>
 </head>
 <body class="metro">
 <div class="tile-area tile-area-dark">
     <h1 class="tile-area-title fg-white">欢迎</h1>
 
-    <div class="user-id" id="createLoginWindow">
+    <div class="user-id" id="userWindows">
         <div class="user-id-image">
             <?php if($_SESSION['userName']== NULL ): ?><span class="icon-user no-display1"></span>
 			<?php else: ?><img src="__PUBLIC__/metro/images/Battlefield_4_Icon.png"><?php endif; ?>
         </div>
         <div class="user-id-name">
             <span class="first-name">
-           	    <?php if($_SESSION['userName']== NULL ): ?>未登录
+           		<?php if($_SESSION['userName']== NULL ): ?>未登录
    				<?php else: echo (session('userName')); endif; ?>
     		</span>
             <span class="last-name">
@@ -44,38 +109,6 @@
             </span>
         </div>
     </div>
-	<script>
-	    $(function(){
-	        $("#createLoginWindow").on('click', function(){
-	            $.Dialog({
-	                overlay: true,
-	                shadow: true,
-	                flat: true,
-	                draggable: true,
-	                icon: '<span class="icon-windows"/>',
-	                title: 'Flat window',
-	                content: '',
-	                padding: 10,
-	                onShow: function(_dialog){
-	                    var content = '<form class="user-input" method="post" action="<?php echo U("User/toLogin");?>">' +
-	                            '<label>用户名</label>' +
-	                            '<div class="input-control text"><input type="text" name="userName"><button class="btn-clear"></button></div>' +
-	                            '<label>密码</label>'+
-	                            '<div class="input-control password"><input type="password" name="userPassword"><button class="btn-reveal"></button></div>' +
-	                            '<div class="input-control checkbox"><label>请输入用户名和密码</label></div>'+
-	                            '<div class="form-actions">' +
-	                            '<button class="button primary">登录</button>&nbsp;'+
-	                            '<button class="button" type="button" onclick="$.Dialog.close()">取消</button> '+
-	                            '</div>'+
-	                            '</form>';
-	
-	                    $.Dialog.title("用户登录");
-	                    $.Dialog.content(content);
-	                }
-	            });
-	        });
-	    })
-	</script>
 
     <div class="tile-group two">
         <div class="tile-group-title">信息</div>
@@ -243,6 +276,7 @@
     </div> <!-- End group -->
 
 </div>
+
 
 </body>
 </html>

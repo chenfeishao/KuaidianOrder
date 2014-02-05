@@ -1,0 +1,58 @@
+<div id="inputPanel">
+    <div>
+        <span><input id="output" type="text" class="outbutton" maxlength="9" value="." /></span>
+    </div>
+</div>
+<div class="tiles">
+    <div class="grid">
+        <div class="row">
+            <button class="shortcut primary" onclick="inputPanel.getKey('7');" data-click="transform">
+                <h1>7</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('8');" data-click="transform">
+                <h1>8</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('9');" data-click="transform">
+                <h1>9</h1>
+            </button>
+        </div>
+        <div class="row">
+             <button class="shortcut primary" onclick="inputPanel.getKey('4');" data-click="transform">
+                <h1>4</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('5');" data-click="transform">
+                <h1>5</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('6');" data-click="transform">
+                <h1>6</h1>
+            </button>
+        </div>
+        <div class="row">
+            <button class="shortcut primary" onclick="inputPanel.getKey('1');" data-click="transform">
+                <h1>1</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('2');" data-click="transform">
+                <h1>2</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('3');" data-click="transform">
+                <h1>3</h1>
+            </button>
+        </div>
+        <div class="row">
+            <button class="shortcut primary" onclick="inputPanel.getKey('0');" data-click="transform">
+                <h1>0</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('.');" data-click="transform">
+                <h1>.</h1>
+            </button>
+            <button class="shortcut primary" onclick="inputPanel.getKey('tuige');" data-click="transform">
+                <i style="font-size: 70px;" class="icon-backspace-2"></i>
+            </button>
+        </div>
+        <div class="row">
+            <button class="shortcut primary" onclick="inputPanel.getKey('c');" data-click="transform">
+                <h2>清零</h2>
+            </button>
+        </div>
+    </div>
+</div>
