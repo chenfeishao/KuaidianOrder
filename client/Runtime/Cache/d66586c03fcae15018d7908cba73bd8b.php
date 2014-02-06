@@ -21,15 +21,18 @@
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
     <script src="__PUBLIC__/metro/js/start-screen.js"></script>
-
     <title>EasyOrder</title>
-    
+
 <script>
 //预先加载一遍
 $.get("__PUBLIC__/inputPanel.txt",function(data,status){
 	content = data;
 });
 
+function go(str)
+{
+	window.location = str;
+}
 
 $(function(){
     $("#userWindows").on('click', function(){
@@ -64,6 +67,9 @@ $(function(){
             window.location='<?php echo U("User/logout");?>';
         }
     });
+    /*
+     * js inputPanel界面  废弃
+     *
     $(".six").on('click', function(){
         if ( true )
         {
@@ -87,6 +93,7 @@ $(function(){
         {
         }
     });
+    */
 });
 </script>
 </head>
@@ -181,7 +188,7 @@ $(function(){
     <div class="tile-group six">
         <div class="tile-group-title">货物清单</div>
 
-        <div class="tile double double-vertical image">
+        <div class="tile double double-vertical image" onclick='window.location = "<?php echo U("Goods/inputPanel","id=1");?>"'>
             <div class="tile-content">
                 <img alt="" src="__PUBLIC__/metro/goodsImages/gurouxianglian.jpg">
             </div>
