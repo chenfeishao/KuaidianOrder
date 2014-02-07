@@ -1,41 +1,70 @@
-<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-cn">
-<head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-<meta name="author" content="Topthink - <www.thinkphp.cn>" />
-<meta name="Copyright" content="Topthink - <www.topthink.com>" />
-<meta name="description" content="ThinkPHP启动成功欢迎页" />
-<title>^_^  Hello 欢迎使用ThinkPHP!</title>
-<style>
-body{font:400 14px/25px 'Microsoft Yahei',Tahoma,sans-serif;background:#fff;}
-a{text-decoration:none; color:#174B73; padding:0 5px;}
-a:hover{color:#f60;}
-img{border:0}
-em,i {font-style:normal;}
-h1{border-bottom:1px solid #ddd;padding:10px 0;}
-h2{font-size:14px;padding:10px;color:#06f;border:1px solid #e0e0e0;background:#ffd;}
-em{color:red}
-.hello{width:600px;height:100%;padding:10px; margin:50px auto 0; border:1px solid #ddd;overflow:hidden;}
-.link{float:right;}
-.copyright{clear:both;text-align:center;margin-top:10px;}
-.copyright i{color:silver;}
-.copyright sup{font-size:9pt;color:#666;}
-</style>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	 
+    <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/css/docs.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/js/prettify/prettify.css" rel="stylesheet">
+
+    <!-- Load JavaScript Libraries -->
+    <script src="__PUBLIC__/metro/js/jquery/jquery.min.js"></script>
+    <script src="__PUBLIC__/metro/js/jquery/jquery.widget.min.js"></script>
+    <script src="__PUBLIC__/metro/js/jquery/jquery.mousewheel.js"></script>
+    <script src="__PUBLIC__/metro/js/prettify/prettify.js"></script>
+
+    <!-- Metro UI CSS JavaScript plugins -->
+    <script src="__PUBLIC__/metro/js/load-metro.js"></script>
+    <script src="__PUBLIC__/metro/js/metro/metro-live-tile.js"></script>
+
+    <!-- Local JavaScript -->
+    <script src="__PUBLIC__/metro/js/docs.js"></script>
+    <script src="__PUBLIC__/metro/js/start-screen.js"></script>
+    <title>EasyOrder</title>
+
+<script src="__PUBLIC__/checkInput.js"></script>
 </head>
-<body>
-    <div class="hello">
-        <h1><a href="http://thinkphp.cn" target="_blank"  title=""><img src="__APP__/4e5e5d7364f443e28fbf0d3ae744a59a" style=" vertical-align: middle;" />  ThinkPHP </a></h1>
-        <h2><em>^_^</em> Hello &nbsp;&nbsp;欢迎使用ThinkPHP!
-		</h2>
-        <div class="link">
-           [<a href="http://thinkphpsae.sinaapp.com/readme.html" target="_blank" title="">说明文档</a>] [<a href="__URL__/imit" target="_blank" title="">SAE本地环境模拟</a>] [<a href="__URL__/pinghua" target="_blank" title="">平滑性测试</a>] [<a href="__URL__/new_features" target="_blank" title="">新功能测试</a>] [<a href="http://www.thinkphp.cn/" target="_blank" title="">官方网站</a>]  
+
+<body class="metro">
+
+    <div class="container">
+        <h1>
+            <a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+            	添加商品
+        </h1>
+        <div class="tile-area no-padding clearfix">
+            <div class="grid">
+                <div class="tile-group three">
+                    <div class="row">
+                        <form id="form" method="post" action="<?php echo U("Order/toOneOrder");?>">
+                            <fieldset>
+                                <label><font color=black>数量</font></label>
+                                <div class="input-control text" data-role="input-control">
+                                    <input name="num" type="text" autofocus=""">
+                                    <button type="button" class="btn-clear" tabindex="1"></button>
+                                </div>
+                                <label><font color=black>单价</font></label>
+                                <div class="input-control text" data-role="input-control">
+                                    <input name="money" type="text">
+                                    <button type="button" class="btn-clear" tabindex="2"></button>
+                                </div>
+                                <label><font color=black>规格</font></label>
+                                <div class="input-control text" data-role="input-control">
+                                    <input name="size" type="text">
+                                    <button type="button" class="btn-clear" tabindex="3"></button>
+                                </div>
+                                <input value="提交" type="submit">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="tile-group three">
+                </div>
+            </div>
         </div>
     </div>
-    <p class="copyright">
-	注意：你安装的是ThinkPHP<?php echo (THINK_VERSION); ?>版本如果想使用其他版本，请到ThinkPHP官方网站进行下载。<br />
-	<em>ThinkPHP</em>&nbsp;<sup><?php echo (THINK_VERSION); ?></sup>&nbsp;<i class="slogan">{  WE CAN DO IT JUST THINK IT }</i><a href="http://sae.sina.com.cn" target="_blank"><img src="http://static.sae.sina.com.cn/image/poweredby/117X12px.gif" title="Powered by Sina App Engine"></a></p>
-	
-	</div>
+
 </body>
 </html>

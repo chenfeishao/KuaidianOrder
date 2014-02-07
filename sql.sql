@@ -35,9 +35,19 @@ create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
 	
-	/*存储的库房*/
-	repository LONGTEXT NOT NULL,
+	repository LONGTEXT NOT NULL,/*存储的库房*/
+	class LONGTEXT NOT NULL,
+	size LONGTEXT NOT NULL,
+	oem LONGTEXT NOT NULL,
 	
+	/*样式*/
+	style LONGTEXT NOT NULL,
+	highWide LONGTEXT NOT NULL,
+	image LONGTEXT NOT NULL,
+	bgColor LONGTEXT NOT NULL,
+	brandColor LONGTEXT NOT NULL,
+	indexNum bigint,/*在页面上的出现顺序*/
+	remark LONGTEXT NOT NULL,/*提示，只针对样式4*/
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert goods values(null,"测试货物南瓜饼");
+insert goods values(null,"测试货物南瓜饼","@#$%^&*本地1@#$%^&*10@#$%^&*本地2@#$%^&*5","南瓜饼","@#$%^&*默认@#$%^&*10斤","安井","1","double","","blue","red",1,"");
