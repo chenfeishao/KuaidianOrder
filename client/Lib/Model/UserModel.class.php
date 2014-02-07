@@ -21,10 +21,19 @@ class UserModel extends Model {
 	);
 	
 	private $userName = "";
+	private $tmpOrderID = "";
 	
 	public function init($userName)//传入userName
 	{
 		$this->userName = $userName;
+		$condition['userName'] = $this->userName;
+		$result = $this->where($condition)->select();
+		$this->tmpOrderID = $result[0]["tmpOrderID"];
+	}
+	
+	public function getTmpOrderID()
+	{
+		return $this->tmpOrderID;
 	}
 	
 	public function login($userPassword)

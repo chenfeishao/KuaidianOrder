@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -23,3 +23,15 @@
     <script src="__PUBLIC__/metro/js/docs.js"></script>
     <script src="__PUBLIC__/metro/js/start-screen.js"></script>
     <title>EasyOrder</title>
+
+<script src="__PUBLIC__/checkInput.js"></script>
+<script>
+function check()
+{
+	document.getElementById("form").submit();
+}
+</script>  
+</head>
+
+</body>
+</html>

@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	 
     <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
     <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
     <link href="__PUBLIC__/metro/css/docs.css" rel="stylesheet">
@@ -188,7 +189,7 @@ $(function(){
     <div class="tile-group six">
         <div class="tile-group-title">货物清单</div>
 
-        <div class="tile double double-vertical image" onclick='window.location = "<?php echo U("Goods/inputPanel","id=1");?>"'>
+        <div class="tile double double-vertical image" onclick='window.location = "<?php echo U("Order/inputPanel","id=1");?>"'>
             <div class="tile-content">
                 <img alt="" src="__PUBLIC__/metro/goodsImages/gurouxianglian.jpg">
             </div>

@@ -13,7 +13,31 @@ create table user(
 	userName varchar(100) NOT NULL,
 	userPassword varchar(100) NOT NULL,
 	userPower varchar(100) NOT NULL,
+	
+	tmpOrderID bigint NOT NULL,
 	primary key(userName)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert user values("wbx","wbx","root");
-insert user values("a","a","zs");
+insert user values("wbx","wbx","root",1);
+insert user values("a","a","zs",2);
+
+create table tmp_order(
+	id bigint NOT NULL AUTO_INCREMENT,
+	goodsIDArray LONGTEXT NOT NULL,
+	goodsNumArray LONGTEXT NOT NULL,
+	goodsSizeArray LONGTEXT NOT NULL,
+	goodsMoneyArray LONGTEXT NOT NULL,
+	primary key(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+insert tmp_order values (null,"","","","");
+insert tmp_order values (null,"","","","");
+
+create table goods(
+	id bigint NOT NULL AUTO_INCREMENT,
+	name varchar(100) NOT NULL,
+	
+	/*存储的库房*/
+	repository LONGTEXT NOT NULL,
+	
+	primary key(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+insert goods values(null,"测试货物南瓜饼");

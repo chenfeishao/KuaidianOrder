@@ -28,7 +28,16 @@
 <script>
 function check()
 {
-	
+	document.getElementById("form").submit();
+}
+
+function change()
+{
+	num = document.getElementById("myInputN").value;
+	money = document.getElementById("myInputM").value;
+	if (num == "") num = 0;
+	if (money == "") money = 0;
+	document.getElementById("total").value = num*money;
 }
 </script>  
 </head>
@@ -44,27 +53,28 @@ function check()
             <div class="grid">
                 <div class="tile-group three">
                     <div class="row">
-                        <form method="post" action="<?php echo U("Goods/toOneOrder","id=$id");?>">
+                        <form id="form" method="post" action="<?php echo U("Order/toOneOrder");?>">
                             <fieldset>
                                 <label><font color=black>数量</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInput" type="text" autofocus="" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)">
+                                    <input id="myInputN" name="num" type="text" autofocus="" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" onchange="change();">
                                     <button type="button" class="btn-clear" tabindex="1"></button>
+                                </div>
+                                <label><font color=black>单价</font></label>
+                                <div class="input-control text" data-role="input-control">
+                                    <input id="myInputM"  name="money" type="text" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)" onchange="change();">
+                                    <button type="button" class="btn-clear" tabindex="2"></button>
                                 </div>
                                 <label><font color=black>规格</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInput" type="text" autofocus="" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)">
-                                    <button type="button" class="btn-clear" tabindex="2"></button>
-                                </div>
-                                <label><font color=black>价格</font></label>
-                                <div class="input-control text" data-role="input-control">
-                                    <input id="myInput" type="text" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
+                                    <input id="myInput" name="size" type="text" autofocus="" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
                                     <button type="button" class="btn-clear" tabindex="3"></button>
                                 </div>
-                                <label><font color=black>总金额</font></label>
+                                <label><font color=black>金额</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input type="text" value="300" disabled="">
+                                    <input id="total" name="total" type="text" value="0" disabled="">
                                 </div>
+                                <input type="hidden" name="id"  value=<?php echo ($id); ?>>
                                 <input value="提交" type="submit">
                             </fieldset>
                         </form>
@@ -133,10 +143,13 @@ function inputPanel()
 {
     this.init = function()
     {
+    	document.getElementById("total").value = "0";
         this.num = 0;
         for (var i = 0; i < document.getElementsByTagName("input").length; i++)
         {
-            if (document.getElementsByTagName("input")[i].id != "myInput")
+            if ( (document.getElementsByTagName("input")[i].id != "myInput") 
+            	&& (document.getElementsByTagName("input")[i].id != "myInputN")
+            	&& (document.getElementsByTagName("input")[i].id != "myInputM"))
             {
                 this.max = i;
                 break;
@@ -156,16 +169,17 @@ function inputPanel()
         this.num = k;
         this.output = document.getElementsByTagName("input")[this.num];
         
-        //因为点击势必不会再是下一步，所以这里顺便进行变化
-        if ( k != (this.max - 1) )
+        if ( k != (this.max - 1) )//到最后一步，把“下一步”换成“提交”,否则显示“下一步”
         	document.getElementById("btnValue").innerHTML = "下一步";
+        else
+            document.getElementById("btnValue").innerHTML = "提交";
     }
 
     this.getKey = function(input)
     {
         this.output = document.getElementsByTagName("input")[this.num];
 
-        regExpPattern = /\D/g;
+        regExpPattern = /^-?\d+(\.\d+)?$/g;
         if (input == "tuige")
         {
         	if (this.output.value.length > 0)
@@ -194,11 +208,13 @@ function inputPanel()
                 document.getElementById("btnValue").innerHTML = "提交";
             }
             this.num++;
+            document.getElementsByTagName("input")[this.num].focus()
         }
-        else if ( (input == ".") || (!regExpPattern.test(input)) )//为数字或者小数点
+        else if ( (input == ".") || (regExpPattern.test(input)) )//为数字或者小数点
         {
             this.setValue(input);
         }
+        change();
     }
 }
 var inputPanel = new inputPanel();
