@@ -57,7 +57,7 @@ function change()
                             <fieldset>
                                 <label><font color=black>数量</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInputN" name="num" type="number" autofocus="" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" onchange="change();">
+                                    <input id="myInputN" name="num" type="number" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" onchange="change();">
                                     <button type="button" class="btn-clear" tabindex="1"></button>
                                 </div>
                                 <label><font color=black>单价</font></label>
@@ -157,6 +157,9 @@ function inputPanel()
             this.output = document.getElementsByTagName("input")[i];
             this.output.value = "";
         }
+        
+        //0自动获得焦点
+        document.getElementsByTagName("input")[0].parentNode.className = "input-control text info-state";
     }
 
     this.setValue = function(input)
@@ -207,8 +210,9 @@ function inputPanel()
             {
                 document.getElementById("btnValue").innerHTML = "提交";
             }
+            document.getElementsByTagName("input")[this.num].parentNode.className = "input-control text";
             this.num++;
-            document.getElementsByTagName("input")[this.num].focus()
+            document.getElementsByTagName("input")[this.num].parentNode.className = "input-control text info-state";
         }
         else if ( (input == ".") || (regExpPattern.test(input)) )//为数字或者小数点
         {

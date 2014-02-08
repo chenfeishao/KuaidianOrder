@@ -35,7 +35,7 @@ create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
 	
-	repository LONGTEXT NOT NULL,/*存储的库房*/
+	warehouse LONGTEXT NOT NULL,/*存储的库房*/
 	class LONGTEXT NOT NULL,
 	size LONGTEXT NOT NULL,
 	oem LONGTEXT NOT NULL,
