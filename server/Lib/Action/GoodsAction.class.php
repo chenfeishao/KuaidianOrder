@@ -13,6 +13,11 @@ class GoodsAction extends myAction
         $this->display();
     }
     
+    public function edit()
+    {
+    	$this->display();
+    }
+    
     public function toAdd()
     {
     	//获得表单数据

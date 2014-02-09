@@ -10,7 +10,13 @@ class IndexAction extends Action
 
     public function index()
     {
+    	redirect(U("User/login"),0);
         $this->display();
+    }
+    
+    public function main()
+    {
+    	$this->display();
     }
     
 }

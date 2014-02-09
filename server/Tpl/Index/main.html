@@ -1,0 +1,30 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/checkInput.js"></script>
+ 
+</head>
+
+<body class="metro">
+
+    <div class="container">
+        <h1>
+            	首页<small class="on-right">{$Think.session.userName}&nbsp{$Think.session.userPower}</small>
+            	<small class="element place-right"><a href="{:U("User/logout")}">退出</a></small>
+        </h1>
+        <div class="tile-area no-padding clearfix">
+            <div class="grid">
+                <div class="tile-group seven">
+                    <div class="row">
+                        <button class="shortcut primary" onclick="window.location = '{:U('Goods/add')}'" data-click="transform">
+                            <h2>添加商品</h2>
+                        </button>
+                        <button class="shortcut primary" onclick="window.location = '{:U('Goods/edit')}'" data-click="transform">
+                            <h2>修改商品</h2>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

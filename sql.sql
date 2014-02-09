@@ -34,6 +34,7 @@ insert tmp_order values (null,"","","","");
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
+	pyname varchar(100) NOT NULL,
 	
 	warehouse LONGTEXT NOT NULL,/*存储的库房*/
 	class LONGTEXT NOT NULL,
@@ -50,4 +51,4 @@ create table goods(
 	remark LONGTEXT NOT NULL,/*提示，只针对样式4*/
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert goods values(null,"测试货物南瓜饼","@#$%^&*本地1@#$%^&*10@#$%^&*本地2@#$%^&*5","南瓜饼","@#$%^&*默认@#$%^&*10斤","安井","1","double","","blue","red",1,"");
+insert goods values(null,"测试货物南瓜饼","cshwngb","@#$%^&*本地1@#$%^&*10@#$%^&*本地2@#$%^&*5","南瓜饼","@#$%^&*默认@#$%^&*10斤","安井","1","double","","blue","red",1,"");

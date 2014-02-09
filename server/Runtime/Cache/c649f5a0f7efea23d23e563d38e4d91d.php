@@ -29,7 +29,7 @@
 
     <div class="container">
         <h1>
-            <a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+            <a href="<?php echo U("Index/main");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
             	添加商品
         </h1>
         <div class="tile-area no-padding clearfix">
@@ -43,7 +43,7 @@
                                    <input name="name" type="text" autofocus=""">
                                    <button type="button" class="btn-clear" tabindex="1"></button>
                                </div>
-                               <label><font color=black>库存*<small class="on-right"><br>格式：仓库1：10；仓库2：20<br>代表仓库1有10件，仓库2有20件。为了输入方便，请用中文（全字符）打冒号与分号</small></font></label>
+                               <label><font color=black>库存*<small class="on-right"><br>格式：仓库1：10，12；仓库2：20，23<br>代表仓库1有规格1的10件，规格2的12件，仓库2有规格1的20件，规格2的23件。为了输入方便，请用中文（全角）打冒号、逗号与分号。</small></font></label>
                                <div class="input-control text" data-role="input-control">
                                    <input name="warehouse" type="text" value="默认仓库：">
                                    <button type="button" class="btn-clear" tabindex="2"></button>
@@ -55,7 +55,7 @@
                                </div>
                                <label><font color=black>规格*<small class="on-right"><br>格式：10斤；20只<br>代表有2个规格，10斤与20只。为了输入方便，请用中文（全字符）打分号。<br><b>如果没有规格，请不要更改“默认”。（已经预先填入）</b></small></font></label>
                                <div class="input-control text" data-role="input-control">
-                                   <input name="size" type="text" value="默认" onclick='$(this).val("");'>
+                                   <input name="size" type="text" value="默认" onclick='if ($(this).val()=="默认") $(this).val("");'>
                                    <button type="button" class="btn-clear" tabindex="3"></button>
                                </div>
                                <label><font color=black>供货商*<small class="on-right"><br>一个产品一个厂商，如果多个厂商生产同一个产品，请新增一个商品。</small></font></label>
