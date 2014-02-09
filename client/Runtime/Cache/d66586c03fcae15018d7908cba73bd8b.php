@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	
 	 
     <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
     <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
@@ -21,15 +21,10 @@
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
-    <script src="__PUBLIC__/metro/js/start-screen.js"></script>
     <title>EasyOrder</title>
 
+<script src="__PUBLIC__/metro/js/start-screen.js"></script>
 <script>
-//预先加载一遍
-$.get("__PUBLIC__/inputPanel.txt",function(data,status){
-	content = data;
-});
-
 function go(str)
 {
 	window.location = str;
@@ -68,34 +63,46 @@ $(function(){
             window.location='<?php echo U("User/logout");?>';
         }
     });
-    /*
-     * js inputPanel界面  废弃
-     *
-    $(".six").on('click', function(){
-        if ( true )
-        {
-            $.Dialog({
-                shadow: true,
-                overlay: true,
-                draggable: true,
-                icon: '<span class="icon-cart"></span>',
-                title: '详细',
-                width: 800,
-                padding: 10,
-                onShow: function(){
-                	$.get("__PUBLIC__/inputPanel.txt",function(data,status){
-                		content = data;
-                	});
-                	$.Dialog.content(content);
-                }
-            });
-        }
-        else
-        {
-        }
-    });
-    */
 });
+var tag = 0;
+function onKeyDownDo(e)
+{
+	var input;
+	
+	if(window.event) // IE
+    {
+    	input = e.keyCode;
+    }
+	else if (e.which) // Netscape/Firefox/Opera
+    {
+		input = e.which;
+    }
+	
+	if ( (e.which == 13) && (tag == 1) )
+	{
+        $.Dialog({
+            shadow: true,
+            overlay: true,
+            draggable: true,
+            icon: '<span class="icon-cart"></span>',
+            title: '详细',
+            width: 1000,//还需要改下面html里的宽高
+            padding: 10,
+            onShow: function(_dialog){
+            	url = "<?php echo U("Order/inputPanelIn");?>" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
+                var html = [
+                    '<iframe width="1000" height="580" src=\"'+url+'\" frameborder="0" allowfullscreen></iframe>'
+                ].join("");
+                $.Dialog.content(html);
+            }
+        });
+		
+		tag = 0;
+		$("#quickSelect").val("");
+	}
+	else if ( (e.which == 13) && (tag == 0) )
+		tag++;
+}
 </script>
 </head>
 <body class="metro">
@@ -158,14 +165,14 @@ $(function(){
             </div>
         </a> <!-- end tile -->
 	
-		<a href="#" class="tile double ribbed-amber">
-            <div class="tile-content icon">
-                <span class="icon-search"></span>
-            </div>
-            <div class="brand">
-                <div class="label">快速选择</div>
-            </div>
-        </a>
+		<div class="tile double ribbed-amber">
+            <div class="input-control text span3 place-left margin10" style="margin-left: 10px">
+                <input id="quickSelect"name="quick" type="text" list="product" onclick='$(this).val("");' onkeydown="onKeyDownDo(event)">
+	        </div>
+	        <div class="brand">
+	            <div class="label"><h3 class="no-margin fg-white"><span class="icon-search"></span><button class="place-right button primary">已下单货物</button></h3></div>
+	        </div>
+        </div>
         
         <a href="#" class="tile bg-violet">
             <div class="tile-content icon">
@@ -282,9 +289,10 @@ $(function(){
             </div>
         </a>
     </div> <!-- End group -->
-
 </div>
-
+<datalist id="product">
+    <?php if(is_array($productList)): foreach($productList as $key=>$vo): ?><option label="<?php echo ($vo["pyname"]); echo ($vo["name"]); ?>" value="<?php echo ($vo["name"]); ?>" id="<?php echo ($vo["name"]); ?>" src="<?php echo ($vo["id"]); ?>"/><?php endforeach; endif; ?>
+</datalist>
 
 </body>
 </html>

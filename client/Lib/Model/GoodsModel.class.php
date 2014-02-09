@@ -17,5 +17,10 @@ class GoodsModel extends Model {
 		$condition['id'] = $this->goodsID;
 		return $this->where($condition)->select()[0]["name"];
 	}
+	
+	public function getAllGoodsName()
+	{
+		return $this->select();
+	}
 }
 ?>

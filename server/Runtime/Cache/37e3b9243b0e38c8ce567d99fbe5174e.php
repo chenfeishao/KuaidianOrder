@@ -31,8 +31,8 @@
 
     <div class="container">
         <h1>
-            	首页<small class="on-right"><?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
-            	<small class="element place-right"><a href="<?php echo U("User/logout");?>">退出</a></small>
+       		<a class="element place-right" href="<?php echo U("User/logout");?>"><i class="icon-exit fg-darker smaller"></i></a>
+           	首页<small class="on-right"><?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">

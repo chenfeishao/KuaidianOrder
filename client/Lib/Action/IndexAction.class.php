@@ -10,6 +10,8 @@ class IndexAction extends Action
 
     public function index()
     {
+    	$db = D("Goods");
+    	$this->assign("productList",$db->getAllGoodsName());
         $this->display();
     }
     
