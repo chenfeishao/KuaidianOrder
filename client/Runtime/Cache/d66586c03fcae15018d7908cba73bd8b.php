@@ -25,9 +25,10 @@
 
 <script src="__PUBLIC__/metro/js/start-screen.js"></script>
 <script>
-function go(str)
+function go(id)
 {
-	window.location = str;
+	url = "<?php echo U("Order/inputPanel");?>" + "?id=" + id;
+	window.location = url;
 }
 
 $(function(){
@@ -167,10 +168,10 @@ function onKeyDownDo(e)
 	
 		<div class="tile double ribbed-amber">
             <div class="input-control text span3 place-left margin10" style="margin-left: 10px">
-                <input id="quickSelect"name="quick" type="text" list="product" onclick='$(this).val("");' onkeydown="onKeyDownDo(event)">
+                <input autofocus="" id="quickSelect"name="quick" type="text" list="product" onclick='$(this).val("");' onkeydown="onKeyDownDo(event)">
 	        </div>
 	        <div class="brand">
-	            <div class="label"><h3 class="no-margin fg-white"><span class="icon-search"></span><button class="place-right button primary">已下单货物</button></h3></div>
+	            <div class="label"><h3 class="no-margin fg-white"><span class="icon-search"></span><span class="place-right">快速选择商品</span></h3></div>
 	        </div>
         </div>
         
@@ -179,7 +180,7 @@ function onKeyDownDo(e)
                 <span class="icon-basket"></span>
             </div>
             <div class="brand">
-                <div class="label">已下单的货物</div>
+                <div class="label">结账</div>
             </div>
         </a>
 
@@ -193,101 +194,40 @@ function onKeyDownDo(e)
         </a>
     </div> <!-- End group -->
 
+
+
+	<?php if($select != NULL): ?><div class="tile-group two">
+		   <div class="tile-group-title">购物车</div>
+		   
+		   <?php if(is_array($select)): foreach($select as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>" >
+					<div class="<?php echo ($vo["content"]); ?>">
+						<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
+				 				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
+					</div>
+					<div class="<?php echo ($vo["brand"]); ?>">
+				              <div class="label"><?php echo ($vo["name"]); ?></div>
+				              <div class="badge">0</div>
+				          </div>
+				</div><?php endforeach; endif; ?>
+		
+		</div><?php endif; ?>
+
+
+
     <div class="tile-group six">
         <div class="tile-group-title">货物清单</div>
-
-        <div class="tile double double-vertical image" onclick='window.location = "<?php echo U("Order/inputPanel","id=1");?>"'>
-            <div class="tile-content">
-                <img alt="" src="__PUBLIC__/metro/goodsImages/gurouxianglian.jpg">
-            </div>
-            <div class="brand bg-taupe">
-                <p class="text">南瓜饼</p>
-                <div class="badge">0</div>
-            </div>
-        </div>
-
-        <div class="tile image">
-            <div class="tile-content">
-                <img alt="" src="__PUBLIC__/metro/goodsImages/anjingmantou.jpg">
-            </div>
-            <div class="brand bg-orange">
-                <p class="text">安井馒头</p>
-                <div class="badge">10</div>
-            </div>
-        </div>
-
-        <div class="tile double image">
-            <div class="tile-content">
-                <img alt="" src="__PUBLIC__/metro/goodsImages/chizhong.jpg">
-            </div>
-            <div class="brand bg-red">
-                <p class="text">翅中</p>
-                <div class="badge">4</div>
-            </div>
-        </div>
-
-        <div class="tile bg-green">
-            <div class="tile-content icon">
-                <img src="__PUBLIC__/metro/goodsImages/nanguabing.jpg">
-            </div>
-            <div class="brand">
-                <span class="name">骨肉相连</span>
-            </div>
-        </div>
-
-        <a class="tile double bg-lightBlue">
-            <div class="tile-content email">
-                <div class="email-image">
-                    <img src="__PUBLIC__/metro/goodsImages/jizhua.jpg">
-                </div>
-                <div class="email-data">
-                    <span class="email-data-title">鸡爪</span>
-                    <span class="email-data-subtitle">50斤</span>
-                    <span class="email-data-text">9.6/斤bulabulabulabu</span>
-                </div>
-                 <div class="brand">
-                    <div class="label"><h3 class="no-margin fg-white"><span class="icon-heart"></span></h3></div>
-                    <div class="badge">3</div>
-                </div>
-            </div>
-        </a>
-
         
-        <a href="#" class="tile bg-violet">
-            <div class="tile-content icon">
-                <span class="icon-tag"></span>
-            </div>
-            <div class="brand">
-                <div class="label">翅尖</div>
-            </div>
-        </a>
-
-        <a href="#" class="tile bg-yellow">
-            <div class="tile-content icon">
-                <span class="icon-cart"></span>
-            </div>
-            <div class="brand">
-                <div class="label">带鱼</div>
-            </div>
-        </a>
-
-        <a href="#" class="tile double bg-mauve">
-            <div class="tile-content icon">
-                <span class="icon-cart"></span>
-            </div>
-            <div class="brand">
-                <div class="label">虾仁</div>
-            </div>
-        </a>
-
-        <a href="#" class="tile quadro bg-darkGreen">
-            <div class="tile-content icon">
-                <span class="icon-tag"></span>
-            </div>
-            <div class="brand">
-                <div class="label">鱿鱼</div>
-            </div>
-        </a>
+        <?php if(is_array($goods)): foreach($goods as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>"  onclick='go(<?php echo ($vo["id"]); ?>)'>
+				<div class="<?php echo ($vo["content"]); ?>">
+					<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
+	   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
+				</div>
+				<div class="<?php echo ($vo["brand"]); ?>">
+	                <div class="label"><?php echo ($vo["name"]); ?></div>
+	                <div class="badge">0</div>
+	            </div>
+			</div><?php endforeach; endif; ?>
+		
     </div> <!-- End group -->
 </div>
 <datalist id="product">

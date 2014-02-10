@@ -18,7 +18,7 @@ class GoodsModel extends Model {
 		return $this->where($condition)->select()[0]["name"];
 	}
 	
-	public function getAllGoodsName()
+	public function getAllGoodsInfo()
 	{
 		return $this->select();
 	}

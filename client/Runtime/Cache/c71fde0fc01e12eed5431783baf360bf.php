@@ -28,7 +28,10 @@
 function check()
 {
 	document.getElementById("form").submit();
-	//alert($(".metro window-overlay").html());
+	//obj = $(document).parent().document.html();
+	//$(".window-overlay", window.parent.document).remove();
+	//$(".window-overlay", window.parent.document).css("display","none");
+	//top.location.reload();
 }
 
 function change()

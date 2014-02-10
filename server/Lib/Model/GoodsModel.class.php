@@ -125,7 +125,7 @@ class GoodsModel extends Model {
 		$data["size"] = transformWithSpecalBreakTag(explode("；",$data["size"]));
 		
 		//high and wide
-		$highWide = "title";
+		$highWide = "tile";
 		switch ($data["wide"])
 		{
 			case 1:$highWide .= " half";break;

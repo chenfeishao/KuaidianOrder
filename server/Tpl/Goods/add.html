@@ -50,16 +50,15 @@
 		                    <label><font color=black>样式*</font></label>
 		                    <div class="input-control select">
 								<select name="style">
+									<option value="3">普通瓷片</option>
 									<option value="1">图片瓷片</option>
 									<option value="2">图标瓷片</option>
-									<option value="3">普通瓷片</option>
 									<option value="4">介绍瓷片</option>
 								</select>
 							</div>
 		                    <label><font color=black>瓷片高度*</font></label>
 		                    <div class="input-control select">
 								<select name="high">
-									<option value="1">0.5</option>
 									<option value="2">1</option>
 									<option value="3">2</option>
 									<option value="4">3</option>
@@ -69,7 +68,6 @@
 							<label><font color=black>瓷片宽度*</font></label>
 		                    <div class="input-control select">
 								<select name="wide">
-									<option value="1">0.5</option>
 									<option value="2">1</option>
 									<option value="3">2</option>
 									<option value="4">3</option>
@@ -83,12 +81,12 @@
 		                    </div>
 		                    <label><font color=black>瓷片颜色*<small class="on-right">填写颜色的英文名称，参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a></small></font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                        <input name="bgColor" list="colorDataList" type="text" value="cobalt" onclick='$(this).val("");'>
+		                        <input name="bgColor" list="colorDataList" type="text" value="lightBlue" onclick='$(this).val("");'>
 		                        <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
-		                    <label><font color=black>条带颜色*<small class="on-right">填写颜色的英文名称，参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a></small></font></label>
+		                    <label><font color=black>条带颜色*<small class="on-right">填写颜色的英文名称，参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a>。<br>对于“普通瓷片”样式，建议和瓷片颜色相同</small></font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                        <input name="brandColor" list="colorDataList" type="text" value="orange" onclick='$(this).val("");'>
+		                        <input name="brandColor" list="colorDataList" type="text" value="lightBlue" onclick='$(this).val("");'>
 		                        <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                    <label><font color=black>开始界面中的显示顺序<small class="on-right">一个正整数，数字越小，显示越靠前</small></font></label>
