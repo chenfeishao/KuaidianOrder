@@ -16,10 +16,11 @@
 		                <tr>
 		                	<th class="text-left">序号</th>
 		                    <th class="text-left">商品名称</th>
+		                    <th class="text-left">规格</th>
 		                    <th class="text-left">数量</th>
 		                    <th class="text-left">单价</th>
-		                    <th class="text-left">规格</th>
 		                    <th class="text-left">金额</th>
+		                    <th class="text-left">操作</th>
 		                </tr>
 	                </thead>
 					
@@ -27,10 +28,16 @@
 	                	<volist name="list" id="vo">
 					    	<tr>
 					    		<td style="width: 50px;">{$i}</td>
-					    		<td>{$vo.goodsName}</td>
+					    		<td calss="span4">{$vo.goodsName}</td>
+					    		<td class="right span3">
+					    			<div class="input-control text" data-role="input-control">
+	                                    <input name="size" type="number" tabindex="999" value="{$vo.size}">
+	                                    <button type="button" class="btn-clear"></button>
+	                                </div>
+					    		</td>
 					    		<td class="right span2">
 					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="num" type="number" tabindex="1" value="{$vo.num}">
+	                                    <input autofocus="" name="num" type="number" tabindex="1" value="{$vo.num}">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 					    		</td>
@@ -40,17 +47,14 @@
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 								</td>
-					    		<td class="right span4">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="size" type="number" tabindex="1" value="{$vo.size}">
-	                                    <button type="button" class="btn-clear"></button>
-	                                </div>
-					    		</td>
 					    		<td class="right span2">
 					    			<div class="input-control text" data-role="input-control">
 	                                    <input name="jine" type="number" tabindex="1" value="{$vo.jine}">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
+								</td>
+								<td style="width: 70px;">
+									<button class="button warning">删除</button>
 								</td>
 					    	</tr>
 				    	</volist>
@@ -58,11 +62,12 @@
 	
 	                <tfoot>
 	                	<th class="text-left">序号</th>
-	                	<th class="text-left">商品名称</th>
+	                    <th class="text-left">商品名称</th>
+	                    <th class="text-left">规格</th>
 	                    <th class="text-left">数量</th>
 	                    <th class="text-left">单价</th>
-	                    <th class="text-left">规格</th>
 	                    <th class="text-left">金额</th>
+	                    <th class="text-left">操作</th>
 	                </tfoot>
 	            </table>
             </if>

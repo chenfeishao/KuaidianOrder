@@ -1,20 +1,20 @@
 <?php
-class GoodsModel extends Model {
+include(LIB_PATH."commonModel.php");
 
+class GoodsModel extends ModelBaseOP
+{
 	// 自动验证设置
 	protected $_validate = array(
 	);
 	
-	private $goodsID = "";
-	
 	public function init($id)//传入goodsID
 	{
-		$this->goodsID = $id;
+		$this->id = $id;
 	}
 	
 	public function getGoodsName()
 	{
-		$condition['id'] = $this->goodsID;
+		$condition['id'] = $this->id;
 		$tmp = $this->where($condition)->select();
 		return $tmp[0]["name"];
 	}
@@ -22,6 +22,15 @@ class GoodsModel extends Model {
 	public function getAllGoodsInfo()
 	{
 		return $this->select();
+	}
+	
+	/*
+	 * 得到商品规格信息
+	 * @return	array sizeArray[i];一个size数组
+	 */
+	public function getGoodsSize()
+	{
+		return $this->getArray("size");
 	}
 }
 ?>

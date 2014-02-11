@@ -6,15 +6,16 @@ class OrderAction extends myAction
 
     public function inputPanel()//点击开始界面中的图标后进入的界面
     {
-    	$db = D("Goods");
+    	$dbGoods = D("Goods");
     	if (!isNum($this->_get("id")))
     	{
     		$this->error("商品选择不正确，请重新选择",U("Index/index"));
     	}
-    	$db->init($this->_get("id"));
+    	$dbGoods->init($this->_get("id"));
     	
     	$this->assign("id",$this->_get("id"));
-    	$this->assign("goodsName",$db->getGoodsName());
+    	$this->assign("goodsName",$dbGoods->getGoodsName());
+    	$this->assign("sizeArray",$dbGoods->getGoodsSize());
     	$this->display();
     }
     
@@ -51,15 +52,14 @@ class OrderAction extends myAction
     	$db->init($this->_get("id"));
     	$this->assign("goodsName",$db->getGoodsName());//$db在下面用了，所以要在这里渲染
     	
-    	
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
-    	$db = D("TmpOrder");
-    	$db->init($dbUser->getTmpOrderID());
-    	$idArray = $db->getIDArray();
-    	$numArray = $db->getNumArray();
-    	$moneyArray = $db->getMoneyArray();
-    	$sizeArray = $db->getSizeArray();
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$idArray = $dbTmpOrder->getArray("goodsIDArray");
+    	$numArray = $dbTmpOrder->getArray("goodsNumArray");
+    	$moneyArray = $dbTmpOrder->getArray("goodsMoneyArray");
+    	$sizeArray = $dbTmpOrder->getArray("goodsSizeArray");
     	for ($i = 0; $i < count($idArray); $i++)
     	{
 	    	if ($idArray[$i] == $this->_get("id"))
@@ -84,10 +84,10 @@ class OrderAction extends myAction
     {
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
-    	$db = D("TmpOrder");
-    	$this->isFalse($db->create(),$db->getError(),"Index/goBack");
-    	$db->init($dbUser->getTmpOrderID());
-    	if ($db->insert($this->_post("id"),$this->_post("num"),$this->_post("size"),$this->_post("money")))
+    	$dbTmpOrder = D("TmpOrder");
+    	$this->isFalse($dbTmpOrder->create(),$dbTmpOrder->getError(),"Index/goBack");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	if ($dbTmpOrder->addTmpOrder($this->_post("id"),$this->_post("num"),$this->_post("size"),$this->_post("money")))
     		redirect(U("Index/index"),0);
     	else
     		$this->error("订单提交失败，请重试",U("Order/inputPanel","id=".$this->_post('id')));
@@ -106,17 +106,20 @@ class OrderAction extends myAction
     		$this->error("订单提交失败，请重试",U("Order/inputPanelIn","id=".$this->_post('id')));
     }
     
+    /*
+     * 结算页面
+     */
     public function closing()
     {
     	$dbGoods = D("Goods");
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
-    	$db = D("TmpOrder");
-    	$db->init($dbUser->getTmpOrderID());
-    	$tmp["id"] = $db->getIDArray();
-    	$tmp["num"] = $db->getNumArray();
-    	$tmp["money"] = $db->getMoneyArray();
-    	$tmp["size"] = $db->getSizeArray();
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
+    	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+    	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+    	$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
     	for ($i = 0; $i < count($tmp["id"]); $i++)
     	{
     		$dbGoods->init($tmp["id"][$i]);

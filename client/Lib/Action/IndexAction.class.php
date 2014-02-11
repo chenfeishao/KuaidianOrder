@@ -5,14 +5,13 @@ class IndexAction extends Action
 
     protected function _initialize()
     {
-        header("Content-Type:text/html; charset=utf-8");
     }
 
     public function index()
     {
     	//显示所有商品
-    	$db = D("Goods");
-    	$goodsInfo = $db->getAllGoodsInfo();
+    	$dbGoods = D("Goods");
+    	$goodsInfo = $dbGoods->getAllGoodsInfo();
     	$showInfo = NULL;
     	for ($i = 0; $i < count($goodsInfo); $i++)
     	{
@@ -69,10 +68,10 @@ class IndexAction extends Action
     	
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
-    	$db = D("TmpOrder");
-    	$db->init($dbUser->getTmpOrderID());
-    	$idArray = $db->getIDArray();
-    	$numArray = $db->getNumArray();
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$idArray = $dbTmpOrder->getArray("goodsIDArray");
+    	$numArray = $dbTmpOrder->getArray("goodsNumArray");
     	for ($i = 0; $i < count($idArray); $i++)
     	{
 	    	for ($j = 0; $j < count($showInfo); $j++)

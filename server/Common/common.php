@@ -35,12 +35,12 @@ function isNum($str)
  * @param	array $data;原始数据
  * @return	string;转换完成后的字符串
  */
-function transformWithSpecalBreakTag($data)
+function transformSpecalBreakTag($data)
 {
 	$re = "";
 	for ($i = 0; $i < count($data); $i++)
 	{
-		$re .= _SPECAL_BREAK_FLAG.$data[$i];
+		$re .= $data[$i]._SPECAL_BREAK_FLAG;
 	}
 	return $re;
 }

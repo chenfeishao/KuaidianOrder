@@ -120,10 +120,10 @@ class GoodsModel extends Model {
 				}
 			}
 		}
-		$data["warehouse"] = transformWithSpecalBreakTag(explode("；",$data["warehouse"]));
+		$data["warehouse"] = transformSpecalBreakTag(explode("；",$data["warehouse"]));
 
 		//size
-		$data["size"] = transformWithSpecalBreakTag(explode("；",$data["size"]));
+		$data["size"] = transformSpecalBreakTag(explode("；",$data["size"]));
 		
 		//high and wide
 		$highWide = "tile";

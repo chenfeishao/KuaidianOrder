@@ -41,10 +41,13 @@ function change()
                                     <button type="button" class="btn-clear"></button>
                                 </div>
                                 <label><font color=black>规格</font></label>
-                                <div class="input-control text" data-role="input-control">
-                                    <input id="myInput" name="size" type="text" tabindex="3" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
-                                    <button type="button" class="btn-clear"></button>
-                                </div>
+                                <div class="input-control select">
+									<select name="wide">
+										<foreach name="sizeArray" item="vo">
+											<option value="{$i}">{$vo.size}</option>
+										</foreach>
+									</select>
+								</div>
                                 <label><font color=black>金额</font></label>
                                 <div class="input-control text" data-role="input-control">
                                     <input id="total" name="total" type="text" value="0" disabled="">
