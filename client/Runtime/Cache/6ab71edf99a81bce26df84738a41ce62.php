@@ -1,4 +1,28 @@
-<include file="Public:header" />
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	
+	 
+    <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/css/docs.css" rel="stylesheet">
+    <link href="__PUBLIC__/metro/js/prettify/prettify.css" rel="stylesheet">
+
+    <!-- Load JavaScript Libraries -->
+    <script src="__PUBLIC__/metro/js/jquery/jquery.min.js"></script>
+    <script src="__PUBLIC__/metro/js/jquery/jquery.widget.min.js"></script>
+    <script src="__PUBLIC__/metro/js/jquery/jquery.mousewheel.js"></script>
+    <script src="__PUBLIC__/metro/js/prettify/prettify.js"></script>
+
+    <!-- Metro UI CSS JavaScript plugins -->
+    <script src="__PUBLIC__/metro/js/load-metro.js"></script>
+    <script src="__PUBLIC__/metro/js/metro/metro-live-tile.js"></script>
+
+    <!-- Local JavaScript -->
+    <script src="__PUBLIC__/metro/js/docs.js"></script>
+    <title>EasyOrder</title>
+
 <script src="__PUBLIC__/checkInput.js"></script>
 <script>
 function check()
@@ -21,36 +45,37 @@ function change()
 
     <div class="container">
         <h1>
-            <a href="{:U("Index/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-            订单<small class="on-right">{$goodsName}</small>
+            <a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+ 			修改订单<small class="on-right"><?php echo ($goodsName); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
                 <div class="tile-group three">
                     <div class="row">
-                        <form id="form" method="post" action="{:U("Order/toOneOrder")}">
+                        <form id="form" method="post" action="<?php echo U("Order/toOneOrder");?>">
                             <fieldset>
                                 <label><font color=black>数量</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInputN" name="num" tabindex="1" type="number" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
-                                    <button type="button" class="btn-clear"></button>
+                                    <input id="myInputN" name="num" type="number" value="<?php echo ($num); ?>" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
+                                    <button type="button" class="btn-clear" tabindex="1"></button>
                                 </div>
                                 <label><font color=black>单价</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInputM"  name="money" tabindex="2" type="number" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
-                                    <button type="button" class="btn-clear"></button>
+                                    <input id="myInputM"  name="money" type="number" value="<?php echo ($money); ?>" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
+                                    <button type="button" class="btn-clear" tabindex="2"></button>
                                 </div>
                                 <label><font color=black>规格</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInput" name="size" type="text" tabindex="3" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
-                                    <button type="button" class="btn-clear"></button>
+                                    <input id="myInput" name="size" type="text" value="<?php echo ($size); ?>" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
+                                    <button type="button" class="btn-clear" tabindex="3"></button>
                                 </div>
                                 <label><font color=black>金额</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="total" name="total" type="text" value="0" disabled="">
+                                    <input id="total" name="total" type="text" value="<?php echo ($totalMoney); ?>" disabled="">
                                 </div>
-                                <input type="hidden" name="id"  value={$id}>
+                                <input type="hidden" name="id"  value=<?php echo ($id); ?>>
                                 <input value="提交" type="submit">
+                                <input value="删除" type="submit">
                             </fieldset>
                         </form>
                     </div>
@@ -118,21 +143,7 @@ function inputPanel()
 {
     this.init = function()
     {
-    	document.getElementById("total").value = "0";
-        this.num = 0;
-        for (var i = 0; i < document.getElementsByTagName("input").length; i++)
-        {
-            if ( (document.getElementsByTagName("input")[i].id != "myInput") 
-            	&& (document.getElementsByTagName("input")[i].id != "myInputN")
-            	&& (document.getElementsByTagName("input")[i].id != "myInputM"))
-            {
-                this.max = i;
-                break;
-            }
-            this.output = document.getElementsByTagName("input")[i];
-            this.output.value = "";
-        }
-        
+    	this.num = 0;
         //0自动获得焦点
         document.getElementsByTagName("input")[0].parentNode.className = "input-control text info-state";
     }

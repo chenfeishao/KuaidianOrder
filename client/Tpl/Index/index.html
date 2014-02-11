@@ -1,9 +1,16 @@
 <include file="Public:header" />
 <script src="__PUBLIC__/metro/js/start-screen.js"></script>
 <script>
-function go(id)
+function go(id,k)
 {
-	url = "{:U("Order/inputPanel")}" + "?id=" + id;
+	if (k == 0)
+	{
+		url = "{:U("Order/inputPanel")}" + "?id=" + id;
+	}
+	else
+	{
+		url = "{:U("Order/edit")}" + "?id=" + id;
+	}
 	window.location = url;
 }
 
@@ -155,7 +162,7 @@ function onKeyDownDo(e)
 	        </div>
         </div>
         
-        <a href="#" class="tile bg-violet">
+        <a href="{:U("Order/closing")}" class="tile bg-violet">
             <div class="tile-content icon">
                 <span class="icon-basket"></span>
             </div>
@@ -177,20 +184,20 @@ function onKeyDownDo(e)
 
 
 	<if condition="$select neq NULL">
-		<div class="tile-group two">
+		<div class="tile-group three">
 		   <div class="tile-group-title">购物车</div>
 		   
 		   <foreach name="select" item="vo">
-				<div class="{$vo.className}" >
+				<div class="{$vo.className} selected"  onclick='go({$vo.id},1)'>
 					<div class="{$vo.content}">
 						<if condition="$vo.image eq NULL"><span class="icon-tag"></span>
-				 				<else/><img src="{$vo.image}"/>
-				 				</if>
+		   				<else/><img src="{$vo.image}"/>
+		   				</if>
 					</div>
 					<div class="{$vo.brand}">
-				              <div class="label">{$vo.name}</div>
-				              <div class="badge">0</div>
-				          </div>
+		                <div class="label">{$vo.name}</div>
+		                <div class="badge">{$vo.num}</div>
+		            </div>
 				</div>
 			</foreach>
 		
@@ -203,7 +210,7 @@ function onKeyDownDo(e)
         <div class="tile-group-title">货物清单</div>
         
         <foreach name="goods" item="vo">
-			<div class="{$vo.className}"  onclick='go({$vo.id})'>
+			<div class="{$vo.className}"  onclick='go({$vo.id},0)'>
 				<div class="{$vo.content}">
 					<if condition="$vo.image eq NULL"><span class="icon-tag"></span>
 	   				<else/><img src="{$vo.image}"/>
@@ -211,7 +218,6 @@ function onKeyDownDo(e)
 				</div>
 				<div class="{$vo.brand}">
 	                <div class="label">{$vo.name}</div>
-	                <div class="badge">0</div>
 	            </div>
 			</div>
 		</foreach>

@@ -72,12 +72,19 @@ class IndexAction extends Action
     	$db = D("TmpOrder");
     	$db->init($dbUser->getTmpOrderID());
     	$idArray = $db->getIDArray();
+    	$numArray = $db->getNumArray();
     	for ($i = 0; $i < count($idArray); $i++)
-    		for ($j = 0; $j < count($idArray); $j++)
+    	{
+	    	for ($j = 0; $j < count($showInfo); $j++)
 	    	{
-	    		
+		    	if ($idArray[$i] == $showInfo[$j]["id"])
+		    	{
+		    		$select[$i] = $showInfo[$j];
+		    		$select[$i]["num"] = $numArray[$i];
+		    		break;
+		    	}
 	    	}
-    	
+    	}
     	$this->assign("select",$select);
     	
     	

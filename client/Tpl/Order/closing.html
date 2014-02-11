@@ -1,0 +1,75 @@
+<include file="Public:header" />
+</head>
+
+<body class="metro">
+
+    <div class="container">
+        <h1>
+            <a href="{:U("Index/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+           	 结算
+        </h1>
+		<div class="grid">
+			<if condition="$list eq NULL "><b>购物车是空的</b>
+   			<else/>
+	            <table class="table hovered">
+	                <thead>
+		                <tr>
+		                	<th class="text-left">序号</th>
+		                    <th class="text-left">商品名称</th>
+		                    <th class="text-left">数量</th>
+		                    <th class="text-left">单价</th>
+		                    <th class="text-left">规格</th>
+		                    <th class="text-left">金额</th>
+		                </tr>
+	                </thead>
+					
+	                <tbody>
+	                	<volist name="list" id="vo">
+					    	<tr>
+					    		<td style="width: 50px;">{$i}</td>
+					    		<td>{$vo.goodsName}</td>
+					    		<td class="right span2">
+					    			<div class="input-control text" data-role="input-control">
+	                                    <input name="num" type="number" tabindex="1" value="{$vo.num}">
+	                                    <button type="button" class="btn-clear"></button>
+	                                </div>
+					    		</td>
+					    		<td class="right span2">
+					    			<div class="input-control text" data-role="input-control">
+	                                    <input name="money" type="number" tabindex="1" value="{$vo.money}">
+	                                    <button type="button" class="btn-clear"></button>
+	                                </div>
+								</td>
+					    		<td class="right span4">
+					    			<div class="input-control text" data-role="input-control">
+	                                    <input name="size" type="number" tabindex="1" value="{$vo.size}">
+	                                    <button type="button" class="btn-clear"></button>
+	                                </div>
+					    		</td>
+					    		<td class="right span2">
+					    			<div class="input-control text" data-role="input-control">
+	                                    <input name="jine" type="number" tabindex="1" value="{$vo.jine}">
+	                                    <button type="button" class="btn-clear"></button>
+	                                </div>
+								</td>
+					    	</tr>
+				    	</volist>
+	                </tbody>
+	
+	                <tfoot>
+	                	<th class="text-left">序号</th>
+	                	<th class="text-left">商品名称</th>
+	                    <th class="text-left">数量</th>
+	                    <th class="text-left">单价</th>
+	                    <th class="text-left">规格</th>
+	                    <th class="text-left">金额</th>
+	                </tfoot>
+	            </table>
+            </if>
+           	<div class="row">
+	        </div>
+		</div>
+    </div>
+
+</body>
+</html>

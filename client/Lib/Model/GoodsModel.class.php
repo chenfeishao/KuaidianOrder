@@ -7,7 +7,7 @@ class GoodsModel extends Model {
 	
 	private $goodsID = "";
 	
-	public function init($id)//传入userName
+	public function init($id)//传入goodsID
 	{
 		$this->goodsID = $id;
 	}
@@ -15,7 +15,8 @@ class GoodsModel extends Model {
 	public function getGoodsName()
 	{
 		$condition['id'] = $this->goodsID;
-		return $this->where($condition)->select()[0]["name"];
+		$tmp = $this->where($condition)->select();
+		return $tmp[0]["name"];
 	}
 	
 	public function getAllGoodsInfo()

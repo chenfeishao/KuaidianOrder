@@ -25,9 +25,16 @@
 
 <script src="__PUBLIC__/metro/js/start-screen.js"></script>
 <script>
-function go(id)
+function go(id,k)
 {
-	url = "<?php echo U("Order/inputPanel");?>" + "?id=" + id;
+	if (k == 0)
+	{
+		url = "<?php echo U("Order/inputPanel");?>" + "?id=" + id;
+	}
+	else
+	{
+		url = "<?php echo U("Order/edit");?>" + "?id=" + id;
+	}
 	window.location = url;
 }
 
@@ -175,7 +182,7 @@ function onKeyDownDo(e)
 	        </div>
         </div>
         
-        <a href="#" class="tile bg-violet">
+        <a href="<?php echo U("Order/closing");?>" class="tile bg-violet">
             <div class="tile-content icon">
                 <span class="icon-basket"></span>
             </div>
@@ -196,18 +203,18 @@ function onKeyDownDo(e)
 
 
 
-	<?php if($select != NULL): ?><div class="tile-group two">
+	<?php if($select != NULL): ?><div class="tile-group three">
 		   <div class="tile-group-title">购物车</div>
 		   
-		   <?php if(is_array($select)): foreach($select as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>" >
+		   <?php if(is_array($select)): foreach($select as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?> selected"  onclick='go(<?php echo ($vo["id"]); ?>,1)'>
 					<div class="<?php echo ($vo["content"]); ?>">
 						<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
-				 				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
+		   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
 					</div>
 					<div class="<?php echo ($vo["brand"]); ?>">
-				              <div class="label"><?php echo ($vo["name"]); ?></div>
-				              <div class="badge">0</div>
-				          </div>
+		                <div class="label"><?php echo ($vo["name"]); ?></div>
+		                <div class="badge"><?php echo ($vo["num"]); ?></div>
+		            </div>
 				</div><?php endforeach; endif; ?>
 		
 		</div><?php endif; ?>
@@ -217,14 +224,13 @@ function onKeyDownDo(e)
     <div class="tile-group six">
         <div class="tile-group-title">货物清单</div>
         
-        <?php if(is_array($goods)): foreach($goods as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>"  onclick='go(<?php echo ($vo["id"]); ?>)'>
+        <?php if(is_array($goods)): foreach($goods as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>"  onclick='go(<?php echo ($vo["id"]); ?>,0)'>
 				<div class="<?php echo ($vo["content"]); ?>">
 					<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
 	   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
 				</div>
 				<div class="<?php echo ($vo["brand"]); ?>">
 	                <div class="label"><?php echo ($vo["name"]); ?></div>
-	                <div class="badge">0</div>
 	            </div>
 			</div><?php endforeach; endif; ?>
 		

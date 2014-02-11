@@ -40,25 +40,26 @@ Class OrderOP extends Model
 		$st = 0;
 		$count = 0;
 		$contentLen = strlen($orignArray);
+		$content = "";
 		while ($st < $contentLen)
 		{
 			$breakPoint = strpos($orignArray,_SPECAL_BREAK_FLAG,$st);
-			if ($breakPoint == 0)//开头
+			if ($breakPoint === 0)//开头
 			{
 				$st = $breakPoint + strlen(_SPECAL_BREAK_FLAG);
 				continue;
 			}
 			if (!$breakPoint)//到字符串最后一个内容了
 			{
-				$this->content[$count] = substr($orignArray,$st);
+				$content[$count] = substr($orignArray,$st);
 				break;
 			}
-			$this->content[$count] = substr($orignArray,$st,$breakPoint - $st);
+			$content[$count] = substr($orignArray,$st,$breakPoint - $st);
 			$count++;
 			$st = $breakPoint + strlen(_SPECAL_BREAK_FLAG);
 		}
 	
-		return $this->content;
+		return $content;
 	}
 	
 	public function getContent()
@@ -69,6 +70,46 @@ Class OrderOP extends Model
 		$this->goodsNumArray = $this->getContentOne($this->originGoodsNumArray);
 		$this->goodsSizeArray = $this->getContentOne($this->originGoodsSizeArray);
 		$this->goodsMoneyArray = $this->getContentOne($this->originGoodsMoneyArray);
+	}
+	
+	/*
+	 * 得到已下单的货物id数组
+	 * @return array idArray[i]
+	 */
+	public function getIDArray()
+	{
+		$this->getContent();
+		return $this->goodsIDArray;
+	}
+	
+	/*
+	 * 得到已下单的货物数量数组
+	* @return array numArray[i]
+	*/
+	public function getNumArray()
+	{
+		$this->getContent();
+		return $this->goodsNumArray;
+	}
+	
+	/*
+	 * 得到已下单的货物单价数组
+	* @return array moneyArray[i]
+	*/
+	public function getMoneyArray()
+	{
+		$this->getContent();
+		return $this->goodsMoneyArray;
+	}
+	
+	/*
+	 * 得到已下单的货物规格数组
+	* @return array sizeArray[i]
+	*/
+	public function getSizeArray()
+	{
+		$this->getContent();
+		return $this->goodsSizeArray;
 	}
 	
 	public function insert($goodsID,$num,$size,$money)

@@ -22,7 +22,7 @@ function change()
     <div class="container">
         <h1>
             <a href="{:U("Index/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-            订单<small class="on-right">{$goodsName}</small>
+ 			修改订单<small class="on-right">{$goodsName}</small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
@@ -32,25 +32,26 @@ function change()
                             <fieldset>
                                 <label><font color=black>数量</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInputN" name="num" tabindex="1" type="number" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
-                                    <button type="button" class="btn-clear"></button>
+                                    <input id="myInputN" name="num" type="number" value="{$num}" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
+                                    <button type="button" class="btn-clear" tabindex="1"></button>
                                 </div>
                                 <label><font color=black>单价</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInputM"  name="money" tabindex="2" type="number" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
-                                    <button type="button" class="btn-clear"></button>
+                                    <input id="myInputM"  name="money" type="number" value="{$money}" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
+                                    <button type="button" class="btn-clear" tabindex="2"></button>
                                 </div>
                                 <label><font color=black>规格</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="myInput" name="size" type="text" tabindex="3" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
-                                    <button type="button" class="btn-clear"></button>
+                                    <input id="myInput" name="size" type="text" value="{$size}" onclick="inputPanel.setNum(2)" onkeydown="return onKeyDownCheckNum(event)">
+                                    <button type="button" class="btn-clear" tabindex="3"></button>
                                 </div>
                                 <label><font color=black>金额</font></label>
                                 <div class="input-control text" data-role="input-control">
-                                    <input id="total" name="total" type="text" value="0" disabled="">
+                                    <input id="total" name="total" type="text" value="{$totalMoney}" disabled="">
                                 </div>
                                 <input type="hidden" name="id"  value={$id}>
                                 <input value="提交" type="submit">
+                                <input value="删除" type="submit">
                             </fieldset>
                         </form>
                     </div>
@@ -118,21 +119,7 @@ function inputPanel()
 {
     this.init = function()
     {
-    	document.getElementById("total").value = "0";
-        this.num = 0;
-        for (var i = 0; i < document.getElementsByTagName("input").length; i++)
-        {
-            if ( (document.getElementsByTagName("input")[i].id != "myInput") 
-            	&& (document.getElementsByTagName("input")[i].id != "myInputN")
-            	&& (document.getElementsByTagName("input")[i].id != "myInputM"))
-            {
-                this.max = i;
-                break;
-            }
-            this.output = document.getElementsByTagName("input")[i];
-            this.output.value = "";
-        }
-        
+    	this.num = 0;
         //0自动获得焦点
         document.getElementsByTagName("input")[0].parentNode.className = "input-control text info-state";
     }
