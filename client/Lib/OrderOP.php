@@ -1,4 +1,5 @@
 <?php
+require_once(LIB_PATH."commonModel.php");
 /*
  * 订单基础操作类
  * @NOTE：	继承前，要初始化ModelBaseOP中的$id，即数据索引;

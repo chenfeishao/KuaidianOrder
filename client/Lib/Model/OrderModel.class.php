@@ -1,5 +1,5 @@
 <?php
-include(LIB_PATH."OrderOP.php");
+require_once(LIB_PATH."OrderOP.php");
 
 class OrderModel extends OrderOP {
 

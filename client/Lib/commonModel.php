@@ -7,7 +7,7 @@ class ModelBaseOP extends Model
 	 * 数据索引id
 	 * Note:	需要在继承类中初始化
 	 */
-	protected $id = "";
+	protected $id = null;
 	
 	/*
 	 * 得到原始内容
@@ -34,23 +34,9 @@ class ModelBaseOP extends Model
 	{
 		$this->getOriginArray($arrayName);
 		$tmp = _ORIGIN_PREFIX.$arrayName;
-		$st = 0;
-		$count = 0;
-		$contentLen = strlen($this->$tmp);
-		$this->$arrayName = "";
-		while ($st < $contentLen)
-		{
-			$breakPoint = strpos($this->$tmp,_SPECAL_BREAK_FLAG,$st);
-			if (!$breakPoint)//到字符串最后内容了
-			{
-				break;
-			}
-			$this->$arrayName[$count] = substr($this->$tmp,$st,$breakPoint - $st);
-			$count++;
-			$st = $breakPoint + strlen(_SPECAL_BREAK_FLAG);
-		}
-	
-		return $this->$arrayName;
+		$tmp = explode(_SPECAL_BREAK_FLAG, $this->$tmp);
+		array_pop($tmp);
+		return $tmp;
 	}
 	
 	/*

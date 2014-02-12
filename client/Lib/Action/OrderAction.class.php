@@ -7,7 +7,7 @@ class OrderAction extends myAction
     public function inputPanel()//点击开始界面中的图标后进入的界面
     {
     	$dbGoods = D("Goods");
-    	if (!isNum($this->_get("id")))
+    	if (!$dbGoods->checkID($this->_get("id")))
     	{
     		$this->error("商品选择不正确，请重新选择",U("Index/index"));
     	}
@@ -21,7 +21,6 @@ class OrderAction extends myAction
     
     public function inputPanelIn()//在开始界面上弹出来的界面
     {
-    	$db = D("Goods");
     	/*
     	 * 如果传的是name的话  废弃
     	*
@@ -31,14 +30,16 @@ class OrderAction extends myAction
     
     	}
     	*/
-    	if (!isNum($this->_get("id")))
+    	$dbGoods = D("Goods");
+    	if (!$dbGoods->checkID($this->_get("id")))
     	{
     		$this->error("商品选择不正确，请重新选择",U("Index/noDisplay"));
     	}
-    	$db->init($this->_get("id"));
-    	 
+    	$dbGoods->init($this->_get("id"));
+    	
     	$this->assign("id",$this->_get("id"));
-    	$this->assign("goodsName",$db->getGoodsName());
+    	$this->assign("goodsName",$dbGoods->getGoodsName());
+    	$this->assign("sizeArray",$dbGoods->getGoodsSize());
     	$this->display();
     }
     
@@ -97,13 +98,13 @@ class OrderAction extends myAction
     {
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
-    	$db = D("TmpOrder");
-    	$this->isFalse($db->create(),$db->getError(),"Index/goBack");
-    	$db->init($dbUser->getTmpOrderID());
-    	if ($db->insert($this->_post("id"),$this->_post("num"),$this->_post("size"),$this->_post("money")))
+    	$dbTmpOrder = D("TmpOrder");
+    	$this->isFalse($dbTmpOrder->create(),$dbTmpOrder->getError(),"Index/goBack");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	if ($dbTmpOrder->addTmpOrder($this->_post("id"),$this->_post("num"),$this->_post("size"),$this->_post("money")))
     		redirect(U("Index/noDisplay"),0);
     	else
-    		$this->error("订单提交失败，请重试",U("Order/inputPanelIn","id=".$this->_post('id')));
+    		$this->error("订单提交失败，请重试",U("Order/inputPanel","id=".$this->_post('id')));
     }
     
     /*
@@ -111,6 +112,9 @@ class OrderAction extends myAction
      */
     public function closing()
     {
+    	/*
+    	 * 获取tmpOrder信息
+    	 */
     	$dbGoods = D("Goods");
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
@@ -127,10 +131,13 @@ class OrderAction extends myAction
     		$orderInfo[$i]["id"] = $tmp["id"]["$i"];
     		$orderInfo[$i]["num"] = $tmp["num"]["$i"];
     		$orderInfo[$i]["money"] = $tmp["money"]["$i"];
-    		$orderInfo[$i]["size"] = $tmp["size"]["$i"];
+    		
+    		//渲染规格
+    		$this->assign("goodsInfoSize".$i,$dbGoods->getGoodsSize());//渲染下拉列表
+//     		$orderInfo[$i]["size"] = $tmp["size"]["$i"];
+    		
     		$orderInfo[$i]["jine"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
     	}
-    	
     	
     	//渲染list
     	if (count($orderInfo) == 0)
@@ -138,7 +145,6 @@ class OrderAction extends myAction
     		$orderInfo = null;
     	}
     	$this->assign("list",$orderInfo);
-    	
     	
     	$this->display();
     }

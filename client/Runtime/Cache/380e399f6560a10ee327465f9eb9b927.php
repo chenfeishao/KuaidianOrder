@@ -53,10 +53,11 @@
 					    		<td style="width: 50px;"><?php echo ($i); ?></td>
 					    		<td calss="span4"><?php echo ($vo["goodsName"]); ?></td>
 					    		<td class="right span3">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="size" type="number" tabindex="999" value="<?php echo ($vo["size"]); ?>">
-	                                    <button type="button" class="btn-clear"></button>
-	                                </div>
+					    			<div class="input-control select">
+										<select name="goodsInfoSize<?php echo ($i); ?>" tabindex="999">
+											<?php if(is_array($sizeArray)): foreach($sizeArray as $key=>$vo): ?><option value="<?php echo ($key); ?>"><?php echo ($vo); ?></option><?php endforeach; endif; ?>
+										</select>
+									</div>
 					    		</td>
 					    		<td class="right span2">
 					    			<div class="input-control text" data-role="input-control">

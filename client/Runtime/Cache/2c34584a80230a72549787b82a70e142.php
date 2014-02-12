@@ -66,8 +66,8 @@ function change()
                                 </div>
                                 <label><font color=black>规格</font></label>
                                 <div class="input-control select">
-									<select name="wide">
-										<?php if(is_array($sizeArray)): foreach($sizeArray as $key=>$vo): ?><option value="<?php echo ($i); ?>"><?php echo ($vo["size"]); ?></option><?php endforeach; endif; ?>
+									<select name="size">
+										<?php if(is_array($sizeArray)): foreach($sizeArray as $key=>$vo): ?><option value="<?php echo ($key); ?>"><?php echo ($vo); ?></option><?php endforeach; endif; ?>
 									</select>
 								</div>
                                 <label><font color=black>金额</font></label>

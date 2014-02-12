@@ -30,10 +30,13 @@
 					    		<td style="width: 50px;">{$i}</td>
 					    		<td calss="span4">{$vo.goodsName}</td>
 					    		<td class="right span3">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="size" type="number" tabindex="999" value="{$vo.size}">
-	                                    <button type="button" class="btn-clear"></button>
-	                                </div>
+					    			<div class="input-control select">
+										<select name="goodsInfoSize{$i}" tabindex="999">
+											<foreach name="sizeArray" item="vo">
+												<option value="{$key}">{$vo}</option>
+											</foreach>
+										</select>
+									</div>
 					    		</td>
 					    		<td class="right span2">
 					    			<div class="input-control text" data-role="input-control">
