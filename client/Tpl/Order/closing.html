@@ -1,4 +1,26 @@
 <include file="Public:header" />
+<script>
+function change(k)
+{
+	var numName = "myInputN" + k;
+	var moneyName = "myInputM" + k;
+	var jineName = "jine" + k;
+	num = document.getElementById(numName).value;
+	money = document.getElementById(moneyName).value;
+	if (num == "") num = 0;
+	if (money == "") money = 0;
+	document.getElementById(jineName).value = num*money;
+}
+function clearInfo(k)
+{
+	var numName = "myInputN" + k;
+	var moneyName = "myInputM" + k;
+	var jineName = "jine" + k;
+	document.getElementById(numName).value = "";
+	document.getElementById(moneyName).value = "";
+	document.getElementById(jineName).value = "0";
+}
+</script>
 </head>
 
 <body class="metro">
@@ -31,28 +53,30 @@
 					    		<td calss="span4">{$vo.goodsName}</td>
 					    		<td class="right span3">
 					    			<div class="input-control select">
-										<select name="goodsInfoSize{$i}" tabindex="999">
-											<foreach name="sizeArray" item="vo">
-												<option value="{$key}">{$vo}</option>
+										<select name="size" tabindex="999" onchange="clearInfo({$i})">
+											<foreach name="vo['goodsInfoSize']" item="sub">
+												<if condition="$vo.size eq $key"><option selected="" value="{$key}">{$sub}</option>
+											        <else/><option value="{$key}">{$sub}</option>
+											    </if>
 											</foreach>
 										</select>
 									</div>
 					    		</td>
 					    		<td class="right span2">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input autofocus="" name="num" type="number" tabindex="1" value="{$vo.num}">
+					    			<div class="input-control text success-state" data-role="input-control">
+	                                    <input id="myInputN{$i}" name="num" autofocus="" type="number" tabindex="1" value="{$vo.num}" oninput="change({$i});">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 					    		</td>
 					    		<td class="right span2">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="money" type="number" tabindex="1" value="{$vo.money}">
+					    			<div class="input-control text error-state" data-role="input-control">
+	                                    <input id="myInputM{$i}" name="money" type="number" tabindex="1" value="{$vo.money}" oninput="change({$i});">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 								</td>
 					    		<td class="right span2">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="jine" type="number" tabindex="1" value="{$vo.jine}">
+					    			<div class="input-control text info-state" data-role="input-control">
+	                                    <input id="jine{$i}" name="jine" type="number" tabindex="1" value="{$vo.jine}" disabled="">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 								</td>

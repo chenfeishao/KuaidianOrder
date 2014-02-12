@@ -43,12 +43,12 @@
                                    <input name="name" type="text" autofocus=""">
                                    <button type="button" class="btn-clear" tabindex="1"></button>
                                </div>
-                               <label><font color=black>库存*<small class="on-right"><br>格式：仓库1：10，12；仓库2：20，23<br>代表仓库1有规格1的10件，规格2的12件，仓库2有规格1的20件，规格2的23件。为了输入方便，请用中文（全角）打冒号、逗号与分号。</small></font></label>
+                               <label><font color=black>库存<small class="on-right"><br>格式：仓库1：10，12；仓库2：20，23<br>代表仓库1有规格1的10件，规格2的12件，仓库2有规格1的20件，规格2的23件。为了输入方便，请用中文（全角）打冒号、逗号与分号。</small></font></label>
                                <div class="input-control text" data-role="input-control">
                                    <input name="warehouse" type="text" value="默认仓库：">
                                    <button type="button" class="btn-clear" tabindex="2"></button>
                                </div>
-                               <label><font color=black>类别*</font></label>
+                               <label><font color=black>类别</font></label>
                                <div class="input-control text" data-role="input-control">
                                    <input name="class" type="text">
                                    <button type="button" class="btn-clear" tabindex="3"></button>
@@ -103,14 +103,14 @@
 		                        <input name="image" type="text">
 		                        <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
-		                    <label><font color=black>瓷片颜色*<small class="on-right">填写颜色的英文名称，参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a></small></font></label>
+		                    <label><font color=black>瓷片颜色<small class="on-right">填写颜色的英文名称，留空则生成随机颜色。颜色名称参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a></small></font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                        <input name="bgColor" list="colorDataList" type="text" value="lime" onclick='$(this).val("");'>
+		                        <input name="bgColor" list="colorDataList" type="text" onclick='$(this).val("");'>
 		                        <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
-		                    <label><font color=black>条带颜色*<small class="on-right">填写颜色的英文名称，参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a>。<br>对于“普通瓷片”样式，建议和瓷片颜色相同</small></font></label>
+		                    <label><font color=black>条带颜色<small class="on-right">填写颜色的英文名称，留空则生成随机颜色。颜色名称参考请<a href="__PUBLIC__/colorWatch.html">点击这里</a>。<br>对于“普通瓷片”样式，建议和瓷片颜色相同</small></font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                        <input name="brandColor" list="colorDataList" type="text" value="lime" onclick='$(this).val("");'>
+		                        <input name="brandColor" list="colorDataList" type="text" onclick='$(this).val("");'>
 		                        <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                    <label><font color=black>开始界面中的显示顺序<small class="on-right">一个正整数，数字越小，显示越靠前</small></font></label>

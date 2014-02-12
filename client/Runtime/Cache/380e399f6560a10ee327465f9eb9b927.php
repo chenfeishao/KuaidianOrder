@@ -23,6 +23,28 @@
     <script src="__PUBLIC__/metro/js/docs.js"></script>
     <title>EasyOrder</title>
 
+<script>
+function change(k)
+{
+	var numName = "myInputN" + k;
+	var moneyName = "myInputM" + k;
+	var jineName = "jine" + k;
+	num = document.getElementById(numName).value;
+	money = document.getElementById(moneyName).value;
+	if (num == "") num = 0;
+	if (money == "") money = 0;
+	document.getElementById(jineName).value = num*money;
+}
+function clearInfo(k)
+{
+	var numName = "myInputN" + k;
+	var moneyName = "myInputM" + k;
+	var jineName = "jine" + k;
+	document.getElementById(numName).value = "";
+	document.getElementById(moneyName).value = "";
+	document.getElementById(jineName).value = "0";
+}
+</script>
 </head>
 
 <body class="metro">
@@ -54,26 +76,27 @@
 					    		<td calss="span4"><?php echo ($vo["goodsName"]); ?></td>
 					    		<td class="right span3">
 					    			<div class="input-control select">
-										<select name="goodsInfoSize<?php echo ($i); ?>" tabindex="999">
-											<?php if(is_array($sizeArray)): foreach($sizeArray as $key=>$vo): ?><option value="<?php echo ($key); ?>"><?php echo ($vo); ?></option><?php endforeach; endif; ?>
+										<select name="size" tabindex="999" onchange="clearInfo(<?php echo ($i); ?>)">
+											<?php if(is_array($vo['goodsInfoSize'])): foreach($vo['goodsInfoSize'] as $key=>$sub): if($vo["size"] == $key): ?><option selected="" value="<?php echo ($key); ?>"><?php echo ($sub); ?></option>
+											        <?php else: ?><option value="<?php echo ($key); ?>"><?php echo ($sub); ?></option><?php endif; endforeach; endif; ?>
 										</select>
 									</div>
 					    		</td>
 					    		<td class="right span2">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input autofocus="" name="num" type="number" tabindex="1" value="<?php echo ($vo["num"]); ?>">
+					    			<div class="input-control text success-state" data-role="input-control">
+	                                    <input id="myInputN<?php echo ($i); ?>" name="num" autofocus="" type="number" tabindex="1" value="<?php echo ($vo["num"]); ?>" oninput="change(<?php echo ($i); ?>);">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 					    		</td>
 					    		<td class="right span2">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="money" type="number" tabindex="1" value="<?php echo ($vo["money"]); ?>">
+					    			<div class="input-control text error-state" data-role="input-control">
+	                                    <input id="myInputM<?php echo ($i); ?>" name="money" type="number" tabindex="1" value="<?php echo ($vo["money"]); ?>" oninput="change(<?php echo ($i); ?>);">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 								</td>
 					    		<td class="right span2">
-					    			<div class="input-control text" data-role="input-control">
-	                                    <input name="jine" type="number" tabindex="1" value="<?php echo ($vo["jine"]); ?>">
+					    			<div class="input-control text info-state" data-role="input-control">
+	                                    <input id="jine<?php echo ($i); ?>" name="jine" type="number" tabindex="1" value="<?php echo ($vo["jine"]); ?>" disabled="">
 	                                    <button type="button" class="btn-clear"></button>
 	                                </div>
 								</td>

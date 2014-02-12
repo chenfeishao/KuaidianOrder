@@ -4,19 +4,21 @@ class GoodsModel extends Model {
 	// 自动验证设置
 	protected $_validate = array(
 			array('name','require','商品名称不能为空'),
-			array('warehouse','require','库存不能为空'),
-			array('class','require','类别不能为空'),
+// 			array('warehouse','require','库存不能为空'),
+// 			array('class','require','类别不能为空'),
 			array('size','require','规格不能为空'),
 			array('oem','require','供货商不能为空'),
-			array('bgColor','require','瓷片颜色不能为空'),
-			array('brandColor','require','条带颜色不能为空'),
 			array('style',array(1,4),'瓷片样式不在可选范围内！',0,'between'),
 			array('high',array(1,5),'瓷片高度不在可选范围内！',0,'between'),
 			array('wide',array(1,5),'瓷片宽度不在可选范围内！',0,'between'),
-			array('bgColor',array("black","white","lime","green","emerald","teal","cyan","cobalt","indigo","violet","pink","magenta","crimson","red","orange","amber","yellow","brown","olive","steel","mauve","taupe","gray","dark","darker","transparent","darkBrown","darkCrimson","darkMagenta","darkIndigo","darkCyan","darkCobalt","darkTeal","darkEmerald","darkGreen","darkOrange","darkRed","darkPink","darkViolet","darkBlue","lightBlue","lightTeal","lightOlive","lightOrange","lightPink","lightRed","lightGreen")
+			array('bgColor',array("","black","white","lime","green","emerald","teal","cyan","cobalt","indigo","violet","pink","magenta","crimson","red","orange","amber","yellow","brown","olive","steel","mauve","taupe","gray","dark","darker","transparent","darkBrown","darkCrimson","darkMagenta","darkIndigo","darkCyan","darkCobalt","darkTeal","darkEmerald","darkGreen","darkOrange","darkRed","darkPink","darkViolet","darkBlue","lightBlue","lightTeal","lightOlive","lightOrange","lightPink","lightRed","lightGreen")
 						,'瓷片颜色不在可选范围内！',0,'in'),
-			array('brandColor',array("black","white","lime","green","emerald","teal","cyan","cobalt","indigo","violet","pink","magenta","crimson","red","orange","amber","yellow","brown","olive","steel","mauve","taupe","gray","dark","darker","transparent","darkBrown","darkCrimson","darkMagenta","darkIndigo","darkCyan","darkCobalt","darkTeal","darkEmerald","darkGreen","darkOrange","darkRed","darkPink","darkViolet","darkBlue","lightBlue","lightTeal","lightOlive","lightOrange","lightPink","lightRed","lightGreen")
+			array('brandColor',array("","black","white","lime","green","emerald","teal","cyan","cobalt","indigo","violet","pink","magenta","crimson","red","orange","amber","yellow","brown","olive","steel","mauve","taupe","gray","dark","darker","transparent","darkBrown","darkCrimson","darkMagenta","darkIndigo","darkCyan","darkCobalt","darkTeal","darkEmerald","darkGreen","darkOrange","darkRed","darkPink","darkViolet","darkBlue","lightBlue","lightTeal","lightOlive","lightOrange","lightPink","lightRed","lightGreen")
 						,'条带颜色不在可选范围内！',0,'in'),
+	);
+	
+	//自动完成
+	protected $_auto = array (
 	);
 	
 	private $goodsID = "";
@@ -107,20 +109,27 @@ class GoodsModel extends Model {
 			$data["indexNum"] = 999;
 		}
 		//warehouse
-		$tmp = explode("；",$data["warehouse"]);
-		for ($i = 0; $i < count($tmp); $i++)
+		if ($data["warehouse"] != "默认仓库：")//用户有输入则处理
 		{
-			$tmp[$i] = explode("：",$tmp[$i]);
-			$tmp[$i][1] = explode("，",$tmp[$i][1]);
-			for ($j = 0; $j < count($tmp[$i][1]); $j++)
+			$tmp = explode("；",$data["warehouse"]);
+			for ($i = 0; $i < count($tmp); $i++)
 			{
-				if (!isNumWithPoint($tmp[$i][1][$j]))
+				$tmp[$i] = explode("：",$tmp[$i]);
+				$tmp[$i][1] = explode("，",$tmp[$i][1]);
+				for ($j = 0; $j < count($tmp[$i][1]); $j++)
 				{
-					return -1;
+					if (!isNumWithPoint($tmp[$i][1][$j]))
+					{
+						return -1;
+					}
 				}
 			}
+			$data["warehouse"] = transformSpecalBreakTag(explode("；",$data["warehouse"]));
 		}
-		$data["warehouse"] = transformSpecalBreakTag(explode("；",$data["warehouse"]));
+		else
+		{
+			$data["warehouse"] = "默认仓库：0@#$%^&*";
+		}
 
 		//size
 		$data["size"] = transformSpecalBreakTag(explode("；",$data["size"]));
@@ -146,6 +155,26 @@ class GoodsModel extends Model {
 			case 5:$highWide .= " quadro-vertical";break;
 		}
 		$data["highWide"] = $highWide;
+		
+		//color
+		$colorArray = array("black","white","lime","green","emerald","teal","cyan","cobalt","indigo","violet","pink","magenta","crimson","red","orange","amber","yellow","brown","olive","steel","mauve","taupe","gray","dark","darker","transparent","darkBrown","darkCrimson","darkMagenta","darkIndigo","darkCyan","darkCobalt","darkTeal","darkEmerald","darkGreen","darkOrange","darkRed","darkPink","darkViolet","darkBlue","lightBlue","lightTeal","lightOlive","lightOrange","lightPink","lightRed","lightGreen");
+		//bgColor
+		if ( ($data["bgColor"] == "") || ($data["bgColor"] == null) )
+		{
+			$data["bgColor"] = $colorArray[rand(0,46)];
+		}
+		//brandColor
+		if ( ($data["brandColor"] == "") || ($data["brandColor"] == null) )
+		{
+			if ($data["style"] == 1)//当它为图片瓷片时，两个颜色不同
+			{
+				$data["brandColor"] = $colorArray[rand(0,46)];
+			}
+			else
+			{
+				$data["brandColor"] = $data["bgColor"];
+			}
+		}
 		
 		return $this->add($data);
 	}

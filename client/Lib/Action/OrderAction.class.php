@@ -133,8 +133,8 @@ class OrderAction extends myAction
     		$orderInfo[$i]["money"] = $tmp["money"]["$i"];
     		
     		//渲染规格
-    		$this->assign("goodsInfoSize".$i,$dbGoods->getGoodsSize());//渲染下拉列表
-//     		$orderInfo[$i]["size"] = $tmp["size"]["$i"];
+    		$orderInfo[$i]["goodsInfoSize"] = $dbGoods->getGoodsSize();//商品规格信息
+    		$orderInfo[$i]["size"] = $tmp["size"]["$i"];//选中的规格信息
     		
     		$orderInfo[$i]["jine"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
     	}
