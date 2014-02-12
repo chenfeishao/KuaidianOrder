@@ -124,6 +124,8 @@ class OrderAction extends myAction
     	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
     	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
     	$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
+    	$totalJine = 0;
+    	$totalNum = 0;
     	for ($i = 0; $i < count($tmp["id"]); $i++)
     	{
     		$dbGoods->init($tmp["id"][$i]);
@@ -137,6 +139,8 @@ class OrderAction extends myAction
     		$orderInfo[$i]["size"] = $tmp["size"]["$i"];//选中的规格信息
     		
     		$orderInfo[$i]["jine"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+    		$totalJine += $orderInfo[$i]["jine"];
+    		$totalNum += $orderInfo[$i]["num"];
     	}
     	
     	//渲染list
@@ -146,6 +150,17 @@ class OrderAction extends myAction
     	}
     	$this->assign("list",$orderInfo);
     	
+    	$this->assign("totalJine",$totalJine);
+    	$this->assign("totalNum",$totalNum);
+    	$this->assign("totalID",count($tmp["id"]));
+    	$this->display();
+    }
+    
+    /*
+     * 从结算页面提交的订单
+     */
+    public function toAddFromClosing()
+    {
     	$this->display();
     }
 }

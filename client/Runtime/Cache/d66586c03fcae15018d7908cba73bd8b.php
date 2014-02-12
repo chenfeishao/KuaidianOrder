@@ -236,6 +236,7 @@ function onKeyDownDo(e)
 		
     </div> <!-- End group -->
 </div>
+
 <datalist id="product">
     <?php if(is_array($productList)): foreach($productList as $key=>$vo): ?><option label="<?php echo ($vo["pyname"]); echo ($vo["name"]); ?>" value="<?php echo ($vo["name"]); ?>" id="<?php echo ($vo["name"]); ?>" src="<?php echo ($vo["id"]); ?>"/><?php endforeach; endif; ?>
 </datalist>
