@@ -47,5 +47,18 @@ class GoodsModel extends ModelBaseOP
 		$tmp = count($tmp);
 		return ( isNum($id) && ($tmp == 1) );
 	}
+	
+	/*
+	* 检查规格是否是数字，且是否在正确范围内
+	* @NOTE	当选择的商品id错误的时候，因为查不出来数据，所以$tmp为0，这里永远为false
+	* @param	int $sizeNo;要验证的size编号
+	* @return	bool;验证是否正确
+	*/
+	public function checkSize($sizeNo)
+	{
+		$tmp = $this->getGoodsSize();
+		$tmp = count($tmp);
+		return ( isNum($sizeNo) && ($sizeNo >=0) && ($sizeNo < $tmp) );//必须要有>=0,不然-1也小于$tmp=0时。
+	}
 }
 ?>

@@ -156,10 +156,10 @@ function onKeyDownDo(e)
 
         <a href="#" class="tile bg-darkOrange">
             <div class="tile-content icon">
-                <span class="icon-help"></span>
+                <span class="icon-history"></span>
             </div>
             <div class="brand">
-                <div class="label">关于</div>
+                <div class="label">历史出货记录</div>
             </div>
         </a>
         

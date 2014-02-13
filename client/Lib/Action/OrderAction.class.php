@@ -161,7 +161,27 @@ class OrderAction extends myAction
      */
     public function toAddFromClosing()
     {
-    	$this->display();
+     	$dbUser = D("User");
+     	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+		$this->isFalse($dbTmpOrder->updateTmpOrder($this->_post()),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+    	redirect(U("Order/closingInfo"),0);
+    }
+    
+    /*
+     * 结算页面中删除一条商品的TmpOrder记录
+     */
+    public function closingDelete()
+    {
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+    	$this->isFalse($dbTmpOrder->deleteFromTmpOrder($this->_get("no") - 1),"删除的商品不在购物车内","Order/closing");
+    	redirect(U("Order/closing"),0);
     }
 }
 

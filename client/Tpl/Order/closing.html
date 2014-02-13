@@ -63,11 +63,12 @@ function clearInfo(k)
 		                <tbody>
 		                	<volist name="list" id="vo">
 						    	<tr>
-						    		<td style="width: 50px;">{$i}</td>
-						    		<td calss="span4">{$vo.goodsName}</td>
+						    		<td style="width: 50px;">{$i}
+						    		</td>
+						    		<td class="span4">{$vo.goodsName}</td>
 						    		<td class="right span3">
 						    			<div class="input-control select">
-											<select name="size" tabindex="999" onchange="clearInfo({$i})">
+											<select name="size{$i}" tabindex="999" onchange="clearInfo({$i})">
 												<foreach name="vo['goodsInfoSize']" item="sub">
 													<if condition="$vo.size eq $key"><option selected="" value="{$key}">{$sub}</option>
 												        <else/><option value="{$key}">{$sub}</option>
@@ -78,13 +79,13 @@ function clearInfo(k)
 						    		</td>
 						    		<td class="right span2">
 						    			<div class="input-control text success-state" data-role="input-control">
-		                                    <input id="myInputN{$i}" name="num" autofocus="" type="number" tabindex="1" value="{$vo.num}" oninput="change({$i});">
+		                                    <input id="myInputN{$i}" name="num{$i}" autofocus="" type="number" tabindex="1" value="{$vo.num}" oninput="change({$i});">
 		                                    <button type="button" class="btn-clear"></button>
 		                                </div>
 						    		</td>
 						    		<td class="right span2">
 						    			<div class="input-control text error-state" data-role="input-control">
-		                                    <input id="myInputM{$i}" name="money" type="number" tabindex="1" value="{$vo.money}" oninput="change({$i});">
+		                                    <input id="myInputM{$i}" name="money{$i}" type="number" tabindex="1" value="{$vo.money}" oninput="change({$i});">
 		                                    <button type="button" class="btn-clear"></button>
 		                                </div>
 									</td>
@@ -95,7 +96,7 @@ function clearInfo(k)
 		                                </div>
 									</td>
 									<td style="width: 70px;">
-										<button class="button warning">删除</button>
+										<a href="{:U("Order/closingDelete")}?no={$i}" class="button warning">删除</a>
 									</td>
 						    	</tr>
 					    	</volist>

@@ -31,7 +31,7 @@
 
     <div class="container">
         <h1>
-            <a href="<?php echo U("Index/goBack");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+            <a href="<?php echo U("Order/closing");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	结算<small class="on-right">相关信息</small>
         </h1>
         
@@ -45,7 +45,7 @@
 						<div class="span3">
 							<label><font color=black>客户名称*</font></label>
 		                   	<div class="input-control text" data-role="input-control">
-		                       <input name="name" type="text" autofocus=""">
+		                       <input name="name" type="text" autofocus="">
 		                       <button type="button" class="btn-clear" tabindex="1"></button>
 		                    </div>
 		                </div>
@@ -84,7 +84,7 @@
 			</div>
 			<div class="panel">
 				<div class="panel-header bg-darkRed fg-white">
-					付款信息<span class="place-right">账单原应收金额:10002</span>
+					付款信息<span class="place-right">账单原应收金额:<?php echo ($originJinE); ?></span>
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
@@ -98,7 +98,7 @@
 		                <div class="span3">
 		                    <label><font color=black>应收金额</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="class" type="text">
+		                       <input name="class" type="text" value="<?php echo ($originJinE); ?>">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
@@ -142,20 +142,21 @@
 		            </div>
 				</div>
 			</div>
-			<div class="tile-area no-padding clearfix">
-	            <div class="grid fluid">
-	                <div class="tile-group seven">
-	                    <div class="row">
-	                        <button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Goods/add');?>'" data-click="transform">
-	                            <h2>延迟发货</h2>
-	                        </button>
-	                        <button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Goods/edit');?>'" data-click="transform">
-	                            <h2>立即发货</h2>
-	                        </button>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
+			<div class="panel">
+				<div class="panel-header bg-green fg-white">
+					出货选择
+				</div>
+				<div class="panel-content grid fluid">
+					<div class="row">
+						<button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Goods/add');?>'" data-click="transform">
+                            <h2>延迟发货</h2>
+                        </button>
+                        <button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Goods/edit');?>'" data-click="transform">
+                            <h2>立即发货</h2>
+                        </button>
+		            </div>
+				</div>
+			</div>
         	<div class="row">
 	        	<div class="stepper rounded" data-role="stepper" data-steps="4" data-start="3"></div>
 	        </div>

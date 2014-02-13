@@ -86,11 +86,12 @@ function clearInfo(k)
 						
 		                <tbody>
 		                	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
-						    		<td style="width: 50px;"><?php echo ($i); ?></td>
-						    		<td calss="span4"><?php echo ($vo["goodsName"]); ?></td>
+						    		<td style="width: 50px;"><?php echo ($i); ?>
+						    		</td>
+						    		<td class="span4"><?php echo ($vo["goodsName"]); ?></td>
 						    		<td class="right span3">
 						    			<div class="input-control select">
-											<select name="size" tabindex="999" onchange="clearInfo(<?php echo ($i); ?>)">
+											<select name="size<?php echo ($i); ?>" tabindex="999" onchange="clearInfo(<?php echo ($i); ?>)">
 												<?php if(is_array($vo['goodsInfoSize'])): foreach($vo['goodsInfoSize'] as $key=>$sub): if($vo["size"] == $key): ?><option selected="" value="<?php echo ($key); ?>"><?php echo ($sub); ?></option>
 												        <?php else: ?><option value="<?php echo ($key); ?>"><?php echo ($sub); ?></option><?php endif; endforeach; endif; ?>
 											</select>
@@ -98,13 +99,13 @@ function clearInfo(k)
 						    		</td>
 						    		<td class="right span2">
 						    			<div class="input-control text success-state" data-role="input-control">
-		                                    <input id="myInputN<?php echo ($i); ?>" name="num" autofocus="" type="number" tabindex="1" value="<?php echo ($vo["num"]); ?>" oninput="change(<?php echo ($i); ?>);">
+		                                    <input id="myInputN<?php echo ($i); ?>" name="num<?php echo ($i); ?>" autofocus="" type="number" tabindex="1" value="<?php echo ($vo["num"]); ?>" oninput="change(<?php echo ($i); ?>);">
 		                                    <button type="button" class="btn-clear"></button>
 		                                </div>
 						    		</td>
 						    		<td class="right span2">
 						    			<div class="input-control text error-state" data-role="input-control">
-		                                    <input id="myInputM<?php echo ($i); ?>" name="money" type="number" tabindex="1" value="<?php echo ($vo["money"]); ?>" oninput="change(<?php echo ($i); ?>);">
+		                                    <input id="myInputM<?php echo ($i); ?>" name="money<?php echo ($i); ?>" type="number" tabindex="1" value="<?php echo ($vo["money"]); ?>" oninput="change(<?php echo ($i); ?>);">
 		                                    <button type="button" class="btn-clear"></button>
 		                                </div>
 									</td>
@@ -115,7 +116,7 @@ function clearInfo(k)
 		                                </div>
 									</td>
 									<td style="width: 70px;">
-										<button class="button warning">删除</button>
+										<a href="<?php echo U("Order/closingDelete");?>?no=<?php echo ($i); ?>" class="button warning">删除</a>
 									</td>
 						    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 		                </tbody>

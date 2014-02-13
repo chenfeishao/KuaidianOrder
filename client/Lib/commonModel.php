@@ -40,8 +40,8 @@ class ModelBaseOP extends Model
 	}
 	
 	/*
-	 * 序列化数组，即给数组添加中断标记并转换成字符串。
-	* @param	array $data;原始数据
+	 * 序列化数组，即给数组添加中断标记并转换成字符串。（不跟数据库通信）
+	* @param	array $data;需要转换的原始数据
 	* @return	string;转换完成后的字符串
 	*/
 	public function transformSpecalBreakTag($data)
@@ -55,6 +55,22 @@ class ModelBaseOP extends Model
 	}
 	
 	/*
+	 * 序列化数组，并更新数据库内容
+	* @param	string $name;要更新的数据在数据库中的字段名
+	* 			array $data;需要转换的原始数据
+	* @return	bool；更新是否成功
+	*/
+	public function serializeAndUpdate($name,$data)
+	{
+		$condition["id"] = $this->id;
+		$condition[$name] = $this->transformSpecalBreakTag($data);
+		if ($this->save($condition) === false)//save更新成功后返回的是影响的记录数。会返回0
+			return false;
+		else
+			return true;
+	}
+	
+	/*
 	 * 给原始数组后面追加内容。（不跟数据库通信）
 	 * @param	string $arrayName;要追加的数组名称(字段名称)
 	 * 			string $value;要追加的值
@@ -65,6 +81,19 @@ class ModelBaseOP extends Model
 		$this->getOriginArray($arrayName);
 		$tmp = _ORIGIN_PREFIX.$arrayName;
 		return $this->$tmp .= $value._SPECAL_BREAK_FLAG;
+	}
+	
+	/*
+	 * 删除name字段的第No个数据（与数据库通信）
+	 * @param	string $name;字段名称
+	 * 			int $No;第多少个数据
+	 * @return	bool;删除是否成功
+	 */
+	public function deleteOne($name,$No)
+	{
+		$data = $this->getArray($name);
+		array_splice($data,$No,1);
+		return $this->serializeAndUpdate($name,$data);
 	}
 }
 ?>
