@@ -91,7 +91,7 @@
 		                <div class="span3">
 		                    <label><font color=black>优惠金额</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="warehouse" type="text">
+		                       <input name="warehouse" type="text" value="0">
 		                       <button type="button" class="btn-clear" tabindex="2"></button>
 		                    </div>
 		                </div>
@@ -118,32 +118,27 @@
 		                </div>
 		            </div>
 		            <div class="row">
-		            	<div class="span3">
-		                    <label><font color=black>客户本次欠付款情况</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input name="size" type="text">
-		                       <button type="button" class="btn-clear" tabindex="3"></button>
-		                    </div>
+		                <div class="span3">
+		                    <h5><font color=black>客户历史欠付款情况总计：<br></font></h5>
+		                    <span class="place-right">1000000</span>
+		                </div>
+		                <div class="span2">
+		                    <h5><font color=black>客户本次欠付款：</font></h5>
 		                </div>
 		                <div class="span3">
-		                    <label><font color=black>客户历史欠付款情况总计</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input name="size" type="text">
-		                       <button type="button" class="btn-clear" tabindex="3"></button>
-		                    </div>
+		                    <h1 class="text-warning place-right">欠  1000000</h1>
 		                </div>
-		                <div class="span6">
-		                    <label><font color=black>本次实收</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input name="oem" type="text">
-		                       <button type="button" class="btn-clear" tabindex="3"></button>
-		                    </div>
+		                <div class="span2">
+		                    <h5><font color=black>本次实收：</font></h5>
+		                </div>
+		                <div class="span2">
+		                	<h1 class="text-alert place-right">1000000</h1>
 		                </div>
 		            </div>
 				</div>
 			</div>
 			<div class="panel">
-				<div class="panel-header bg-green fg-white">
+				<div class="panel-header bg-mauve fg-white">
 					出货选择
 				</div>
 				<div class="panel-content grid fluid">

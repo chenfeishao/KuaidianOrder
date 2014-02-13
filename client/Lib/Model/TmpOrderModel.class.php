@@ -170,5 +170,6 @@ class TmpOrderModel extends OrderOP {
 				 ($this->deleteOne("goodsMoneyArray",$No))
 				);
 	}
+	
 }
 ?>

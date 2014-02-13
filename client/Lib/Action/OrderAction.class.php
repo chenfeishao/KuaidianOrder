@@ -112,6 +112,8 @@ class OrderAction extends myAction
      */
     public function closing()
     {
+    	$orderInfo = null;
+    	
     	/*
     	 * 获取tmpOrder信息
     	 */
@@ -182,6 +184,41 @@ class OrderAction extends myAction
     	
     	$this->isFalse($dbTmpOrder->deleteFromTmpOrder($this->_get("no") - 1),"删除的商品不在购物车内","Order/closing");
     	redirect(U("Order/closing"),0);
+    }
+    
+    /*
+     * 结算的相关信息页面
+    */
+    public function closingInfo()
+    {
+    	$orderInfo = null;
+    	
+    	/*
+    	 * 获取tmpOrder信息
+    	*/
+    	$dbGoods = D("Goods");
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+    	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+    	$totalJinE = 0;
+    	for ($i = 0; $i < count($tmp["num"]); $i++)
+    	{
+    		$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+    		$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+    		$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+    		$totalJinE += $orderInfo[$i]["jinE"];
+    	}
+    	$totalJinE = round($totalJinE);
+    	
+    	/*
+    	 * 获取user信息
+    	 */
+    	
+    	$this->assign("originJinE",$totalJinE);
+    	$this->display();
     }
 }
 
