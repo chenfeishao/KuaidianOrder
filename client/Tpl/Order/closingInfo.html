@@ -21,7 +21,7 @@
 						<div class="span3">
 							<label><font color=black>客户名称*</font></label>
 		                   	<div class="input-control text" data-role="input-control">
-		                       <input name="name" type="text" autofocus="">
+		                       <input name="name" type="text" autofocus="" list="userName">
 		                       <button type="button" class="btn-clear" tabindex="1"></button>
 		                    </div>
 		                </div>
@@ -133,6 +133,10 @@
 	        </div>
 		</form>
     </div>
-
+<datalist id="userName">
+    <foreach name="userName" item="vo">
+        <option label="{$vo.userPinYin}{$vo.userName}" value="{$vo.userName}"/>
+    </foreach>
+</datalist>
 </body>
 </html>

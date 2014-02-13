@@ -45,7 +45,7 @@
 						<div class="span3">
 							<label><font color=black>客户名称*</font></label>
 		                   	<div class="input-control text" data-role="input-control">
-		                       <input name="name" type="text" autofocus="">
+		                       <input name="name" type="text" autofocus="" list="userName">
 		                       <button type="button" class="btn-clear" tabindex="1"></button>
 		                    </div>
 		                </div>
@@ -157,6 +157,8 @@
 	        </div>
 		</form>
     </div>
-
+<datalist id="userName">
+    <?php if(is_array($userName)): foreach($userName as $key=>$vo): ?><option label="<?php echo ($vo["userPinYin"]); echo ($vo["userName"]); ?>" value="<?php echo ($vo["userName"]); ?>"/><?php endforeach; endif; ?>
+</datalist>
 </body>
 </html>

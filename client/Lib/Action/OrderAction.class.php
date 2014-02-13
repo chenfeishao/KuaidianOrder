@@ -218,6 +218,7 @@ class OrderAction extends myAction
     	 */
     	
     	$this->assign("originJinE",$totalJinE);
+    	$this->assign("userName",$dbUser->getAllUserInfo());
     	$this->display();
     }
 }

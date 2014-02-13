@@ -1,6 +1,17 @@
 <?php
 class UserModel extends Model {
 
+	private $userName = "";
+	private $tmpOrderID = "";
+	
+	public function init($userName)//传入userName
+	{
+		$this->userName = $userName;
+		$condition['userName'] = $this->userName;
+		$result = $this->where($condition)->select();
+		$this->tmpOrderID = $result[0]["tmpOrderID"];
+	}
+	
 	// 自动验证设置
 	protected $_validate = array(
 			array('userName', 'require', '用户名不能为空！'),
@@ -20,17 +31,6 @@ class UserModel extends Model {
 			*/
 	);
 	
-	private $userName = "";
-	private $tmpOrderID = "";
-	
-	public function init($userName)//传入userName
-	{
-		$this->userName = $userName;
-		$condition['userName'] = $this->userName;
-		$result = $this->where($condition)->select();
-		$this->tmpOrderID = $result[0]["tmpOrderID"];
-	}
-	
 	public function getTmpOrderID()
 	{
 		return $this->tmpOrderID;
@@ -46,6 +46,15 @@ class UserModel extends Model {
 		$condition['userName'] = $this->userName;
 		$condition['userPassword'] = $userPassword;
 		return $this->where($condition)->select();
+	}
+	
+	/*
+	 * 得到所有用户的用户信息
+	* @return	array;所有用户所有字段的数组
+	*/
+	public function getAllUserInfo()
+	{
+		return $this->select();
 	}
 }
 ?>

@@ -13,12 +13,19 @@ create table user(
 	userName varchar(100) NOT NULL,
 	userPassword varchar(100) NOT NULL,
 	userPower varchar(100) NOT NULL,
+	userPinYin varchar(100) NOT NULL,
 	
+	/*扩展信息*/
+	tel varchar(100) NOT NULL,
+	address varchar(200) NOT NULL,
+	carAdress varchar(200) NOT NULL,
+	carNo varchar(100) NOT NULL,
+	
+	/*数据库要用的信息*/
 	tmpOrderID bigint NOT NULL,
 	primary key(userName)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert user values("wbx","wbx","root",1);
-insert user values("a","a","zs",2);
+insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",1);
 
 create table tmp_order(
 	id bigint NOT NULL AUTO_INCREMENT,
