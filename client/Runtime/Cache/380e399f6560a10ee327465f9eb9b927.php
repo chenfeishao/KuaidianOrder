@@ -143,7 +143,7 @@ function clearInfo(k)
 			        </div>
 				</form><?php endif; ?>
 	        <div class="row">
-	        	<div class="stepper rounded" data-role="stepper" data-steps="4" data-start="2"></div>
+	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="2"></div>
 	        </div>
 		</div>
     </div>

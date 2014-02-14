@@ -60,7 +60,7 @@ class TmpOrderModel extends OrderOP {
 	 * @return	bool 是否更新成功
 	 * @NOTE	如果返回false，用updateTmpOrderGetError方法获得错误消息
 	 */
-	public function updateTmpOrder($originData)
+	public function updateTmpOrderWithGoods($originData)
 	{
 		$tag = 1;//状态信息
 		$msg = "";//是哪一个字段出现问题了。eg：规格
@@ -149,7 +149,7 @@ class TmpOrderModel extends OrderOP {
 	}
 	
 	/*
-	 * 获得出错的updateTmpOrder方法返回的消息
+	 * 获得出错的updateTmpOrderWith*方法返回的消息
 	 * @return updateTmpOrder方法出错返回的消息
 	 */
 	public function updateTmpOrderGetError()
@@ -169,6 +169,41 @@ class TmpOrderModel extends OrderOP {
 				 ($this->deleteOne("goodsSizeArray",$No)) &&
 				 ($this->deleteOne("goodsMoneyArray",$No))
 				);
+	}
+	
+	/*
+	 * 从closingInof页面创建最终付款数据
+	* @param	array[i] $data;_post方法传来的数据
+	* @return	bool 是否更新成功
+	* @NOTE	如果返回false，用updateTmpOrderGetError方法获得错误消息
+	*/
+	public function updateTmpOrderWithPayment($data)
+	{
+		//验证数据
+		if ( ($data["save"] == "") || ($data["save"] == null) )
+			$data["save"] = 0;
+		if ( ($data["xianJinShiShou"] == "") || ($data["xianJinShiShou"] == null) )
+			$data["xianJinShiShou"] = 0;
+		if ( ($data["yinHangShiShou"] == "") || ($data["yinHangShiShou"] == null) )
+			$data["yinHangShiShou"] = 0;
+		if (!isNumWithPoint($data["save"]))
+		{
+			$this->updateTmpOrderError = "优惠金额不是数字";
+			return false;
+		}
+		if (!isNumWithPoint($data["xianJinShiShou"]))
+		{
+			$this->updateTmpOrderError = "现金实收不是数字";
+			return false;
+		}
+		if (!isNumWithPoint($data["yinHangShiShou"]))
+		{
+			$this->updateTmpOrderError = "银行实收不是数字";
+			return false;
+		}
+		
+		$data["id"] = $this->id;
+		return $this->save($data);
 	}
 	
 }

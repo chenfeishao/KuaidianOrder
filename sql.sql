@@ -18,7 +18,7 @@ create table user(
 	/*扩展信息*/
 	tel varchar(100) NOT NULL,
 	address varchar(200) NOT NULL,
-	carAdress varchar(200) NOT NULL,
+	carAddress varchar(200) NOT NULL,
 	carNo varchar(100) NOT NULL,
 	
 	/*数据库要用的信息*/
@@ -33,10 +33,16 @@ create table tmp_order(
 	goodsNumArray LONGTEXT NOT NULL,
 	goodsSizeArray LONGTEXT NOT NULL,
 	goodsMoneyArray LONGTEXT NOT NULL,
+	
+	/*付款信息*/
+	userName varchar(100) NOT NULL,
+	save double NOT NULL,
+	xianJinShiShou double NOT NULL,
+	yinHangShiShou double NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert tmp_order values (null,"","","","");
-insert tmp_order values (null,"","","","");
+insert tmp_order values (null,"","","","","",0,0,0);
+insert tmp_order values (null,"","","","","",0,0,0);
 
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,

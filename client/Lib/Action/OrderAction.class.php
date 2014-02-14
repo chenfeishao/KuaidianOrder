@@ -1,5 +1,5 @@
 <?php
-include(LIB_PATH."commonAction.php");
+require_once(LIB_PATH."commonAction.php");
 
 class OrderAction extends myAction
 {
@@ -168,7 +168,7 @@ class OrderAction extends myAction
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
     	
-		$this->isFalse($dbTmpOrder->updateTmpOrder($this->_post()),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+		$this->isFalse($dbTmpOrder->updateTmpOrderWithGoods($this->_post()),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
     	redirect(U("Order/closingInfo"),0);
     }
     
@@ -220,6 +220,53 @@ class OrderAction extends myAction
     	$this->assign("originJinE",$totalJinE);
     	$this->assign("userName",$dbUser->getAllUserInfo());
     	$this->display();
+    }
+    
+    /*
+     * 结算页面的最终数据提交页面
+     */
+    public function toClosingInfo()
+    {
+    	/*
+    	 * 处理用户信息
+    	 */
+    	//得到用户信息数据
+    	$userData["userName"] = $this->_post("userName");
+    	$userData["tel"] = $this->_post("tel");
+    	$userData["address"] = $this->_post("address");
+    	$userData["carAddress"] = $this->_post("carAddress");
+    	$userData["carNo"] = $this->_post("carNo");
+    	
+    	//处理用户信息
+    	$dbUser = D("User");
+    	$tmp = $dbUser->getUserInfo($userData["userName"]);
+    	if ($tmp === false)
+    		$this->error("数据库查询失败，请重试",U("Index/goBack"));
+    	if ($tmp === null)//用户不存在，创建新用户
+    	{
+    		$this->isFalse($dbUser->sign($userData),$dbUser->getErrorMsg(),"Index/goBack");
+    	}
+    	else//用户存在，更新用户信息
+    	{
+    		$this->isFalsePlus($dbUser->updateInfo($userData),$dbUser->getErrorMsg(),"Index/goBack");
+    	}
+    	
+    	/*
+    	 * 处理付款信息
+    	 */
+    	//得到付款信息数据
+    	$paymentData["userName"] = $this->_post("userName");
+    	$paymentData["save"] = $this->_post("save");
+    	$paymentData["xianJinShiShou"] = $this->_post("xianJinShiShou");
+    	$paymentData["yinHangShiShou"] = $this->_post("yinHangShiShou");
+    	
+    	//更新TmpOrder中的付款信息
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$this->isFalsePlus($dbTmpOrder->updateTmpOrderWithPayment($paymentData),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+    	
+    	redirect(U("Order/closingOver"),0);
     }
 }
 

@@ -1,5 +1,5 @@
 <?php
-include(CONF_PATH."MyConfigINI.php");
+require_once(CONF_PATH."MyConfigINI.php");
 
 class ModelBaseOP extends Model
 {

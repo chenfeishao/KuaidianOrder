@@ -1,7 +1,9 @@
 <?php
+require_once(LIB_PATH."commonAction.php");
 
 class UserAction extends Action
 {
+	
 	private function isLogin()//判断是否已经登陆
 	{
 		if (session('?userName'))//如果用户已经存在
@@ -73,14 +75,24 @@ class UserAction extends Action
     		$this->success('退出成功',U('Index/index'));////////////////////////////////////////////////////////
     }
     
-    public function index()
+    /*
+     * ajax得到用户信息的页面
+     */
+    public function ajaxGetUserInfo()
     {
-    	//判断是否登录
-    	if (!$this->isLogin())
-    		redirect(U('User/login'),0);
-    	
-    	//已经登录了
-        redirect(U('Index/index'),0);
+    	$dbUser = D("User");
+    	if ( ($this->_post("name") == null) || ($this->_post("name") == "") )
+    		$re = false;
+    	else
+    		$re = $dbUser->getUserInfo($this->_post("name"))[0];
+    	if ( ($re == false) || ($re == null) )//查询错误返回false;查询结果为空返回null;查询成功返回查询的结果集（二维索引数组）
+    	{
+    		echo "错误的用户名";
+    	}
+    	else
+    	{
+    		echo $re["tel"]._AJAX_BREAK_TAG.$re["address"]._AJAX_BREAK_TAG.$re["carAddress"]._AJAX_BREAK_TAG.$re["carNo"];
+    	}
     }
     
 }
