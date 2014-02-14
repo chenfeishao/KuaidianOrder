@@ -1,6 +1,24 @@
 <include file="Public:header" />
 <script src="__PUBLIC__/checkInput.js"></script>
-
+<script>
+function getInfo()
+{
+	url = "http://localhost/easyOrder/index.php/User/ajaxGetUserInfo";
+	$.post(url,
+			  {
+			    name:$("#userName").val()
+			  },
+			  function(data,status)
+			  {
+				  data = data.split("<?php require_once(CONF_PATH."MyConfigINI.php");echo _AJAX_BREAK_TAG;?>");
+				  $("#tel").val(data[0]);
+				  $("#address").val(data[1]);
+				  $("#carAddress").val(data[2]);
+				  $("#carNo").val(data[3]);
+			  }
+		);
+}
+</script>
 </head>
 
 <body class="metro">
@@ -21,21 +39,21 @@
 						<div class="span3">
 							<label><font color=black>客户名称*</font></label>
 		                   	<div class="input-control text" data-role="input-control">
-		                       <input name="name" type="text" autofocus="" list="userName">
+		                       <input id="userName" name="name" type="text" autofocus="" list="userNameList" oninput="getInfo(event);">
 		                       <button type="button" class="btn-clear" tabindex="1"></button>
 		                    </div>
 		                </div>
 		                <div class="span3">
 		                    <label><font color=black>电话*</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="tel" type="text">
+		                       <input id="tel" name="tel" type="number">
 		                       <button type="button" class="btn-clear" tabindex="2"></button>
 		                    </div>
 		                </div>
 		                <div class="span6">
 		                    <label><font color=black>地址</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="address" type="text">
+		                       <input id="address" name="address" type="text">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
@@ -44,14 +62,14 @@
 		                <div class="span6">
 		                    <label><font color=black>停车位置</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="carAddress" type="text">
+		                       <input id="carAddress" name="carAddress" type="text">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
 		                <div class="span6">
 		                    <label><font color=black>车号</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="carNo" type="text">
+		                       <input id="carNo" name="carNo" type="text">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
@@ -67,28 +85,28 @@
 		                <div class="span3">
 		                    <label><font color=black>优惠金额</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="warehouse" type="text" value="0">
+		                       <input name="warehouse" type="number" value="0">
 		                       <button type="button" class="btn-clear" tabindex="2"></button>
 		                    </div>
 		                </div>
 		                <div class="span3">
 		                    <label><font color=black>应收金额</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="class" type="text" value="{$originJinE}">
+		                       <input name="class" type="text" value="{$originJinE}" disabled="">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
 		                <div class="span3">
 		                    <label><font color=black>现金实收</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="class" type="text">
+		                       <input name="class" type="number">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
 		                <div class="span3">
 		                    <label><font color=black>银行实收</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input name="class" type="text">
+		                       <input name="class" type="number">
 		                       <button type="button" class="btn-clear" tabindex="3"></button>
 		                    </div>
 		                </div>
@@ -133,7 +151,7 @@
 	        </div>
 		</form>
     </div>
-<datalist id="userName">
+<datalist id="userNameList">
     <foreach name="userName" item="vo">
         <option label="{$vo.userPinYin}{$vo.userName}" value="{$vo.userName}"/>
     </foreach>
