@@ -111,10 +111,10 @@
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-						<button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Goods/add');?>'" data-click="transform">
+						<button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Order/delayGo');?>'" data-click="transform">
                             <h2>延迟发货</h2>
                         </button>
-                        <button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Goods/edit');?>'" data-click="transform">
+                        <button class="span6 shortcut primary" onclick="window.location = '<?php echo U('Order/go');?>'" data-click="transform">
                             <h2>立即发货</h2>
                         </button>
 		            </div>

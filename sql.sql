@@ -44,6 +44,24 @@ create table tmp_order(
 insert tmp_order values (null,"","","","","",0,0,0);
 insert tmp_order values (null,"","","","","",0,0,0);
 
+/*正式订单*/
+create table official_order(
+	id bigint NOT NULL AUTO_INCREMENT,
+	goodsIDArray LONGTEXT NOT NULL,
+	goodsNumArray LONGTEXT NOT NULL,
+	goodsSizeArray LONGTEXT NOT NULL,
+	goodsMoneyArray LONGTEXT NOT NULL,
+	
+	/*付款信息*/
+	customName varchar(100) NOT NULL,
+	save double NOT NULL,
+	xianJinShiShou double NOT NULL,
+	yinHangShiShou double NOT NULL,
+	
+	createDate datetime NOT NULL,
+	primary key(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,

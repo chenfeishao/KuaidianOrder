@@ -354,6 +354,24 @@ class OrderAction extends myAction
 
     	$this->display();
     }
+    
+    /*
+     * 立即发货页面
+     */
+    public function go()
+    {
+    	$dbGoods = D("Goods");
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+    	$data = $dbTmpOrder->getTmpOrderInfo();
+    	
+    	$dbOfficialOrder = D("OfficialOrder");
+    	$this->isFalse($dbOfficialOrder->newOrder($data),"数据库连接失败，请重试","Index/goBack");
+    	
+    }
 }
 
 ?>

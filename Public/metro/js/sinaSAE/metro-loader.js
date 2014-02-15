@@ -41,5 +41,5 @@ var plugins = [
 ];
 
 $.each(plugins, function(i, plugin){
-    $("<script/>").attr('src', '/easyOrder/Public/metro/js/metro/metro-'+plugin+'.js').appendTo($('head'));
+    $("<script/>").attr('src', 'http://easyorder.sinaapp.com/Public/metro/js/metro/metro-'+plugin+'.js').appendTo($('head'));
 });
