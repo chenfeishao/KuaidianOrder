@@ -39,28 +39,13 @@ create table tmp_order(
 	save double NOT NULL,
 	xianJinShiShou double NOT NULL,
 	yinHangShiShou double NOT NULL,
-	primary key(id)
-) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert tmp_order values (null,"","","","","",0,0,0);
-insert tmp_order values (null,"","","","","",0,0,0);
-
-/*正式订单*/
-create table official_order(
-	id bigint NOT NULL AUTO_INCREMENT,
-	goodsIDArray LONGTEXT NOT NULL,
-	goodsNumArray LONGTEXT NOT NULL,
-	goodsSizeArray LONGTEXT NOT NULL,
-	goodsMoneyArray LONGTEXT NOT NULL,
-	
-	/*付款信息*/
-	customName varchar(100) NOT NULL,
-	save double NOT NULL,
-	xianJinShiShou double NOT NULL,
-	yinHangShiShou double NOT NULL,
 	
 	createDate datetime NOT NULL,
+	printOk boolean NOT NULL,
+	canPrint boolean NOT NULL,/*为true则打印机开始打印*/
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '0', '1');
 
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,
@@ -80,6 +65,6 @@ create table goods(
 	brandColor LONGTEXT NOT NULL,
 	indexNum bigint,/*在页面上的出现顺序*/
 	remark LONGTEXT NOT NULL,/*提示，只针对样式4*/
+	
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert goods values(null,"测试货物南瓜饼","cshwngb","@#$%^&*本地1@#$%^&*10@#$%^&*本地2@#$%^&*5","南瓜饼","@#$%^&*默认@#$%^&*10斤","安井","1","double","","blue","red",1,"");

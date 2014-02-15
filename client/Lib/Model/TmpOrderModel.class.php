@@ -214,7 +214,8 @@ class TmpOrderModel extends OrderOP {
 	public function getTmpOrderCustomName()
 	{
 		$condition["id"] = $this->id;
-		return $this->where($condition)->select()[0]["customName"];
+		$tmp = $this->where($condition)->select();
+		return $tmp[0]["customName"];
 	}
 	
 	/*
