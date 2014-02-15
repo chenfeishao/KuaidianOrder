@@ -100,7 +100,7 @@ function getPinYinFirstChar($zh)
 		$p = ord($s1);
 		if($p > 160){
 			$s2 = substr($zh,$i++,2);
-			$ret .= chr(ord($this->getfirstchar($s2)) + 32);
+			$ret .= chr(ord(getfirstchar($s2)) + 32);
 		}else{
 			$ret .= $s1;
 		}

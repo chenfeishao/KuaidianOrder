@@ -255,7 +255,7 @@ class OrderAction extends myAction
     	 * 处理付款信息
     	 */
     	//得到付款信息数据
-    	$paymentData["userName"] = $this->_post("userName");
+    	$paymentData["customName"] = $this->_post("userName");
     	$paymentData["save"] = $this->_post("save");
     	$paymentData["xianJinShiShou"] = $this->_post("xianJinShiShou");
     	$paymentData["yinHangShiShou"] = $this->_post("yinHangShiShou");
@@ -267,6 +267,92 @@ class OrderAction extends myAction
     	$this->isFalsePlus($dbTmpOrder->updateTmpOrderWithPayment($paymentData),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
     	
     	redirect(U("Order/closingOver"),0);
+    }
+    
+    /*
+     * 结算信息总览页面
+     */
+    public function closingOver()
+    {
+    	$orderInfo = null;
+    	 
+    	$dbGoods = D("Goods");
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+    	/*
+    	 * 货物信息
+    	*/
+    	$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
+    	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+    	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+    	$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
+    	$totalJinE = 0;
+    	$totalNum = 0;
+    	for ($i = 0; $i < count($tmp["id"]); $i++)
+    	{
+    			$dbGoods->init($tmp["id"][$i]);
+    			$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
+    			$orderInfo[$i]["id"] = $tmp["id"]["$i"];
+    			$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+    			$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+    	
+    			//渲染规格
+    			$tmpSize = null;
+    			$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
+    			$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
+    	
+    			$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+    			$totalJinE += $orderInfo[$i]["jinE"];
+    			$totalNum += $orderInfo[$i]["num"];
+    	}
+    	 
+    	//渲染list
+    	if (count($orderInfo) == 0)
+    	{
+    		$orderInfo = null;
+    	}
+    	$this->assign("list",$orderInfo);
+    	$this->assign("totalJinE",$totalJinE);
+    	
+    	/*
+    	 * 付款信息
+    	 */
+    	$tmpOrderInfo = $dbTmpOrder->getTmpOrderInfo();
+    	$yingShouJinE = $totalJinE - $tmpOrderInfo["save"];
+    	$benCiShiShou = $tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"];
+    	$this->assign("save",$tmpOrderInfo["save"]);
+    	$this->assign("xianJinShiShou",$tmpOrderInfo["xianJinShiShou"]);
+    	$this->assign("yinHangShiShou",$tmpOrderInfo["yinHangShiShou"]);
+    	$this->assign("yingShouJinE",$yingShouJinE);
+    	$this->assign("benCiShiShou",$benCiShiShou);
+    	$benCiQianFuKuan = $benCiShiShou - $yingShouJinE;
+    	if ($benCiQianFuKuan == 0)
+    		$benCiQianFuKuanInfo = "<strong class='text-info'>无  </strong>";
+    	else if ($benCiQianFuKuan > 0)
+    		$benCiQianFuKuanInfo = "<strong class='text-success'>多  ".$benCiQianFuKuan."</strong>";
+    	else if ($benCiQianFuKuan < 0)
+    		$benCiQianFuKuanInfo = "<strong class='text-warning'>少  ".(0 - $benCiQianFuKuan)."</strong>";
+    	$this->assign("benCiQianFuKuan",$benCiQianFuKuanInfo);
+    	
+    	/*
+    	 * 用户信息
+    	 */
+    	$customName = $dbTmpOrder->getTmpOrderCustomName();
+    	$dbCustomUser = D("User");
+    	$dbCustomUser->init($customName);
+    	$tmpRe = $dbCustomUser->getUserInfo($customName);
+    	if ( ($tmpRe === false) || ($tmpRe === null) )
+    		$this->error("查询用户失败，请重试",U("Index/goBack"));
+    	$this->assign("customName",$customName);
+    	$this->assign("tel",$tmpRe["tel"]);
+    	$this->assign("address",$tmpRe["address"]);
+    	$this->assign("carAddress",$tmpRe["carAddress"]);
+    	$this->assign("carNo",$tmpRe["carNo"]);
+
+    	$this->display();
     }
 }
 

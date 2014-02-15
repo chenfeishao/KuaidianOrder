@@ -84,7 +84,7 @@ class UserAction extends Action
     	if ( ($this->_post("name") == null) || ($this->_post("name") == "") )
     		$re = false;
     	else
-    		$re = $dbUser->getUserInfo($this->_post("name"))[0];
+    		$re = $dbUser->getUserInfo($this->_post("name"));
     	if ( ($re == false) || ($re == null) )//查询错误返回false;查询结果为空返回null;查询成功返回查询的结果集（二维索引数组）
     	{
     		echo "错误的用户名";

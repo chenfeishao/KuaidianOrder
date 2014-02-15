@@ -35,7 +35,7 @@ create table tmp_order(
 	goodsMoneyArray LONGTEXT NOT NULL,
 	
 	/*付款信息*/
-	userName varchar(100) NOT NULL,
+	customName varchar(100) NOT NULL,
 	save double NOT NULL,
 	xianJinShiShou double NOT NULL,
 	yinHangShiShou double NOT NULL,

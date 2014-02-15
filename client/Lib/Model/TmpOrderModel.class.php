@@ -206,5 +206,29 @@ class TmpOrderModel extends OrderOP {
 		return $this->save($data);
 	}
 	
+	/*
+	 * 得到数据表内的customName字段
+	 * @NOTE	使用前要先init
+	 * @return	string;customName的值
+	 */
+	public function getTmpOrderCustomName()
+	{
+		$condition["id"] = $this->id;
+		return $this->where($condition)->select()[0]["customName"];
+	}
+	
+	/*
+	 * 得到指定tmpOrderID的条目下的所有字段值
+	 * @return	array;所有字段的数组
+	 * @note:	使用前要先init
+	 */
+	public function getTmpOrderInfo()
+	{
+		$tmp = $this->where("id=".$this->id)->select();
+		if ( ($tmp === null) || ($tmp === false) )
+			return $tmp;
+		else
+			return $tmp[0];
+	}
 }
 ?>

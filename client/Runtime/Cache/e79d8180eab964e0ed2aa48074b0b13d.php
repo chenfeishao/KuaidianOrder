@@ -30,113 +30,83 @@
     <div class="container">
         <h1>
             <a href="<?php echo U("Index/goBack");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	结算<small class="on-right">总览</small>
+           	结算<small class="on-right">确认</small>
         </h1>
         
-      	<form id="form" method="post" action="<?php echo U("Goods/toAdd");?>">
+      		<div class="panel">
+				<div class="panel-header bg-indigo fg-white">
+					商品信息
+					<small class="place-right">应收货款:<?php echo ($totalJinE); ?></small>
+				</div>
+				<div class="panel-content grid fluid">
+					<table class="table hovered">
+		                <thead>
+			                <tr>
+			                	<th class="text-left">序号</th>
+			                    <th class="text-left">商品名称</th>
+			                    <th class="text-left">规格</th>
+			                    <th class="text-left">数量</th>
+			                    <th class="text-left">单价</th>
+			                    <th class="text-left">金额</th>
+			                </tr>
+		                </thead>
+						
+		                <tbody>
+		                	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
+						    		<td style="width: 50px;"><?php echo ($i); ?></td>
+						    		<td class="span4"><?php echo ($vo["goodsName"]); ?></td>
+						    		<td class="right span3"><?php echo ($vo["size"]); ?></td>
+						    		<td class="right span2"><?php echo ($vo["num"]); ?></td>
+						    		<td class="right span2"><?php echo ($vo["money"]); ?></td>
+						    		<td class="right span2"><?php echo ($vo["jinE"]); ?></td>
+						    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
+		                </tbody>
+		            </table>
+				</div>
+			</div>
        		<div class="panel">
 				<div class="panel-header bg-lightBlue fg-white">
-					客户信息<h5 class="fg-white place-right">客户的登录用户名为手机号，登录密码为手机号</h5>
+					客户信息<small><?php echo ($customName); ?></small>
+					<small class="place-right">电话：<?php echo ($tel); ?></small>
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-						<div class="span3">
-							<label><font color=black>客户名称*</font></label>
-		                   	<div class="input-control text" data-role="input-control">
-		                       <input id="userName" name="name" type="text" tabindex="1" autofocus="" list="userNameList" oninput="getInfo(event);">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
+		                <div class="span4">
+		                    <label><font color=black>地址：<?php echo ($address); ?></font></label>
+		                </div>
+		                <div class="span5">
+		                    <label><font color=black>停车位置：<?php echo ($carAddress); ?></font></label>
 		                </div>
 		                <div class="span3">
-		                    <label><font color=black>电话*</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="tel" name="tel" type="number" tabindex="2">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
-		                </div>
-		                <div class="span6">
-		                    <label><font color=black>地址</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="address" name="address" type="text" tabindex="3">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
-		                </div>
-		            </div>
-		            <div class="row">
-		                <div class="span6">
-		                    <label><font color=black>停车位置</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="carAddress" name="carAddress" type="text" tabindex="4">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
-		                </div>
-		                <div class="span6">
-		                    <label><font color=black>车号</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="carNo" name="carNo" type="text" tabindex="5">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
+		                    <label><font color=black>车号：<?php echo ($carNo); ?></font></label>
 		                </div>
 		            </div>
 				</div>
 			</div>
 			<div class="panel">
 				<div class="panel-header bg-darkRed fg-white">
-					付款信息<span class="place-right">账单原应收金额:<?php echo ($originJinE); ?></span>
+					付款信息<small>优惠金额：<?php echo ($save); ?></small>
+					<small class="place-right">优惠后应收金额：<?php echo ($yingShouJinE); ?></small>
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
 		                <div class="span3">
-		                    <label><font color=black>优惠金额</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="save" name="save" type="number" value="0" onclick="$(this).val('');" tabindex="9" oninput="change()">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
+		                    <label><font color=black>现金实收：<?php echo ($xianJinShiShou); ?></font></label>
 		                </div>
 		                <div class="span3">
-		                    <label><font color=black>应收金额</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="yingShou" name="yingShou" type="text" value="<?php echo ($originJinE); ?>" disabled="">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
+		                    <label><font color=black>银行实收：<?php echo ($yinHangShiShou); ?></font></label>
 		                </div>
 		                <div class="span3">
-		                    <label><font color=black>现金实收</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="xianJinShiShou" name="xianJinShiShou" type="number" tabindex="7" oninput="change()">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
+		                    <h5><font color=black>本次实收：<?php echo ($benCiShiShou); ?></font></h5>
 		                </div>
 		                <div class="span3">
-		                    <label><font color=black>银行实收</font></label>
-		                    <div class="input-control text" data-role="input-control">
-		                       <input id="yinHangShiShou" name="yinHangShiShou" type="number" tabindex="8" oninput="change()">
-		                       <button type="button" class="btn-clear"></button>
-		                    </div>
-		                </div>
-		            </div>
-		            <div class="row">
-		                <div class="span3">
-		                    <h5><font color=black>客户历史欠付款情况总计：<br></font></h5>
-		                    <span id="history" class="place-right"><?php echo ($originHistory); ?></span>
-		                </div>
-		                <div class="span2">
-		                    <h5><font color=black>客户本次欠付款：</font></h5>
-		                </div>
-		                <div class="span3">
-		                    <h1 id="benCiQianFuKuan" class="text-warning place-right">0</h1>
-		                </div>
-		                <div class="span2">
-		                    <h5><font color=black>本次实收：</font></h5>
-		                </div>
-		                <div class="span2">
-		                	<h1 id="shiShou" class="text-alert place-right">1000000</h1>
+		                    <h5><font color=black>客户本次欠付款：<?php echo ($benCiQianFuKuan); ?></font></h5>
 		                </div>
 		            </div>
 				</div>
 			</div>
 			<div class="panel">
-				<div class="panel-header bg-mauve fg-white">
+				<div class="panel-header bg-green fg-white">
 					出货选择
 				</div>
 				<div class="panel-content grid fluid">
@@ -153,10 +123,6 @@
         	<div class="row">
 	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="4"></div>
 	        </div>
-		</form>
     </div>
-<datalist id="userNameList">
-    <?php if(is_array($userName)): foreach($userName as $key=>$vo): ?><option label="<?php echo ($vo["userPinYin"]); echo ($vo["userName"]); ?>" value="<?php echo ($vo["userName"]); ?>"/><?php endforeach; endif; ?>
-</datalist>
 </body>
 </html>
