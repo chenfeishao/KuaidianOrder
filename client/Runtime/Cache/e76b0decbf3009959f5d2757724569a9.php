@@ -26,7 +26,7 @@
 <script>
 function getInfo()
 {
-	url = "http://localhost/easyOrder/index.php/User/ajaxGetUserInfo";
+	url = "<?php echo U("User/ajaxGetUserInfo");?>";
 	$.post(url,
 			{
 			  name:$("#userName").val()

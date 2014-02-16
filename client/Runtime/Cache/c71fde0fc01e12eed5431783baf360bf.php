@@ -52,7 +52,7 @@ function change()
             <div class="grid">
                 <div class="tile-group two">
                     <div class="row">
-                        <form id="form" method="post" action="<?php echo U("Order/toOneOrder");?>">
+                        <form id="form" method="post" action="<?php echo U("Order/toOneOrderIn");?>">
                             <fieldset>
                                 <label><font color=black>数量</font></label>
                                 <div class="input-control text" data-role="input-control">
