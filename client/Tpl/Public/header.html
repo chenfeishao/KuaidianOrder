@@ -17,7 +17,6 @@
 
     <!-- Metro UI CSS JavaScript plugins -->
     <script src="__PUBLIC__/metro/js/load-metro.js"></script>
-    <script src="__PUBLIC__/metro/js/metro/metro-live-tile.js"></script>
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>

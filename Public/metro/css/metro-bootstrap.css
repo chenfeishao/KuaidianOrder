@@ -4710,7 +4710,7 @@ a {
   width: 780px;
 }
 .metro .tile-group.seven {
-  width: 910px;
+  width: 922px;
 }
 .metro .tile-group:first-child {
   margin-left: 80px;
@@ -5505,7 +5505,7 @@ a {
   display: block;
 }
 .metro .tab-control .frame {
-  padding: 20px;
+  padding: 5px;
 }
 .metro .progress-bar {
   display: block;

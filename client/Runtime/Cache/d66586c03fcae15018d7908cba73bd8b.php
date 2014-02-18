@@ -17,13 +17,29 @@
 
     <!-- Metro UI CSS JavaScript plugins -->
     <script src="__PUBLIC__/metro/js/load-metro.js"></script>
-    <script src="__PUBLIC__/metro/js/metro/metro-live-tile.js"></script>
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
     <title>EasyOrder</title>
 
 <script src="__PUBLIC__/metro/js/start-screen.js"></script>
+<script>
+function getCookie(c_name)
+{
+    if (document.cookie.length>0)
+      {
+          var c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                var c_end = document.cookie.indexOf(";",c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+      }
+    return "";
+}
+</script>
 <script>
 function go(id,k)
 {
@@ -220,19 +236,37 @@ function onKeyDownDo(e)
 		</div><?php endif; ?>
 
 
-
-    <div class="tile-group six">
+    <div class="tile-group seven">
         <div class="tile-group-title">货物清单</div>
         
-        <?php if(is_array($goods)): foreach($goods as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>"  onclick='go(<?php echo ($vo["id"]); ?>,0)'>
-				<div class="<?php echo ($vo["content"]); ?>">
-					<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
-	   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
+        <div class="tab-control" data-effect="fade" data-role="tab-control">
+		    <ul class="tabs">
+		        <li><a href="#___1">Tab 1</a></li>
+		        <li><a href="#___2">Tab 2</a></li>
+		        <li><a href="#___3">Tab 3</a></li>
+		    </ul>
+		
+		    <div class="frames">
+		        <div style="display: block;" class="frame" id="___1">
+		         	<?php if(is_array($goods)): foreach($goods as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>"  onclick='go(<?php echo ($vo["id"]); ?>,0)'>
+							<div class="<?php echo ($vo["content"]); ?>">
+								<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
+				   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
+							</div>
+							<div class="<?php echo ($vo["brand"]); ?>">
+				                <div class="label"><?php echo ($vo["name"]); ?></div>
+				            </div>
+						</div><?php endforeach; endif; ?>
+					<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 				</div>
-				<div class="<?php echo ($vo["brand"]); ?>">
-	                <div class="label"><?php echo ($vo["name"]); ?></div>
-	            </div>
-			</div><?php endforeach; endif; ?>
+		        <div style="display: none;" class="frame" id="___2">
+		            Aliquam ornare libe<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>ro eget leo imperdiet varius. Aenean fringilla orci volutpat enim lobortis, id elementum lectus consectetur. Integer id ante nec ligula consectetur rutrum imperdiet vel tellus. Nam a lectus placerat, pretium risus ut, rutrum orci.
+		        </div>
+		        <div style="display: none;" class="frame" id="___3">
+		            Duis malesuada, dolor eu sollicitudin sagittis, leo sapien vehicula nunc, lobortis ornare tellus augue ac augue. Suspendisse sagittis sit amet ante ac suscipit. Duis ligula metus, auctor ut risus et, blandit suscipit lectus. Pellentesque cursus adipiscing tortor at malesuada.
+		        </div>
+		    </div>
+		</div>
 		
     </div> <!-- End group -->
 </div>

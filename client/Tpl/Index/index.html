@@ -1,6 +1,23 @@
 <include file="Public:header" />
 <script src="__PUBLIC__/metro/js/start-screen.js"></script>
 <script>
+function getCookie(c_name)
+{
+    if (document.cookie.length>0)
+      {
+          var c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                var c_end = document.cookie.indexOf(";",c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+      }
+    return "";
+}
+</script>
+<script>
 function go(id,k)
 {
 	if (k == 0)
@@ -205,22 +222,40 @@ function onKeyDownDo(e)
 	</if>
 
 
-
-    <div class="tile-group six">
+    <div class="tile-group seven">
         <div class="tile-group-title">货物清单</div>
         
-        <foreach name="goods" item="vo">
-			<div class="{$vo.className}"  onclick='go({$vo.id},0)'>
-				<div class="{$vo.content}">
-					<if condition="$vo.image eq NULL"><span class="icon-tag"></span>
-	   				<else/><img src="{$vo.image}"/>
-	   				</if>
+        <div class="tab-control" data-effect="fade" data-role="tab-control">
+		    <ul class="tabs">
+		        <li><a href="#___1">Tab 1</a></li>
+		        <li><a href="#___2">Tab 2</a></li>
+		        <li><a href="#___3">Tab 3</a></li>
+		    </ul>
+		
+		    <div class="frames">
+		        <div style="display: block;" class="frame" id="___1">
+		         	<foreach name="goods" item="vo">
+						<div class="{$vo.className}"  onclick='go({$vo.id},0)'>
+							<div class="{$vo.content}">
+								<if condition="$vo.image eq NULL"><span class="icon-tag"></span>
+				   				<else/><img src="{$vo.image}"/>
+				   				</if>
+							</div>
+							<div class="{$vo.brand}">
+				                <div class="label">{$vo.name}</div>
+				            </div>
+						</div>
+					</foreach>
+					<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 				</div>
-				<div class="{$vo.brand}">
-	                <div class="label">{$vo.name}</div>
-	            </div>
-			</div>
-		</foreach>
+		        <div style="display: none;" class="frame" id="___2">
+		            Aliquam ornare libe<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>ro eget leo imperdiet varius. Aenean fringilla orci volutpat enim lobortis, id elementum lectus consectetur. Integer id ante nec ligula consectetur rutrum imperdiet vel tellus. Nam a lectus placerat, pretium risus ut, rutrum orci.
+		        </div>
+		        <div style="display: none;" class="frame" id="___3">
+		            Duis malesuada, dolor eu sollicitudin sagittis, leo sapien vehicula nunc, lobortis ornare tellus augue ac augue. Suspendisse sagittis sit amet ante ac suscipit. Duis ligula metus, auctor ut risus et, blandit suscipit lectus. Pellentesque cursus adipiscing tortor at malesuada.
+		        </div>
+		    </div>
+		</div>
 		
     </div> <!-- End group -->
 </div>
