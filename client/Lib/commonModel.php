@@ -40,6 +40,18 @@ class ModelBaseOP extends Model
 	}
 	
 	/*
+	 * 得到一个数组解析后的内容（自己带需要解析的数组，不需要与数据库通信）
+	* @param string $arrayName;要解析的原始内容的数组
+	* @return array a[i] = 一项
+	*/
+	public function getArrayWithSelf($array)
+	{
+		$tmp = explode(_SPECAL_BREAK_FLAG, $array);
+		array_pop($tmp);
+		return $tmp;
+	}
+	
+	/*
 	 * 序列化数组，即给数组添加中断标记并转换成字符串。（不跟数据库通信）
 	* @param	array $data;需要转换的原始数据
 	* @return	string;转换完成后的字符串
@@ -51,6 +63,24 @@ class ModelBaseOP extends Model
 		{
 			$re .= $data[$i]._SPECAL_BREAK_FLAG;
 		}
+		return $re;
+	}
+	
+	/*
+	 * 序列化数组，给数组添加自定义的中断标记并转换成字符串。
+	* @param	array $data;需要转换的原始数据
+	* 			string $tag;中断标记
+	* @return	string;转换完成后的字符串
+	* @note		开头和最后一个元素末尾都没有中断标记
+	*/
+	public function transformWithSlef($data,$tag)
+	{
+		$re = "";
+		for ($i = 0; $i < (count($data) - 1); $i++)
+		{
+		$re .= $data[$i].$tag;
+		}
+		$re .= $data[count($data) - 1];
 		return $re;
 	}
 	

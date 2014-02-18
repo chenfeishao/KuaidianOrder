@@ -1,0 +1,117 @@
+<include file="Public:header" />
+</head>
+
+<body class="metro" onload="timedCount()">
+
+    <div class="container">
+        <h1>
+            <a href="{:U("Index/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+           	历史记录
+        </h1>
+        
+      		<div class="panel" data-role="panel">
+				<div class="panel-header bg-indigo fg-white">
+					未完成订单
+				</div>
+				<div style="display: block;" class="panel-content">
+					<if condition="$undoneList eq NULL "><b>没有未完成的订单</b>
+   					<else/>
+						<table class="table hovered">
+			                <thead>
+				                <tr>
+				                	<th class="text-center">序号</th>
+				                    <th class="text-center">顾客名称</th>
+				                    <th class="text-center">生成时间</th>
+				                    <th class="text-center">商品</th>
+				                    <th class="text-center">状态</th>
+				                    <th class="text-center">操作</th>
+				                </tr>
+			                </thead>
+							
+			                <tbody class="grid fluid text-center">
+			                	<volist name="undoneList" id="vo">
+							    	<tr>
+							    		<td style="width: 50px;">{$i}
+							    		</td>
+							    		<td class="span2">{$vo.customName}</td>
+							    		<td class="right span2">{$vo.createDate}
+							    		</td>
+							    		<td class="right span5">{$vo.goodsName}
+							    		</td>
+							    		<td class="right span1">{$vo.printState}
+							    		</td>
+										<td style="width: 100px;">
+											<a href="{:U("Order/")}?no={$i}" class="button info">出货</a>
+											<a href="{:U("Order/")}?no={$i}" class="button success">查看</a>
+											<a href="{:U("Order/")}?no={$i}" class="button warning">删除</a>
+											<a href="#" class="button defalut">预留</a>
+										</td>
+							    	</tr>
+						    	</volist>
+			                </tbody>
+			
+			                <tfoot>
+			                	<th class="text-center">序号</th>
+			                    <th class="text-center">顾客名称</th>
+			                    <th class="text-center">生成时间</th>
+			                    <th class="text-center">商品</th>
+			                    <th class="text-center">状态</th>
+			                    <th class="text-center">操作</th>
+			                </tfoot>
+			            </table>
+					</if>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-header bg-green fg-white">
+					已完成订单
+				</div>
+				<div class="panel-content grid fluid">
+					<if condition="$doneList eq NULL "><b>没有已完成的订单</b>
+   					<else/>
+						<table class="table hovered">
+			                <thead>
+				                <tr>
+				                	<th class="text-center">序号</th>
+				                    <th class="text-center">顾客名称</th>
+				                    <th class="text-center">生成时间</th>
+				                    <th class="text-center">商品</th>
+				                    <th class="text-center">操作</th>
+				                </tr>
+			                </thead>
+							
+			                <tbody class="grid fluid text-center">
+			                	<volist name="doneList" id="vo">
+							    	<tr>
+							    		<td style="width: 50px;">{$i}
+							    		</td>
+							    		<td class="span2">{$vo.customName}</td>
+							    		<td class="right span2">{$vo.createDate}
+							    		</td>
+							    		<td class="right span5">{$vo.goodsName}
+							    		</td>
+										<td style="width: 70px;">
+											<a href="{:U("Order/")}?no={$i}" class="button warning">查看</a>
+										</td>
+							    	</tr>
+						    	</volist>
+			                </tbody>
+			
+			                <tfoot>
+			                	<th class="text-center">序号</th>
+			                    <th class="text-center">顾客名称</th>
+			                    <th class="text-center">生成时间</th>
+			                    <th class="text-center">商品</th>
+			                    <th class="text-center">操作</th>
+			                </tfoot>
+			            </table>
+					</if>
+				</div>
+			</div>
+       		
+        	<div class="row">
+	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="5"></div>
+	        </div>
+    </div>
+</body>
+</html>

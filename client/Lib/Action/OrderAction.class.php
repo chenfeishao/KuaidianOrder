@@ -360,16 +360,94 @@ class OrderAction extends myAction
      */
     public function go()
     {
-    	$dbGoods = D("Goods");
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
-    	
+    	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
+    	$this->isFalse($dbUser->newTmpOrderID(),"立即发货提交失败，请重试","Index/goBack");
+    	$this->display();
+    }
+    
+    /*
+     * 延迟发送页面
+     */
+    public function delayGo()
+    {
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$this->isFalse($dbTmpOrder->updatePrintState(0),"延迟发货提交失败，请重试","Index/goBack");
+    	$this->isFalse($dbUser->newTmpOrderID(),"延迟发货提交失败，请重试","Index/goBack");
+    	$this->display();
+    }
+    
+    /*
+     * ajax获得订单打印状态
+     */
+    public function ajaxGetTmpOrderInfo()
+    {
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getPreTmpOrderID());
+    	 
     	$data = $dbTmpOrder->getTmpOrderInfo();
+    	echo $data["printState"];
+    }
+    
+    /*
+     * 历史订单页面
+    */
+    public function history()
+    {
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbGoods = D("Goods");
+    	/*
+    	 * 未完成的订单信息
+    	*/
+    	$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
+    	for ($i = 0; $i < count($undone); $i++)
+    	{
+    		$tmpGoodsName = null;
+    		$tmp = null;
+    		$undoneList[$i]["customName"] = $undone[$i]["customName"];
+    		$undoneList[$i]["createDate"] = $undone[$i]["createDate"];
+    		$undoneList[$i]["printState"] = $undone[$i]["printState"];
     	
-    	$dbOfficialOrder = D("OfficialOrder");
-    	$this->isFalse($dbOfficialOrder->newOrder($data),"数据库连接失败，请重试","Index/goBack");
+    	    //得到商品名称
+    	   	$tmp = $dbTmpOrder->getArrayWithSelf($undone[$i]["goodsIDArray"]);
+    		for ($j = 0; $j < count($tmp); $j++)
+    	    {
+    	   		$dbGoods->init($tmp[$j]);
+    	    	$tmpGoodsName[$j] = $dbGoods->getGoodsName();
+    	    }
+    	    $undoneList[$i]["goodsName"] = $dbTmpOrder->transformWithSlef($tmpGoodsName,"；");
+    	}
+    	
+    	/*
+    	 * 已完成的订单信息
+    	 */
+    	$done = $dbTmpOrder->where("printState='7'")->select();
+    	for ($i = 0; $i < count($done); $i++)
+    	{
+    		$tmpGoodsName = null;
+    		$tmp = null;
+    		$doneList[$i]["customName"] = $done[$i]["customName"];
+    		$doneList[$i]["createDate"] = $done[$i]["createDate"];
+    		
+    		//得到商品名称
+    		$tmp = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsIDArray"]);
+    		for ($j = 0; $j < count($tmp); $j++)
+    		{
+    			$dbGoods->init($tmp[$j]);
+    			$tmpGoodsName[$j] = $dbGoods->getGoodsName();
+    		}
+    		$doneList[$i]["goodsName"] = $dbTmpOrder->transformWithSlef($tmpGoodsName,",");
+    	}
+    	$this->assign("undoneList",$undoneList);
+    	$this->assign("doneList",$doneList);
     	$this->display();
     }
 }

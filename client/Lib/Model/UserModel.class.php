@@ -32,6 +32,14 @@ class UserModel extends Model {
 		return $this->tmpOrderID;
 	}
 	
+	public function getPreTmpOrderID()
+	{
+		$condition['userName'] = $this->userName;
+		$result = $this->where($condition)->select();
+		$this->preTmpOrderID = $result[0]["preTmpOrderID"];
+		return $this->preTmpOrderID;
+	}
+	
 	public function login($userPassword)
 	/*
 	 * 判断用户名和密码是否能登录
@@ -98,6 +106,34 @@ class UserModel extends Model {
 	}
 	
 	/*
+	 * 订单完成后User新建一条TmpOrder中的记录，并更新User内的tmpOrderID
+	* @param	string $userName;//当前账户用户名
+	* @return	bool;是否成功
+	* @note:	sign中也有创建tmpOrderID的操作
+	*/
+	public function newTmpOrderID()
+	{
+		$dbTmpOrder = D("TmpOrder");
+		$tmpData["printState"] = 8;
+		$tmpData["preTmpOrderID"] = $this->getTmpOrderID();
+		$tmp = null;
+		$tmp["tmpOrderID"] = $dbTmpOrder->add($tmpData);
+		if ( ($tmp["tmpOrderID"] === null) || ($tmp["tmpOrderID"] === false) )
+		{
+			return false;
+		}
+		else
+		{
+			$tmp["userName"] = $this->userName;
+			$tmpRe = $this->save($tmp);
+			if ($tmpRe === false)
+				return false;
+			else
+				return true;
+		}
+	}
+	
+	/*
 	 * 新用户注册
 	* @param	$data;用户相关信息
 	* @return	int；注册是否成功
@@ -116,7 +152,8 @@ class UserModel extends Model {
 		$data["userPassword"] = $data["tel"];
 		$dbTmpOrder = D("TmpOrder");
 		$tmp = null;
-		$tmpData["save"] = 0;
+		$tmpData["printState"] = 8;
+		$tmpData["preTmpOrderID"] = $this->getTmpOrderID();
 		$tmp = $dbTmpOrder->add($tmpData);
 		if ( ($tmp === null) || ($tmp === false) )
 		{

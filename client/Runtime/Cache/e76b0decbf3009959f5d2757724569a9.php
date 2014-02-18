@@ -182,7 +182,7 @@ function change()
 		            <div class="row">
 		                <div class="span3">
 		                    <h5><font color=black>客户历史欠付款情况总计：<br></font></h5>
-		                    <span id="history" class="place-right"><?php echo ($originHistory); ?></span>
+		                    <span id="history" class="place-right">暂未实现<?php echo ($originHistory); ?></span>
 		                </div>
 		                <div class="span2">
 		                    <h5><font color=black>客户本次欠付款：</font></h5>

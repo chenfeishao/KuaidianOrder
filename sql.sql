@@ -23,9 +23,10 @@ create table user(
 	
 	/*数据库要用的信息*/
 	tmpOrderID bigint NOT NULL,
+	preTmpOrderID bigint NOT NULL,
 	primary key(userName)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",1);
+insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",1,1);
 
 create table tmp_order(
 	id bigint NOT NULL AUTO_INCREMENT,
@@ -42,6 +43,7 @@ create table tmp_order(
 	
 	createDate datetime NOT NULL,
 	/*打印状态
+	 *  8:该条订单还没有任何有效操作
 	 * 	0：不打印
 	 *	1:立即打印，还没有发送给打印机
 	 *	2：存根已经下发给打印机，但是打印机还没有返回成功打印信号
@@ -50,11 +52,12 @@ create table tmp_order(
 	 *	5：发票联打印成功
 	 *	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
 	 *	7：出货单已经打印成功，所有打印完成
+	 *	8已用
 	 */
 	printState int NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '0', '1');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
 
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,

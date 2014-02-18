@@ -242,7 +242,12 @@ class TmpOrderModel extends OrderOP {
 	{
 		$tmpPrintDate["id"] = $this->id;
 		$tmpPrintDate["printState"] = $state;
-		return isset($this->save($data));
+		$tmp = $this->save($tmpPrintDate);
+		if ($tmp === false)
+			return false;
+		else
+			return true;
 	}
+	
 }
 ?>

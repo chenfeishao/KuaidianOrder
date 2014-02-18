@@ -23,38 +23,6 @@
     <script src="__PUBLIC__/metro/js/docs.js"></script>
     <title>EasyOrder</title>
 
-<script>
-var t
-function timedCount()
-{
-	url = "<?php echo U("Order/ajaxGetTmpOrderInfo");?>";
-	$.post(url,
-		{
-		},
-		function(data,status)
-		{
-			//alert(data);
-			switch (data)
-			{
-			case "0":$("#printState").html("目前没有打印该订单");braek;
-			case "1":$("#printState").html("正在打印存根");braek;
-			case "2":$("#printState").html("存根已经下发给打印机");braek;
-			case "3":$("#printState").html("打印存根成功，准备打印发票联");braek;
-			case "4":$("#printState").html("发票联已经下发给打印机");braek;
-			case "5":$("#printState").html("发票联打印成功，准备打印出货单");braek;
-			case "6":$("#printState").html("出货单已经下发给打印机");braek;
-			case "7":
-				$("#allText").html('\
-						<i class="icon-checkmark"></i>\
-						<span id="printState">全部打印完成</span>\
-						');braek;
-			default:$("#printState").html("数据库出错，请重试");braek;
-			}
-		}
-	);
-	t=setTimeout("timedCount()",1000)
-}
-</script>
 </head>
 
 <body class="metro" onload="timedCount()">
@@ -67,13 +35,13 @@ function timedCount()
         
       		<div class="panel">
 				<div class="panel-header bg-indigo fg-white">
-					立即发货
+					延迟发货
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
 						<h1 id="allText" class="text-center">
-							<img src="__PUBLIC__/images/loading.gif"></img>
-							<span id="printState">目前没有打印该订单</span>
+							<i class="icon-checkmark"></i>
+							<span id="printState">延迟发货成功</span>
 						</h1>
 					</div>
 					<div class="row">

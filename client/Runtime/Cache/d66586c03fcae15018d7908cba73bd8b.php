@@ -154,7 +154,7 @@ function onKeyDownDo(e)
             </div>
         </a>
 
-        <a href="#" class="tile bg-darkOrange">
+        <a href="<?php echo U("Order/history");?>" class="tile bg-darkOrange">
             <div class="tile-content icon">
                 <span class="icon-history"></span>
             </div>
