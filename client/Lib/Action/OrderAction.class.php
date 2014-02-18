@@ -370,7 +370,7 @@ class OrderAction extends myAction
     	
     	$dbOfficialOrder = D("OfficialOrder");
     	$this->isFalse($dbOfficialOrder->newOrder($data),"数据库连接失败，请重试","Index/goBack");
-    	
+    	$this->display();
     }
 }
 

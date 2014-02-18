@@ -41,8 +41,17 @@ create table tmp_order(
 	yinHangShiShou double NOT NULL,
 	
 	createDate datetime NOT NULL,
-	printOk boolean NOT NULL,
-	canPrint boolean NOT NULL,/*为true则打印机开始打印*/
+	/*打印状态
+	 * 	0：不打印
+	 *	1:立即打印，还没有发送给打印机
+	 *	2：存根已经下发给打印机，但是打印机还没有返回成功打印信号
+	 *	3：打印存根成功
+	 *	4：发票联已经下发给打印机，但是打印机还没有返回成功打印信号
+	 *	5：发票联打印成功
+	 *	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
+	 *	7：出货单已经打印成功，所有打印完成
+	 */
+	printState int NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '0', '1');

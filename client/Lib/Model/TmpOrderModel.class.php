@@ -231,5 +231,18 @@ class TmpOrderModel extends OrderOP {
 		else
 			return $tmp[0];
 	}
+	
+	/*
+	 * 更新打印状态
+	* @param	int $state;当前状态
+	* @return	bool;更新是否成功
+	* @note:	使用前要先init
+	*/
+	public function updatePrintState($state)
+	{
+		$tmpPrintDate["id"] = $this->id;
+		$tmpPrintDate["printState"] = $state;
+		return isset($this->save($data));
+	}
 }
 ?>

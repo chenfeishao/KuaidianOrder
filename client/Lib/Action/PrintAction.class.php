@@ -1,104 +1,300 @@
 <?php
+require_once(LIB_PATH."commonAction.php");
 
-class PrintAction extends Action
+class PrintAction extends myAction
 {
 
     protected function _initialize()
     {
     }
 
-    public function printOrder()
+    /*
+     * 打印第一联单子。目前这里也打印第二联单子
+     */
+    public function printOneOrder()
     {
-    	/*
-    	 * 准备数据
-    	 */
-    	$orderInfo = null;
-    	
     	$dbGoods = D("Goods");
-    	$dbUser = D("User");
-    	$dbUser->init("wbx");////////////////////////TODO:session("userName")
     	$dbTmpOrder = D("TmpOrder");
-    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$orderArray = null;
     	 
-	    	/*
-	    	 * //货物信息
-	    	*/
-    	$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
-    	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
-    	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
-    	$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
-    	$totalNum = 0;
-    	for ($i = 0; $i < count($tmp["id"]); $i++)
+    	/*打印状态
+    	 * 	0：不打印
+    	*	1:立即打印，还没有发送给打印机
+    	*	2：存根已经下发给打印机，但是打印机还没有返回成功打印信号
+    	*	3：打印存根成功
+    	*	4：发票联已经下发给打印机，但是打印机还没有返回成功打印信号
+    	*	5：发票联打印成功
+    	*	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
+    	*	7：出货单已经打印成功，所有打印完成
+    	*/
+    	$orderArray = $dbTmpOrder->where("printState=1")->order("id")->select();//选出要立即打印的单子
+    	$nowPrint = $dbTmpOrder->where("printState=2")->select();
+    	if (isset($nowPrint))
+    		$orderArray = null;
+    	 
+    	if (isset($orderArray))//如果有需要打印的数据则打印，没有则输出空
     	{
+    		/*
+    		 * 准备数据
+    		*/
+    		$k = count($orderArray) - 1;
+    		$orderInfo = null;
+    		$dbTmpOrder->init($orderArray[$k]["id"]);
+    	
+    		/*
+    		 * //货物信息
+    		*/
+    		$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
+    		$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+    		$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+    		$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
+    		$totalNum = 0;
+    		for ($i = 0; $i < count($tmp["id"]); $i++)
+    		{
     		$dbGoods->init($tmp["id"][$i]);
-    		$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
-    		$orderInfo[$i]["id"] = $tmp["id"]["$i"];
-    		$orderInfo[$i]["num"] = $tmp["num"]["$i"];
-    		$orderInfo[$i]["money"] = $tmp["money"]["$i"];
-   
-    		//渲染规格
-    		$tmpSize = null;
+    				$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
+    				$orderInfo[$i]["id"] = $tmp["id"]["$i"];
+    				$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+    				$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+    	
+    				//渲染规格
+    						$tmpSize = null;
     		$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
     		$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
-    	 
+	   
     		$totalNum += $orderInfo[$i]["num"];
-    	}
+    		}
+    	
+    		/*
+    		* //用户信息
+    		*/
+    		$customName = $dbTmpOrder->getTmpOrderCustomName();
+    		$dbCustomUser = D("User");
+    		$dbCustomUser->init($customName);
+    		$tmpRe = $dbCustomUser->getUserInfo($customName);
+    		if ( ($tmpRe === false) || ($tmpRe === null) )
+    		$this->error("打印准备时查询用户失败，请重试",U("Index/closingOver"));
+    			
+    		$originAllInfo = $dbTmpOrder->getTmpOrderInfo();
+    	
     	
 	    	/*
-	    	 * //用户信息
-	    	*/
-    	$customName = $dbTmpOrder->getTmpOrderCustomName();
-    	$dbCustomUser = D("User");
-    	$dbCustomUser->init($customName);
-    	$tmpRe = $dbCustomUser->getUserInfo($customName);
-    	if ( ($tmpRe === false) || ($tmpRe === null) )
-    		$this->error("打印准备时查询用户失败，请重试",U("Index/closingOver"));
-		
-    	$originAllInfo = $dbTmpOrder->getTmpOrderInfo();
-    	
-    	/*
-    	 * 生成输出数据
-    	 */
-    	$output = "%30黄海水产店出货单%%%00%%+===========================+%%%10";
-    	//用户信息
-    	$output .= "客户：".$customName."%%%00"
-    					."电话：".$tmpRe["tel"]."%%"
-    					."位置：".$tmpRe["carAddress"]."%%%30"
-    					."车号：".$tmpRe["carNo"]."%%%00+===========================+%%%10";
-    	//货物信息
-    	for ($i = 0; $i < count($tmp["id"]); $i++)
-    	{
-    		$output .= $orderInfo[$i]["goodsName"]."   规格:"
-    					.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件  "
-    							."单价:99318  金额:86214789"."%%%00.............................%%%10";
+    		* 生成输出数据
+    		*/
+    		$output = "";
+    		
+	    		/*
+	    		* //第一次打印时添加打印时间
+	    		*/
+    		$data = "";
+    		$data["id"] = $orderArray[$k]["id"];
+    		$data["createDate"] = date("Y-m-d H:i:s");
+	    	$this->isFalse(isset($dbTmpOrder->save($data)),"数据库添加打印时间出错，请重试","Index/goBack");
+    		    		 
+
+	    	$output = "%30黄海水产存根%%%00%%+===========================+%%%10";
+		    //订单信息
+    		$output .= "日期:".$originAllInfo["createDate"]."%%%00%%+===========================+%%%10";
+    		//用户信息
+    		$output .= "客户：".$customName."%%%00"
+		    				."电话：".$tmpRe["tel"]."%%"
+    			    		."位置：".$tmpRe["carAddress"]."%%%30"
+    			    		."车号：".$tmpRe["carNo"]."%%%00+===========================+%%%10";
+    		//货物信息
+    		for ($i = 0; $i < count($tmp["id"]); $i++)
+		    {
+    			$output .= $orderInfo[$i]["goodsName"]."   规格:"
+    			    	.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件  "
+    			    	."单价:99318  金额:86214789"."%%%00.............................%%%10";
+    		}
+    		$output .= "总件数：".$totalNum."件%%";
+    		$output .= "总金额：123456%%%00";
+    			    					 
+		    //转码
+		  
+		  
+    		/*
+		    * 打印发票联
+		    */
+    		$output .= "%%%%%%%%%%";
+    		$output .= "%30黄海水产发票联%%%00%%+===========================+%%%10";
+    		//订单信息
+    		$output .= "日期:".$originAllInfo["createDate"]."%%%00%%+===========================+%%%10";
+		    //用户信息
+		    $output .= "客户：".$customName."%%%00"
+    			    ."电话：".$tmpRe["tel"]."%%"
+    			    ."位置：".$tmpRe["carAddress"]."%%%30"
+		    		."车号：".$tmpRe["carNo"]."%%%00+===========================+%%%10";
+		    //货物信息
+    		for ($i = 0; $i < count($tmp["id"]); $i++)
+    		{
+		    	$output .= $orderInfo[$i]["goodsName"]."   规格:"
+		    			.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件  "
+    			    	."单价:99318  金额:86214789"."%%%00.............................%%%10";
+    		}
+		    $output .= "总件数：".$totalNum."件%%";
+    		$output .= "总金额：123456%%%00";
+		    			
+		    //转码
+		    $output = iconv("UTF-8", "GB2312//TRANSLIT//IGNORE", $output);
     	}
-    	$output .= "总件数：".$totalNum."件%%";
-    	$output .= "总金额：123456%%%00";
+    	else//如果不存在需要打印的单子
+    	{
+    		//为空输出
+    		return;
+    	}
+    		    												 
+    	    	 
+    	    	 
+    	/*
+    	* 打印
+    	*/
+    	//采用单例模式，防止传输多个XML
+    	$printer = printerClass::getInstance();
+    		    									 
+    	if (isset($printer->params['id']) && isset($printer->params['sta']))  // 返回打印结果
+    	{
+    		 if ($printer->params['sta'] === 0)//0为打印成功
+    		 {
+    		 	$dbTmpOrder->init($printer->params['id']);
+    		    $dbTmpOrder->updateState(5);
+    		 }
+    	}
+    	else // 传输需要打印的内容
+    	{
+    		echo $printer->setId($originAllInfo["id"]) // 设置ID
+    		->setTime( strtotime(date("Y-m-d H:i:s")) ) // 设置时间
+    	    		->setContent($output) // 设置content
+    	    		->setSetting("103:10") // 设置打印机参数等数据，具体参考协议部分文件，建议非必要不要设置，也可以为空
+    	    		->display(); // 输出
+    	    $dbTmpOrder->updateState(2);
+    	}
+    }
+    
+    /*
+     * 库房那边的打印机输出页面
+     */
+    public function printThreeOrder()
+    {
+    	$dbGoods = D("Goods");
+    	$dbTmpOrder = D("TmpOrder");
+    	$orderArray = null;
     	
-    	//转码
-    	$output = iconv("UTF-8", "GB2312//TRANSLIT//IGNORE", $output);
+    	/*打印状态
+    	 * 	0：不打印
+    	*	1:立即打印，还没有发送给打印机
+    	*	2：存根已经下发给打印机，但是打印机还没有返回成功打印信号
+    	*	3：打印存根成功
+    	*	4：发票联已经下发给打印机，但是打印机还没有返回成功打印信号
+    	*	5：发票联打印成功
+    	*	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
+    	*	7：出货单已经打印成功，所有打印完成
+    	*/
+   		$orderArray = $dbTmpOrder->where("printState=5")->order("id")->select();//选出要立即打印的单子
+   		$nowPrint = $dbTmpOrder->where("printState=6")->select();
+   		if (isset($nowPrint))
+   			$orderArray = null;
+    	
+    	if (isset($orderArray))//如果有需要打印的数据则打印，没有则输出空
+    	{
+    		/*
+    		 * 准备数据
+    		*/
+    		$k = count($orderArray) - 1;
+    		$orderInfo = null;
+    		$dbTmpOrder->init($orderArray[$k]["id"]);
+    		
+		    	/*
+		    	 * //货物信息
+		    	*/
+	    	$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
+	    	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+	    	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+	    	$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
+	    	$totalNum = 0;
+	    	for ($i = 0; $i < count($tmp["id"]); $i++)
+	    	{
+	    		$dbGoods->init($tmp["id"][$i]);
+	    		$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
+	    		$orderInfo[$i]["id"] = $tmp["id"]["$i"];
+	    		$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+	    		$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+	   
+	    		//渲染规格
+	    		$tmpSize = null;
+	    		$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
+	    		$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
+	    	 
+	    		$totalNum += $orderInfo[$i]["num"];
+	    	}
+	    	
+		    	/*
+		    	 * //用户信息
+		    	*/
+	    	$customName = $dbTmpOrder->getTmpOrderCustomName();
+	    	$dbCustomUser = D("User");
+	    	$dbCustomUser->init($customName);
+	    	$tmpRe = $dbCustomUser->getUserInfo($customName);
+	    	if ( ($tmpRe === false) || ($tmpRe === null) )
+	    		$this->error("打印准备时查询用户失败，请重试",U("Index/closingOver"));
+			
+	    	$originAllInfo = $dbTmpOrder->getTmpOrderInfo();
+	
+	    	
+	    	/*
+	    	 * 生成输出数据
+	    	 */
+	    	$output = "";
+	    	
+    		$output = "%30黄海水产出货单%%%00%%+===========================+%%%10";
+    		//订单信息
+    		$output .= "日期:".$originAllInfo["createDate"]."%%%00%%+===========================+%%%10";
+    		//用户信息
+    		$output .= "客户：".$customName."%%%00"
+    						."位置：".$tmpRe["carAddress"]."%%%30"
+    						."车号：".$tmpRe["carNo"]."%%%00+===========================+%%%10";
+    		//货物信息
+    		for ($i = 0; $i < count($tmp["id"]); $i++)
+    		{
+    			$output .= $orderInfo[$i]["goodsName"]."  "
+    					.$orderInfo[$i]["size"]."  数量:".$orderInfo[$i]["num"]."件  "
+    					."%%%00.............................%%%10";
+	    	}
+	    	$output .= "总件数：".$totalNum."件%%";
+    		
+	    	//转码
+    		$output = iconv("UTF-8", "GB2312//TRANSLIT//IGNORE", $output);
+    	}
+    	else//如果不存在需要打印的单子
+    	{
+    		//为空输出
+    		return;
+    	}
     	
     	
     	
     	/*
     	 * 打印
-    	 */
-    	 //采用单例模式，防止传输多个XML
+    	*/
+    	//采用单例模式，防止传输多个XML
     	$printer = printerClass::getInstance();
     	
     	if (isset($printer->params['id']) && isset($printer->params['sta']))  // 返回打印结果
     	{
-    		/*
-    		 * @todo
-    		*/
+    		if ($printer->params['sta'] === 0)//0为打印成功
+    		{
+    			$dbTmpOrder->init($printer->params['id']);
+    			$dbTmpOrder->updateState(7);
+    		}
     	}
     	else // 传输需要打印的内容
     	{
     		echo $printer->setId($originAllInfo["id"]) // 设置ID
-			    		->setTime( strtotime(date("Y-m-d H:i:s")) ) // 设置时间
-			    		->setContent($output) // 设置content
-			    		->setSetting("103:10") // 设置打印机参数等数据，具体参考协议部分文件，建议非必要不要设置，也可以为空
-			    		->display(); // 输出
+    		->setTime( strtotime(date("Y-m-d H:i:s")) ) // 设置时间
+    		->setContent($output) // 设置content
+    		->setSetting("103:10") // 设置打印机参数等数据，具体参考协议部分文件，建议非必要不要设置，也可以为空
+    		->display(); // 输出
+    		$dbTmpOrder->updateState(6);
     	}
     }
     
