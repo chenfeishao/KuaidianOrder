@@ -168,7 +168,9 @@ class OrderAction extends myAction
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
     	
-		$this->isFalse($dbTmpOrder->updateTmpOrderWithGoods($this->_post()),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+    	$tmp = $this->_post();
+    	array_pop($tmp);//把最后一个令牌字段弹出
+		$this->isFalse($dbTmpOrder->updateTmpOrderWithGoods($tmp),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
     	redirect(U("Order/closingInfo"),0);
     }
     
