@@ -13,6 +13,7 @@ class PrintAction extends myAction
      */
     public function printOneOrder()
     {
+    	$blankTag = false;
     	$dbGoods = D("Goods");
     	$dbTmpOrder = D("TmpOrder");
     	$orderArray = null;
@@ -49,20 +50,22 @@ class PrintAction extends myAction
     		$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
     		$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
     		$totalNum = 0;
+    		$totalMoney = 0;
     		for ($i = 0; $i < count($tmp["id"]); $i++)
     		{
-    		$dbGoods->init($tmp["id"][$i]);
-    				$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
-    				$orderInfo[$i]["id"] = $tmp["id"]["$i"];
-    				$orderInfo[$i]["num"] = $tmp["num"]["$i"];
-    				$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+    			$dbGoods->init($tmp["id"][$i]);
+    			$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
+    			$orderInfo[$i]["id"] = $tmp["id"]["$i"];
+    			$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+    			$orderInfo[$i]["money"] = $tmp["money"]["$i"];
     	
-    				//渲染规格
-    						$tmpSize = null;
-    		$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
-    		$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
+    			//渲染规格
+    			$tmpSize = null;
+    			$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
+    			$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
 	   
-    		$totalNum += $orderInfo[$i]["num"];
+    			$totalNum += $orderInfo[$i]["num"];
+    			$totalMoney += $orderInfo[$i]["money"] * $orderInfo[$i]["num"];
     		}
     	
     		/*
@@ -73,7 +76,7 @@ class PrintAction extends myAction
     		$dbCustomUser->init($customName);
     		$tmpRe = $dbCustomUser->getUserInfo($customName);
     		if ( ($tmpRe === false) || ($tmpRe === null) )
-    		$this->error("打印准备时查询用户失败，请重试",U("Index/closingOver"));
+    		$this->error("打印准备时查询用户失败，请重试",U("Index/closingadministrator	len"));
     			
     		$originAllInfo = $dbTmpOrder->getTmpOrderInfo();
     	
@@ -89,12 +92,12 @@ class PrintAction extends myAction
     		$data = "";
     		$data["id"] = $orderArray[$k]["id"];
     		$data["createDate"] = date("Y-m-d H:i:s");
-	    	$this->isFalse(isset($dbTmpOrder->save($data)),"数据库添加打印时间出错，请重试","Index/goBack");
+	    	$this->isFalsePlus($dbTmpOrder->save($data),"数据库添加打印时间出错，请重试","Index/goBack");
     		    		 
 
-	    	$output = "%30黄海水产存根%%%00%%+===========================+%%%10";
-		    //订单信息
-    		$output .= "日期:".$originAllInfo["createDate"]."%%%00%%+===========================+%%%10";
+	    	$output = "%30黄海水产--存根联%%%10   (博大 耘垦 安井)西北专卖%%";
+    		//订单信息
+            $output .= "%10     ".$originAllInfo["createDate"]."%%%00+===========================+%10";
     		//用户信息
     		$output .= "客户：".$customName."%%%00"
 		    				."电话：".$tmpRe["tel"]."%%"
@@ -104,11 +107,12 @@ class PrintAction extends myAction
     		for ($i = 0; $i < count($tmp["id"]); $i++)
 		    {
     			$output .= $orderInfo[$i]["goodsName"]."   规格:"
-    			    	.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件  "
-    			    	."单价:99318  金额:86214789"."%%%00.............................%%%10";
+    			    	.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件   "
+    			    	."单价:".$orderInfo[$i]["money"]."  金额:".($orderInfo[$i]["num"]*$orderInfo[$i]["money"])."%%%00.............................%%%10";
     		}
     		$output .= "总件数：".$totalNum."件%%";
-    		$output .= "总金额：123456%%%00";
+    		$output .= "总金额：".$totalMoney."%%%00"
+                	."以上商品均已履行进货检查验收法定程序，索验票证齐全，供货者特此声明。%%%00";
     			    					 
 		    //转码
 		  
@@ -117,10 +121,10 @@ class PrintAction extends myAction
 		    * 打印发票联
 		    */
     		$output .= "%%%%%%%%%%";
-    		$output .= "%30黄海水产发票联%%%00%%+===========================+%%%10";
+    		$output .= "%30黄海水产--发票联%%%10   (博大 耘垦 安井)西北专卖%%";
     		//订单信息
-    		$output .= "日期:".$originAllInfo["createDate"]."%%%00%%+===========================+%%%10";
-		    //用户信息
+    		$output .= "%10     ".$originAllInfo["createDate"]."%%%00方欣国际食品城一楼125号(后门口)电话:029-83106853 15029483465+===========================+%10";
+    		//用户信息
 		    $output .= "客户：".$customName."%%%00"
     			    ."电话：".$tmpRe["tel"]."%%"
     			    ."位置：".$tmpRe["carAddress"]."%%%30"
@@ -129,22 +133,22 @@ class PrintAction extends myAction
     		for ($i = 0; $i < count($tmp["id"]); $i++)
     		{
 		    	$output .= $orderInfo[$i]["goodsName"]."   规格:"
-		    			.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件  "
-    			    	."单价:99318  金额:86214789"."%%%00.............................%%%10";
+		    			.$orderInfo[$i]["size"]."%%".$orderInfo[$i]["num"]."件   "
+    			    	."单价:".$orderInfo[$i]["money"]."  金额:".($orderInfo[$i]["num"]*$orderInfo[$i]["money"])."%%%00.............................%%%10";
     		}
 		    $output .= "总件数：".$totalNum."件%%";
-    		$output .= "总金额：123456%%%00";
-		    			
+    		$output .= "总金额：".$totalMoney."%%%00"
+    				."以上商品均已履行进货检查验收法定程序，索验票证齐全，供货者特此声明。此联由批发单位直接用于批发台帐资料留存。%%%20   多谢惠顾%%%00";
+		    
 		    //转码
 		    $output = iconv("UTF-8", "GB2312//TRANSLIT//IGNORE", $output);
     	}
     	else//如果不存在需要打印的单子
     	{
     		//为空输出
-    		return;
+    		$blankTag = true;
     	}
     		    												 
-    	    	 
     	    	 
     	/*
     	* 打印
@@ -154,20 +158,20 @@ class PrintAction extends myAction
     		    									 
     	if (isset($printer->params['id']) && isset($printer->params['sta']))  // 返回打印结果
     	{
-    		 if ($printer->params['sta'] === 0)//0为打印成功
+    		 if ($printer->params['sta'] == 0)//0为打印成功
     		 {
     		 	$dbTmpOrder->init($printer->params['id']);
-    		    $dbTmpOrder->updateState(5);
+    		    $dbTmpOrder->updatePrintState(5);
     		 }
     	}
-    	else // 传输需要打印的内容
+    	elseif (!$blankTag)// 传输需要打印的内容
     	{
     		echo $printer->setId($originAllInfo["id"]) // 设置ID
     		->setTime( strtotime(date("Y-m-d H:i:s")) ) // 设置时间
     	    		->setContent($output) // 设置content
     	    		->setSetting("103:10") // 设置打印机参数等数据，具体参考协议部分文件，建议非必要不要设置，也可以为空
     	    		->display(); // 输出
-    	    $dbTmpOrder->updateState(2);
+    	    $dbTmpOrder->updatePrintState(2);
     	}
     }
     
@@ -176,6 +180,7 @@ class PrintAction extends myAction
      */
     public function printThreeOrder()
     {
+    	$blankTag = false;
     	$dbGoods = D("Goods");
     	$dbTmpOrder = D("TmpOrder");
     	$orderArray = null;
@@ -246,9 +251,9 @@ class PrintAction extends myAction
 	    	 */
 	    	$output = "";
 	    	
-    		$output = "%30黄海水产出货单%%%00%%+===========================+%%%10";
+    		$output = "%30黄海水产--出货单%%";
     		//订单信息
-    		$output .= "日期:".$originAllInfo["createDate"]."%%%00%%+===========================+%%%10";
+            $output .= "%10     ".$originAllInfo["createDate"]."%%%00+===========================+%10";
     		//用户信息
     		$output .= "客户：".$customName."%%%00"
     						."位置：".$tmpRe["carAddress"]."%%%30"
@@ -257,10 +262,10 @@ class PrintAction extends myAction
     		for ($i = 0; $i < count($tmp["id"]); $i++)
     		{
     			$output .= $orderInfo[$i]["goodsName"]."  "
-    					.$orderInfo[$i]["size"]."  数量:".$orderInfo[$i]["num"]."件  "
+    					.$orderInfo[$i]["size"]."  数量:".$orderInfo[$i]["num"]."件"
     					."%%%00.............................%%%10";
 	    	}
-	    	$output .= "总件数：".$totalNum."件%%";
+	    	$output .= "总件数：".$totalNum."件%%%00";
     		
 	    	//转码
     		$output = iconv("UTF-8", "GB2312//TRANSLIT//IGNORE", $output);
@@ -268,7 +273,7 @@ class PrintAction extends myAction
     	else//如果不存在需要打印的单子
     	{
     		//为空输出
-    		return;
+    		$blankTag = true;
     	}
     	
     	
@@ -281,20 +286,20 @@ class PrintAction extends myAction
     	
     	if (isset($printer->params['id']) && isset($printer->params['sta']))  // 返回打印结果
     	{
-    		if ($printer->params['sta'] === 0)//0为打印成功
+    		if ($printer->params['sta'] == 0)//0为打印成功
     		{
     			$dbTmpOrder->init($printer->params['id']);
-    			$dbTmpOrder->updateState(7);
+    			$dbTmpOrder->updatePrintState(7);
     		}
     	}
-    	else // 传输需要打印的内容
+    	elseif (!$blankTag)// 传输需要打印的内容
     	{
     		echo $printer->setId($originAllInfo["id"]) // 设置ID
     		->setTime( strtotime(date("Y-m-d H:i:s")) ) // 设置时间
     		->setContent($output) // 设置content
     		->setSetting("103:10") // 设置打印机参数等数据，具体参考协议部分文件，建议非必要不要设置，也可以为空
     		->display(); // 输出
-    		$dbTmpOrder->updateState(6);
+    		$dbTmpOrder->updatePrintState(6);
     	}
     }
     
@@ -328,14 +333,13 @@ class printerClass {
 		/*
 		 * 验证是否为正常连接
 		*/
-		/*
 		 if (!isset(self::$_instance->params['usr'])
 		 		&& !isset(self::$_instance->params['sgn'])
 		 		&& md5(self::$_instance->params['usr']) != self::$_instance->params['sgn'])
-		 {
-		return false;
+		{
+			return false;
 		}
-		*/
+		
 		return self::$_instance;
 	}
 	/*

@@ -4712,6 +4712,15 @@ a {
 .metro .tile-group.seven {
   width: 922px;
 }
+.metro .tile-group.nine {
+  width: 1182px;
+}
+.metro .tile-group.ten {
+  width: 1368px;
+}
+.metro .tile-group.eleven {
+  width: 1442px;
+}
 .metro .tile-group:first-child {
   margin-left: 80px;
 }

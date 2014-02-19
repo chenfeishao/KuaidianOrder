@@ -236,36 +236,28 @@ function onKeyDownDo(e)
 		</div><?php endif; ?>
 
 
-    <div class="tile-group seven">
+    <div class="tile-group eleven">
         <div class="tile-group-title">货物清单</div>
         
         <div class="tab-control" data-effect="fade" data-role="tab-control">
 		    <ul class="tabs">
-		        <li><a href="#___1">Tab 1</a></li>
-		        <li><a href="#___2">Tab 2</a></li>
-		        <li><a href="#___3">Tab 3</a></li>
+		        <?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><li><a href="#___<?php echo ($i); ?>"><?php echo ($vo["tabName"]); ?></a></li><?php endforeach; endif; else: echo "" ;endif; ?>
 		    </ul>
 		
 		    <div class="frames">
-		        <div style="display: block;" class="frame" id="___1">
-		         	<?php if(is_array($goods)): foreach($goods as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?>"  onclick='go(<?php echo ($vo["id"]); ?>,0)'>
-							<div class="<?php echo ($vo["content"]); ?>">
-								<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
-				   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
-							</div>
-							<div class="<?php echo ($vo["brand"]); ?>">
-				                <div class="label"><?php echo ($vo["name"]); ?></div>
-				            </div>
-						</div><?php endforeach; endif; ?>
-					<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-				</div>
-		        <div style="display: none;" class="frame" id="___2">
-		            Aliquam ornare libe<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>ro eget leo imperdiet varius. Aenean fringilla orci volutpat enim lobortis, id elementum lectus consectetur. Integer id ante nec ligula consectetur rutrum imperdiet vel tellus. Nam a lectus placerat, pretium risus ut, rutrum orci.
-		        </div>
-		        <div style="display: none;" class="frame" id="___3">
-		            Duis malesuada, dolor eu sollicitudin sagittis, leo sapien vehicula nunc, lobortis ornare tellus augue ac augue. Suspendisse sagittis sit amet ante ac suscipit. Duis ligula metus, auctor ut risus et, blandit suscipit lectus. Pellentesque cursus adipiscing tortor at malesuada.
-		        </div>
-		    </div>
+		    	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><div class="frame" id="___<?php echo ($i); ?>">
+			         	<?php if(is_array($vo['goods'])): foreach($vo['goods'] as $key=>$sub): ?><div class="<?php echo ($sub["className"]); ?>"  onclick='go(<?php echo ($sub["id"]); ?>,0)'>
+								<div class="<?php echo ($sub["content"]); ?>">
+									<?php if($sub["image"] == NULL): ?><span class="icon-tag"></span>
+					   				<?php else: ?><img src="<?php echo ($sub["image"]); ?>"/><?php endif; ?>
+								</div>
+								<div class="<?php echo ($sub["brand"]); ?>">
+					                <div class="label"><?php echo ($sub["name"]); ?></div>
+					            </div>
+							</div><?php endforeach; endif; ?>
+						<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+					</div><?php endforeach; endif; else: echo "" ;endif; ?>
+		   	</div>
 		</div>
 		
     </div> <!-- End group -->

@@ -115,7 +115,6 @@ class UserModel extends Model {
 	{
 		$dbTmpOrder = D("TmpOrder");
 		$tmpData["printState"] = 8;
-		$tmpData["preTmpOrderID"] = $this->getTmpOrderID();
 		$tmp = null;
 		$tmp["tmpOrderID"] = $dbTmpOrder->add($tmpData);
 		if ( ($tmp["tmpOrderID"] === null) || ($tmp["tmpOrderID"] === false) )
@@ -124,6 +123,7 @@ class UserModel extends Model {
 		}
 		else
 		{
+			$tmp["preTmpOrderID"] = $this->getTmpOrderID();
 			$tmp["userName"] = $this->userName;
 			$tmpRe = $this->save($tmp);
 			if ($tmpRe === false)
@@ -153,7 +153,6 @@ class UserModel extends Model {
 		$dbTmpOrder = D("TmpOrder");
 		$tmp = null;
 		$tmpData["printState"] = 8;
-		$tmpData["preTmpOrderID"] = $this->getTmpOrderID();
 		$tmp = $dbTmpOrder->add($tmpData);
 		if ( ($tmp === null) || ($tmp === false) )
 		{
@@ -161,7 +160,7 @@ class UserModel extends Model {
 			return false;
 		}
 		$data["tmpOrderID"] = $tmp;
-		
+		$data["preTmpOrderID"] = $tmp;
 		/*
 		 * 添加用户
 		*/
