@@ -273,6 +273,7 @@ class OrderAction extends myAction
     
     /*
      * 结算信息总览页面
+     * note		和historyOver对应
      */
     public function closingOver()
     {
@@ -456,13 +457,98 @@ class OrderAction extends myAction
     }
     
     /*
+     * 在历史界面的查看某一条单子的详细信息的界面
+     * note		和closingOver对应
+     */
+    public function historyOver()
+    {
+    	$orderInfo = null;
+    	
+    	$dbGoods = D("Goods");
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($this->_get("no"));
+    	 
+    	/*
+    	 * 货物信息
+    	*/
+    	$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
+    	$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+    	$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+    	$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
+    	$totalJinE = 0;
+    	$totalNum = 0;
+    	for ($i = 0; $i < count($tmp["id"]); $i++)
+    	{
+    	$dbGoods->init($tmp["id"][$i]);
+    			$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
+    			$orderInfo[$i]["id"] = $tmp["id"]["$i"];
+    			$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+    					$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+   
+    					//渲染规格
+    							$tmpSize = null;
+    	$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
+    	$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
+    	 
+    			$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+    					$totalJinE += $orderInfo[$i]["jinE"];
+    					$totalNum += $orderInfo[$i]["num"];
+    	}
+    	
+    	//渲染list
+    			if (count($orderInfo) == 0)
+    			{
+    			$orderInfo = null;
+    	}
+    	$this->assign("list",$orderInfo);
+    	$this->assign("totalJinE",$totalJinE);
+    	 
+    	/*
+    	* 付款信息
+    	*/
+    	$tmpOrderInfo = $dbTmpOrder->getTmpOrderInfo();
+    	$yingShouJinE = $totalJinE - $tmpOrderInfo["save"];
+    	$benCiShiShou = $tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"];
+    	$this->assign("save",$tmpOrderInfo["save"]);
+    	$this->assign("xianJinShiShou",$tmpOrderInfo["xianJinShiShou"]);
+    	$this->assign("yinHangShiShou",$tmpOrderInfo["yinHangShiShou"]);
+    	$this->assign("yingShouJinE",$yingShouJinE);
+    	$this->assign("benCiShiShou",$benCiShiShou);
+    	$benCiQianFuKuan = $benCiShiShou - $yingShouJinE;
+    	if ($benCiQianFuKuan == 0)
+    		$benCiQianFuKuanInfo = "<strong class='text-info'>无  </strong>";
+    	else if ($benCiQianFuKuan > 0)
+    		$benCiQianFuKuanInfo = "<strong class='text-success'>多  ".$benCiQianFuKuan."</strong>";
+    	else if ($benCiQianFuKuan < 0)
+    		$benCiQianFuKuanInfo = "<strong class='text-warning'>少  ".(0 - $benCiQianFuKuan)."</strong>";
+    	$this->assign("benCiQianFuKuan",$benCiQianFuKuanInfo);
+    						 
+    	/*
+    	* 用户信息
+    	*/
+    	$customName = $dbTmpOrder->getTmpOrderCustomName();
+    	$dbCustomUser = D("User");
+    	$dbCustomUser->init($customName);
+    	$tmpRe = $dbCustomUser->getUserInfo($customName);
+    	if ( ($tmpRe === false) || ($tmpRe === null) )
+    		$this->error("查询用户失败，请重试",U("Index/goBack"));
+    	$this->assign("customName",$customName);
+    	$this->assign("tel",$tmpRe["tel"]);
+    	$this->assign("address",$tmpRe["address"]);
+    	$this->assign("carAddress",$tmpRe["carAddress"]);
+    	$this->assign("carNo",$tmpRe["carNo"]);
+    	
+    	$this->display();
+    }
+    
+    /*
      * 在历史页面，删除未完成的打印单
      */
     public function deleteTmpOrder()
     {
     	$condition["id"] = $this->_get("no");
     	$dbTmpOrder = D("TmpOrder");
-    	$this->isFalse($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
+    	$this->isFalsePlus($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
     	redirect(U("Order/history"),0);
     }
 }
