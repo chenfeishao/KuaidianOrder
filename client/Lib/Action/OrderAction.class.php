@@ -414,6 +414,7 @@ class OrderAction extends myAction
     	{
     		$tmpGoodsName = null;
     		$tmp = null;
+    		$undoneList[$i]["id"] = $undone[$i]["id"];
     		$undoneList[$i]["customName"] = $undone[$i]["customName"];
     		$undoneList[$i]["createDate"] = $undone[$i]["createDate"];
     		$undoneList[$i]["printState"] = $undone[$i]["printState"];
@@ -436,6 +437,7 @@ class OrderAction extends myAction
     	{
     		$tmpGoodsName = null;
     		$tmp = null;
+    		$doneList[$i]["id"] = $done[$i]["id"];
     		$doneList[$i]["customName"] = $done[$i]["customName"];
     		$doneList[$i]["createDate"] = $done[$i]["createDate"];
     		
@@ -451,6 +453,17 @@ class OrderAction extends myAction
     	$this->assign("undoneList",$undoneList);
     	$this->assign("doneList",$doneList);
     	$this->display();
+    }
+    
+    /*
+     * 在历史页面，删除未完成的打印单
+     */
+    public function deleteTmpOrder()
+    {
+    	$condition["id"] = $this->_get("no");
+    	$dbTmpOrder = D("TmpOrder");
+    	$this->isFalse($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
+    	redirect(U("Order/history"),0);
     }
 }
 

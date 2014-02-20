@@ -1,0 +1,112 @@
+<include file="Public:header" />
+</head>
+
+<body class="metro">
+
+    <div class="container">
+        <h1>
+            <a href="{:U("Index/goBack")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+           	历史记录<small class="on-right">{$title}</small>
+        </h1>
+        
+      		<div class="panel">
+				<div class="panel-header bg-indigo fg-white">
+					商品信息
+					<small class="place-right">应收货款:{$totalJinE}</small>
+				</div>
+				<div class="panel-content grid fluid">
+					<table class="table hovered">
+		                <thead>
+			                <tr>
+			                	<th class="text-left">序号</th>
+			                    <th class="text-left">商品名称</th>
+			                    <th class="text-left">规格</th>
+			                    <th class="text-left">数量</th>
+			                    <th class="text-left">单价</th>
+			                    <th class="text-left">金额</th>
+			                </tr>
+		                </thead>
+						
+		                <tbody>
+		                	<volist name="list" id="vo">
+						    	<tr>
+						    		<td style="width: 50px;">{$i}</td>
+						    		<td class="span4">{$vo.goodsName}</td>
+						    		<td class="right span3">{$vo.size}</td>
+						    		<td class="right span2">{$vo.num}</td>
+						    		<td class="right span2">{$vo.money}</td>
+						    		<td class="right span2">{$vo.jinE}</td>
+						    	</tr>
+					    	</volist>
+		                </tbody>
+		            </table>
+				</div>
+			</div>
+       		<div class="panel">
+				<div class="panel-header bg-lightBlue fg-white">
+					客户信息<small>{$customName}</small>
+					<small class="place-right">电话：{$tel}</small>
+				</div>
+				<div class="panel-content grid fluid">
+					<div class="row">
+		                <div class="span4">
+		                    <label><font color=black>地址：{$address}</font></label>
+		                </div>
+		                <div class="span5">
+		                    <label><font color=black>停车位置：{$carAddress}</font></label>
+		                </div>
+		                <div class="span3">
+		                    <label><font color=black>车号：{$carNo}</font></label>
+		                </div>
+		            </div>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-header bg-darkRed fg-white">
+					付款信息<small>优惠金额：{$save}</small>
+					<small class="place-right">优惠后应收金额：{$yingShouJinE}</small>
+				</div>
+				<div class="panel-content grid fluid">
+					<div class="row">
+		                <div class="span3">
+		                    <label><font color=black>现金实收：{$xianJinShiShou}</font></label>
+		                </div>
+		                <div class="span3">
+		                    <label><font color=black>银行实收：{$yinHangShiShou}</font></label>
+		                </div>
+		                <div class="span3">
+		                    <h5><font color=black>本次实收：{$benCiShiShou}</font></h5>
+		                </div>
+		                <div class="span3">
+		                    <h5><font color=black>客户本次欠付款：{$benCiQianFuKuan}</font></h5>
+		                </div>
+		            </div>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-header bg-green fg-white">
+					操作
+				</div>
+				<div class="panel-content grid fluid">
+					<div class="row">
+						<button class="span3 shortcut warning" onclick="window.location = '{:U('Order/')}'" data-click="transform">
+                            <h2>重新全部打印</h2>
+                        </button>
+                        <button class="span3 shortcut primary" onclick="window.location = '{:U('Order/')}'" data-click="transform">
+                            <h2>打印存根联</h2>
+                        </button>
+                        <button class="span3 shortcut default" onclick="window.location = '{:U('Order/')}'" data-click="transform">
+                            <h2>打印发票联</h2>
+                        </button>
+                        <button class="span3 shortcut info" onclick="window.location = '{:U('Order/')}'" data-click="transform">
+                            <h2>打印出库单</h2>
+                        </button>
+		            </div>
+				</div>
+			</div>
+        	<div class="row">
+	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="4"></div>
+	        </div>
+    </div>
+</body>
+</html>
