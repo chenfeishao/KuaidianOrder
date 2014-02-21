@@ -97,7 +97,7 @@ class PrintAction extends myAction
 
 	    	$output = "%30黄海水产--存根联%%%10   (博大 耘垦 安井)西北专卖%%";
     		//订单信息
-            $output .= "%10     ".$originAllInfo["createDate"]."%%%00+===========================+%10";
+            $output .= "%10     ".$data["createDate"]."%%%00+===========================+%10";
     		//用户信息
     		$output .= "客户：".$customName."%%%00"
 		    				."电话：".$tmpRe["tel"]."%%"
@@ -111,7 +111,7 @@ class PrintAction extends myAction
     			    	."单价:".$orderInfo[$i]["money"]."  金额:".($orderInfo[$i]["num"]*$orderInfo[$i]["money"])."%%%00.............................%%%10";
     		}
     		$output .= "总件数：".$totalNum."件%%";
-    		$output .= "总金额：".$totalMoney."%%%00"
+    		$output .= "总金额：".$totalMoney."元%%"."现金实收:".$originAllInfo['xianJinShiShou']."元%%银行实收:".$originAllInfo['yinHangShiShou']."元%%%00"
                 	."以上商品均已履行进货检查验收法定程序，索验票证齐全，供货者特此声明。%%%00";
     			    					 
 		    //转码
@@ -123,7 +123,7 @@ class PrintAction extends myAction
     		$output .= "%%%%%%%%%%";
     		$output .= "%30黄海水产--发票联%%%10   (博大 耘垦 安井)西北专卖%%";
     		//订单信息
-    		$output .= "%10     ".$originAllInfo["createDate"]."%%%00方欣国际食品城一楼125号(后门口)电话:029-83106853 15029483465+===========================+%10";
+    		$output .= "%10     ".$data["createDate"]."%%%00方欣国际食品城一楼125号(后门口)电话:029-83106853 15029483465+===========================+%10";
     		//用户信息
 		    $output .= "客户：".$customName."%%%00"
     			    ."电话：".$tmpRe["tel"]."%%"
@@ -137,7 +137,7 @@ class PrintAction extends myAction
     			    	."单价:".$orderInfo[$i]["money"]."  金额:".($orderInfo[$i]["num"]*$orderInfo[$i]["money"])."%%%00.............................%%%10";
     		}
 		    $output .= "总件数：".$totalNum."件%%";
-    		$output .= "总金额：".$totalMoney."%%%00"
+    		$output .= "总金额：".$totalMoney."元%%%00"
     				."以上商品均已履行进货检查验收法定程序，索验票证齐全，供货者特此声明。此联由批发单位直接用于批发台帐资料留存。%%%20   多谢惠顾%%%00";
 		    
 		    //转码
@@ -154,7 +154,7 @@ class PrintAction extends myAction
     	* 打印
     	*/
     	//采用单例模式，防止传输多个XML
-    	$printer = printerClass::getInstance();
+    	$printer = printerOneClass::getInstance();
     		    									 
     	if (isset($printer->params['id']) && isset($printer->params['sta']))  // 返回打印结果
     	{
@@ -282,7 +282,7 @@ class PrintAction extends myAction
     	 * 打印
     	*/
     	//采用单例模式，防止传输多个XML
-    	$printer = printerClass::getInstance();
+    	$printer = printerThreeClass::getInstance();
     	
     	if (isset($printer->params['id']) && isset($printer->params['sta']))  // 返回打印结果
     	{
@@ -305,8 +305,7 @@ class PrintAction extends myAction
     
 }
 
-
-class printerClass {
+class printerOneClass {
 
 	private static $_instance;
 
@@ -333,13 +332,266 @@ class printerClass {
 		/*
 		 * 验证是否为正常连接
 		*/
-		 if (!isset(self::$_instance->params['usr'])
-		 		&& !isset(self::$_instance->params['sgn'])
-		 		&& md5(self::$_instance->params['usr']) != self::$_instance->params['sgn'])
+		if (isset(self::$_instance->params['sta']) && isset(self::$_instance->params['id']))//为返回信号
+		{
+			if (!isset(self::$_instance->params['usr'])
+					&& !isset(self::$_instance->params['sgn'])
+					&& !isset(self::$_instance->params['ord'])
+					&& !isset(self::$_instance->params['id'])
+					&& !isset(self::$_instance->params['sta'])
+				)
+			{
+				return false;
+			}
+			//IMEI是否一样
+			if (self::$_instance->params['usr'] != "355839023185848")
+			{
+				return false;
+			}
+			//md5是否正确
+			if (strtoupper(md5(self::$_instance->params['usr'].self::$_instance->params['id'].self::$_instance->params['ord']
+					.self::$_instance->params['sta']."alienware")) != self::$_instance->params['sgn'])
+			{
+				return false;
+			}
+		}
+		else
+		{
+			 if (!isset(self::$_instance->params['usr'])
+			 		&& !isset(self::$_instance->params['sgn'])
+			 		&& !isset(self::$_instance->params['ord'])
+			 	)
+			{
+				return false;
+			}
+			//IMEI是否一样
+			if (self::$_instance->params['usr'] != "355839023185848")
+			{
+				return false;
+			}
+			//md5是否正确
+			if (strtoupper(md5(self::$_instance->params['usr'].self::$_instance->params['ord']."alienware")) != self::$_instance->params['sgn'])
+			{
+				return false;
+			}
+		}
+		
+		
+		return self::$_instance;
+	}
+	/*
+	 * 打印终端请求平台下发数据
+	*
+	*/
+	/**
+	 +----------------------------------------------------------
+	 * 设置时间 时间不能小于2013-08-01 00:00:00 同时 时间不能于大于2030-08-01 00:00:00
+	 +----------------------------------------------------------
+	 * @param string $timestamp 时间戳
+	 +----------------------------------------------------------
+	 */
+	public function setTime( $timestamp )
+	{
+		if ($timestamp > 1375315200 && $timestamp < 1911772800) {
+			$this->time = date('Y-m-d H:i:s', $timestamp);
+		}
+		return $this;
+	}
+
+
+	/**
+	 +----------------------------------------------------------
+	 * 写入内容
+	 +----------------------------------------------------------
+	 * @param string $content 内容
+	 +----------------------------------------------------------
+	 */
+	public function setContent( $content )
+	{
+		$this->content = strip_tags($content);
+		return $this;
+	}
+
+	/**
+	 +----------------------------------------------------------
+	 * 设置打印机参数
+	 +----------------------------------------------------------
+	 * @param array $setting 设置 key(响应码) => value(内容)
+	 +----------------------------------------------------------
+	 */
+	public function setSetting( $setting )
+	{
+		if (!empty($setting) && is_array($setting)) {
+			$this->setting = "";
+			foreach ($setting as $k => $v) {
+				if (is_numeric($k))
+				{
+					$this->setting .= $k.":".strip_tags($v)."|";
+				}
+			}
+		}
+		else
+		{
+			$this->setting = strip_tags($setting);
+		}
+		return $this;
+	}
+
+	/**
+	 +----------------------------------------------------------
+	 * 设置ID
+	 +----------------------------------------------------------
+	 * @param string $id id SYD123456789
+	 +----------------------------------------------------------
+	 */
+	public function setId( $id )
+	{
+		$this->id = strip_tags($id);
+		return $this;
+	}
+
+
+	/**
+	 +----------------------------------------------------------
+	 * 传输内容是否大于最大内容长度 不能多于2000字节
+	 +----------------------------------------------------------
+	 * @return boolean
+	 +----------------------------------------------------------
+	 */
+	public function maxLength($str, $length = 2000)
+	{
+		if (mb_strlen($str) > 2000)
 		{
 			return false;
 		}
-		
+		return true;
+	}
+
+	/**
+	 +----------------------------------------------------------
+	 * 生成传输用XML 不能多于2000字节
+	 +----------------------------------------------------------
+	 * @return string xml
+	 +----------------------------------------------------------
+	 */
+	public function display()
+	{
+
+		$xml = '<?xml version="1.0" encoding="GBK"?>';
+		$xml .= "<r>";
+
+		$xml .= "<id>".$this->id."</id>";
+		$xml .= "<time>".$this->time."</time>";
+		$xml .= "<content>".$this->content."</content>";
+		$xml .= "<setting>".$this->setting."</setting>";
+
+		$xml .= "</r>";
+
+		if ($this->maxLength($xml)) {
+			header("Content-type: text/xml");
+			return $xml;
+		}
+		return false;
+	}
+
+
+	/**
+	 +----------------------------------------------------------
+	 * 解析返回参数
+	 +----------------------------------------------------------
+	 * @return array
+	 +----------------------------------------------------------
+	 */
+	public function getParams()
+	{
+		$arr = array();
+
+		if (isset($_REQUEST['usr'])) $arr['usr'] = $_REQUEST['usr']; // 用户IMEI号码
+		if (isset($_REQUEST['ord'])) $arr['ord'] = $_REQUEST['ord']; // 本次交易的序列号，不得重复
+		if (isset($_REQUEST['sgn'])) $arr['sgn'] = $_REQUEST['sgn']; // 交易签名。 MD5(usr)转大写
+
+		if (isset($_REQUEST['id'])) $arr['id'] = $_REQUEST['id']; // 平台下发打印数据的ID号
+		if (isset($_REQUEST['sta'])) $arr['sta'] = $_REQUEST['sta']; // 打印机状态（0为打印成功， 1为过热，3为缺纸卡纸等）
+
+		$this->params = $arr;
+
+		return $arr;
+	}
+}
+
+
+class printerThreeClass {
+
+	private static $_instance;
+
+	private $time;
+	private $content = "";
+	private $setting = "";
+	private $id = "";
+
+	public $params = array();
+
+	private function __construct() {
+		$this->getParams();
+		$this->time = date('Y-m-d H:i:s');
+	}
+
+	private function __clone() {}  //覆盖__clone()方法，禁止克隆
+
+	public static function getInstance()
+	{
+		if(! (self::$_instance instanceof self) ) {
+			self::$_instance = new self();
+		}
+
+		/*
+		 * 验证是否为正常连接
+		*/
+		if (isset(self::$_instance->params['sta']) && isset(self::$_instance->params['id']))//为返回信号
+		{
+			if (!isset(self::$_instance->params['usr'])
+			&& !isset(self::$_instance->params['sgn'])
+			&& !isset(self::$_instance->params['ord'])
+			&& !isset(self::$_instance->params['id'])
+			&& !isset(self::$_instance->params['sta'])
+			)
+			{
+				return false;
+			}
+			//IMEI是否一样
+			if (self::$_instance->params['usr'] != "355839022516951")
+			{
+				return false;
+			}
+			//md5是否正确
+			if (strtoupper(md5(self::$_instance->params['usr'].self::$_instance->params['id'].self::$_instance->params['ord']
+					.self::$_instance->params['sta']."alienware")) != self::$_instance->params['sgn'])
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (!isset(self::$_instance->params['usr'])
+			&& !isset(self::$_instance->params['sgn'])
+			&& !isset(self::$_instance->params['ord'])
+			)
+			{
+				return false;
+			}
+			//IMEI是否一样
+			if (self::$_instance->params['usr'] != "355839022516951")
+			{
+				return false;
+			}
+			//md5是否正确
+			if (strtoupper(md5(self::$_instance->params['usr'].self::$_instance->params['ord']."alienware")) != self::$_instance->params['sgn'])
+			{
+				return false;
+			}
+		}
+
+
 		return self::$_instance;
 	}
 	/*
