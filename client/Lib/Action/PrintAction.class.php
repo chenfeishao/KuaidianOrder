@@ -111,7 +111,7 @@ class PrintAction extends myAction
     			    	."单价:".$orderInfo[$i]["money"]."  金额:".($orderInfo[$i]["num"]*$orderInfo[$i]["money"])."%%%00.............................%%%10";
     		}
     		$output .= "总件数：".$totalNum."件%%";
-    		$output .= "总金额：".$totalMoney."元%%"."现金实收:".$originAllInfo['xianJinShiShou']."元%%银行实收:".$originAllInfo['yinHangShiShou']."元%%%00"
+    		$output .= "总金额：".$totalMoney."元%%"."优惠:".$originAllInfo["save"]."元%%现金实收:".$originAllInfo['xianJinShiShou']."元%%银行实收:".$originAllInfo['yinHangShiShou']."元%%%00"
                 	."以上商品均已履行进货检查验收法定程序，索验票证齐全，供货者特此声明。%%%00";
     			    					 
 		    //转码
@@ -137,7 +137,7 @@ class PrintAction extends myAction
     			    	."单价:".$orderInfo[$i]["money"]."  金额:".($orderInfo[$i]["num"]*$orderInfo[$i]["money"])."%%%00.............................%%%10";
     		}
 		    $output .= "总件数：".$totalNum."件%%";
-    		$output .= "总金额：".$totalMoney."元%%%00"
+    		$output .= "总金额：".$totalMoney."元%%"."优惠:".$originAllInfo["save"]."元%%%00"
     				."以上商品均已履行进货检查验收法定程序，索验票证齐全，供货者特此声明。此联由批发单位直接用于批发台帐资料留存。%%%20   多谢惠顾%%%00";
 		    
 		    //转码
