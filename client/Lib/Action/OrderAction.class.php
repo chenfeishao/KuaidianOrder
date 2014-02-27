@@ -391,11 +391,18 @@ class OrderAction extends myAction
      */
     public function ajaxGetTmpOrderInfo()
     {
-    	$dbUser = D("User");
-    	$dbUser->init(session("userName"));
-    	$dbTmpOrder = D("TmpOrder");
-    	$dbTmpOrder->init($dbUser->getPreTmpOrderID());
-    	 
+    	if ( ($this->_get("no") == "") || ($this->_get("no") == null) )
+    	{//正常打印订单的状态查询
+	    	$dbUser = D("User");
+	    	$dbUser->init(session("userName"));
+	    	$dbTmpOrder = D("TmpOrder");
+	    	$dbTmpOrder->init($dbUser->getPreTmpOrderID());
+    	}
+	    else
+	    {//重新打印已有订单的状态查询
+	    	$dbTmpOrder = D("TmpOrder");
+	    	$tmp= $dbTmpOrder->init($this->_get("no"));
+	    }
     	$data = $dbTmpOrder->getTmpOrderInfo();
     	echo $data["printState"];
     }
@@ -466,7 +473,8 @@ class OrderAction extends myAction
     	
     	$dbGoods = D("Goods");
     	$dbTmpOrder = D("TmpOrder");
-    	$dbTmpOrder->init($this->_get("no"));
+    	$id = $this->_get("no");
+    	$dbTmpOrder->init($id);
     	 
     	/*
     	 * 货物信息
@@ -538,6 +546,7 @@ class OrderAction extends myAction
     	$this->assign("carAddress",$tmpRe["carAddress"]);
     	$this->assign("carNo",$tmpRe["carNo"]);
     	
+    	$this->assign("id",$id);
     	$this->display();
     }
     
@@ -550,6 +559,42 @@ class OrderAction extends myAction
     	$dbTmpOrder = D("TmpOrder");
     	$this->isFalsePlus($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
     	redirect(U("Order/history"),0);
+    }
+    
+    /*
+     * 重新打印3联
+     */
+    public function repeatAllPrint()
+    {
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($this->_get("no"));
+    	$this->isOk($dbTmpOrder->updatePrintState(1),"全部重新打印订单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
+    }
+    
+    /*
+     * 重新打印第1联和第2联
+    */
+    public function repeatOnePrint()
+    {
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($this->_get("no"));
+    	$this->isOk($dbTmpOrder->updatePrintState(101),"重新打印存根与发票联申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
+    }
+    
+    /*
+     * 重新打印第3联
+    */
+    public function repeatThreePrint()
+    {
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($this->_get("no"));
+    	$this->isOk($dbTmpOrder->updatePrintState(105),"重新打印出货单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
+    }    
+    
+    public function printState()
+    {
+    	$this->assign("id",$this->_get("no"));
+    	$this->display();
     }
 }
 

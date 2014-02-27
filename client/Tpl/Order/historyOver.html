@@ -5,7 +5,7 @@
 
     <div class="container">
         <h1>
-            <a href="{:U("Index/goBack")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+            <a href="{:U("Order/history")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	订单详情<small class="on-right">{$title}</small>
         </h1>
         
@@ -89,24 +89,18 @@
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-						<button class="span3 shortcut warning" onclick="window.location = '{:U('Order/')}'" data-click="transform">
-                            <h2>重新全部打印</h2>
+						<button class="span4 shortcut warning" onclick="window.location = '{:U('Order/repeatAllPrint')}?no={$id}'" data-click="transform">
+                            <h2>全部三联重新打印</h2>
                         </button>
-                        <button class="span3 shortcut primary" onclick="window.location = '{:U('Order/')}'" data-click="transform">
-                            <h2>打印存根联</h2>
+                        <button class="span4 shortcut primary" onclick="window.location = '{:U('Order/repeatOnePrint')}?no={$id}'" data-click="transform">
+                            <h2>打印存根联与发票联</h2>
                         </button>
-                        <button class="span3 shortcut default" onclick="window.location = '{:U('Order/')}'" data-click="transform">
-                            <h2>打印发票联</h2>
-                        </button>
-                        <button class="span3 shortcut info" onclick="window.location = '{:U('Order/')}'" data-click="transform">
+                        <button class="span4 shortcut info" onclick="window.location = '{:U('Order/repeatThreePrint')}?no={$id}'" data-click="transform">
                             <h2>打印出库单</h2>
                         </button>
 		            </div>
 				</div>
 			</div>
-        	<div class="row">
-	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="4"></div>
-	        </div>
     </div>
 </body>
 </html>
