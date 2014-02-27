@@ -22,7 +22,7 @@ class TmpOrderModel extends OrderOP {
 			array('num','require','数量不能为空',1),
 			array('size','require','规格不能为空'),
 			array('money','require','单价不能为空',1),
-			array('id','checkID','商品选择不正确，请重新选择！',1,'callback'),
+			array('id','checkGoodsID','商品选择不正确，请重新选择！',1,'callback'),
 			array('num','/^-?\d+(\.\d+)?$/','数量必须为数字！',1,'regex'),
 			array('size,id','checkSize','规格选择不正确！',1,'callback'),
 			array('money','/^-?\d+(\.\d+)?$/','单价必须为数字！',1,'regex'),
@@ -34,7 +34,7 @@ class TmpOrderModel extends OrderOP {
 	 * @param	string $data;表单数据中的id字段
 	 * @return	bool;验证是否正确
 	 */
-	protected function checkID($data)
+	protected function checkGoodsID($data)
 	{
 		$dbGoods = D("Goods");
 		return $dbGoods->checkID($data);
@@ -240,9 +240,9 @@ class TmpOrderModel extends OrderOP {
 	*/
 	public function updatePrintState($state)
 	{
-		$tmpPrintDate["id"] = $this->id;
-		$tmpPrintDate["printState"] = $state;
-		$tmp = $this->save($tmpPrintDate);
+		$tmpPrintData["id"] = $this->id;
+		$tmpPrintData["printState"] = $state;
+		$tmp = $this->save($tmpPrintData);
 		if ($tmp === false)
 			return false;
 		else

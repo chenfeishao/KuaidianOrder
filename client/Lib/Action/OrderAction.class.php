@@ -425,7 +425,22 @@ class OrderAction extends myAction
     		$undoneList[$i]["id"] = $undone[$i]["id"];
     		$undoneList[$i]["customName"] = $undone[$i]["customName"];
     		$undoneList[$i]["createDate"] = $undone[$i]["createDate"];
-    		$undoneList[$i]["printState"] = $undone[$i]["printState"];
+    		
+    		//打印状态
+    		switch ($undone[$i]["printState"])
+    		{
+    			case 0:$undoneList[$i]["printState"] = "目前没有打印该订单";break;
+				case 1:$undoneList[$i]["printState"] = "准备打印存根与发票联";break;
+				case "2":$undoneList[$i]["printState"] = "存根与发票联已经下发给打印机";break;
+				case "3":$undoneList[$i]["printState"] = "打印存根成功，准备打印发票联";break;
+				case "4":$undoneList[$i]["printState"] = "发票联已经下发给打印机";break;
+				case "5":$undoneList[$i]["printState"] = "打印存根与发票联成功，准备打印出库单";break;
+				case "6":$undoneList[$i]["printState"] = "出货单已经下发给打印机";break;
+				case "7":$undoneList[$i]["printState"] = "全部打印完成";break;
+				case '101':$undoneList[$i]["printState"] = "重新打印存根与发票联";break;
+				case '105':$undoneList[$i]["printState"] = "重新打印出货单";break;
+				default:$undoneList[$i]["printState"] = "数据库出错，请重试";break;
+    		}
     	
     	    //得到商品名称
     	   	$tmp = $dbTmpOrder->getArrayWithSelf($undone[$i]["goodsIDArray"]);

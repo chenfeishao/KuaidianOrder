@@ -28,7 +28,7 @@ class PrintAction extends myAction
     	*	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
     	*	7：出货单已经打印成功，所有打印完成
     	*/
-    	$orderArray = $dbTmpOrder->where("printState=1")->order("id")->select();//选出要立即打印的单子
+    	$orderArray = $dbTmpOrder->where("printState=1 or printState=101")->order("id")->select();//选出要立即打印的单子
     	$nowPrint = $dbTmpOrder->where("printState=2")->select();
     	if (isset($nowPrint))
     		$orderArray = null;
@@ -161,7 +161,11 @@ class PrintAction extends myAction
     		 if ($printer->params['sta'] == 0)//0为打印成功
     		 {
     		 	$dbTmpOrder->init($printer->params['id']);
-    		    $dbTmpOrder->updatePrintState(5);
+    		 	$preInfo = $dbTmpOrder->getTmpOrderInfo();
+    		 	if ($preInfo["printState"] == 101)
+    		    	$dbTmpOrder->updatePrintState(7);
+    		 	else
+    		 		$dbTmpOrder->updatePrintState(5);
     		 }
     	}
     	elseif (!$blankTag)// 传输需要打印的内容
@@ -195,7 +199,7 @@ class PrintAction extends myAction
     	*	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
     	*	7：出货单已经打印成功，所有打印完成
     	*/
-   		$orderArray = $dbTmpOrder->where("printState=5")->order("id")->select();//选出要立即打印的单子
+   		$orderArray = $dbTmpOrder->where("printState=5 or printState=105")->order("id")->select();//选出要立即打印的单子
    		$nowPrint = $dbTmpOrder->where("printState=6")->select();
    		if (isset($nowPrint))
    			$orderArray = null;
