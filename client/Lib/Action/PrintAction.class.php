@@ -162,7 +162,7 @@ class PrintAction extends myAction
     		 {
     		 	$dbTmpOrder->init($printer->params['id']);
     		 	$preInfo = $dbTmpOrder->getTmpOrderInfo();
-    		 	if ($preInfo["printState"] == 101)
+    		 	if ($preInfo["printState"] == 102)
     		    	$dbTmpOrder->updatePrintState(7);
     		 	else
     		 		$dbTmpOrder->updatePrintState(5);
@@ -175,7 +175,10 @@ class PrintAction extends myAction
     	    		->setContent($output) // 设置content
     	    		->setSetting("103:10") // 设置打印机参数等数据，具体参考协议部分文件，建议非必要不要设置，也可以为空
     	    		->display(); // 输出
-    	    $dbTmpOrder->updatePrintState(2);
+    		 if ($originAllInfo["printState"] == 101)
+    		    $dbTmpOrder->updatePrintState(102);
+    		 else
+    		 	$dbTmpOrder->updatePrintState(2);
     	}
     }
     

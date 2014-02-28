@@ -32,24 +32,32 @@ function timedCount()
 		},
 		function(data,status)
 		{
+			tag = 0;
 			//alert(data);
 			switch (data)
 			{
-			case "0":$("#printState").html("目前没有打印该订单");braek;
-			case "1":$("#printState").html("准备打印存根与发票联");braek;
-			case "2":$("#printState").html("存根与发票联已经下发给打印机");braek;
-			case "3":$("#printState").html("打印存根成功，准备打印发票联");braek;
-			case "4":$("#printState").html("发票联已经下发给打印机");braek;
-			case "5":$("#printState").html("打印存根与发票联成功，准备打印出库单");braek;
-			case "6":$("#printState").html("出货单已经下发给打印机");braek;
+			case "0":$("#printState").html("目前没有打印该订单");$("#printStep").progressbar("value",0);braek;
+			case "1":$("#printState").html("准备打印存根与发票联");$("#printStep").progressbar("value",20);braek;
+			case "2":$("#printState").html("存根与发票联已经下发给打印机");$("#printStep").progressbar("value",40);braek;
+			case "3":$("#printState").html("打印存根成功，准备打印发票联");$("#printStep").progressbar("value",0);braek;
+			case "4":$("#printState").html("发票联已经下发给打印机");$("#printStep").progressbar("value",0);braek;
+			case "5":$("#printState").html("打印存根与发票联成功，准备打印出库单");$("#printStep").progressbar("value",60);braek;
+			case "6":$("#printState").html("出货单已经下发给打印机");
+					if (tag == 105)
+						$("#printStep").progressbar("value",66.6);
+					else
+						$("#printStep").progressbar("value",80);
+					braek;
 			case "7":
 				$("#allText").html('\
 						<i class="icon-checkmark"></i>\
 						<span id="printState">全部打印完成</span>\
-						');braek;
-			case 101:$("#printState").html("准备打印存根与发票联");braek;
-			case 105:$("#printState").html("准备打印出货单");braek;
-			default:$("#printState").html("数据库出错，请重试");braek;
+						');
+				$("#printStep").progressbar("value",100);braek;
+			case "101":$("#printState").html("准备打印存根与发票联");$("#printStep").progressbar("value",33.3);braek;
+			case "102":$("#printState").html("存根与发票联已经下发给打印机");$("#printStep").progressbar("value",66.6);braek;
+			case "105":$("#printState").html("准备打印出货单");$("#printStep").progressbar("value",33.3);tag = 105;braek;
+			default:$("#printState").html("数据库出错，请重试");$("#printStep").progressbar("value",0);braek;
 			}
 		}
 	);
@@ -76,6 +84,9 @@ function timedCount()
 							<img src="__PUBLIC__/images/loading.gif"></img>
 							<span id="printState">正在检查打印机队列</span>
 						</h1>
+					</div>
+					<div class="row">
+						<div id="printStep" class="span12 progress-bar large" data-role="progress-bar" data-value="0" data-color="bg-cyan">></div>
 					</div>
 					<div class="row">
 						<h1 class="text-center"><a href="<?php echo U("Index/index");?>"><i class="icon-windows"></i></a></h1>

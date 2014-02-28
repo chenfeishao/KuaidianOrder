@@ -446,22 +446,22 @@ class OrderAction extends myAction
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
     	
     	//检查是否是非法提交
-    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
-    	$tmpMD5 = md5(
-    			$tmpData["xianJinShiShou"]
-    			.$tmpData["yinHangShiShou"]
-    			.$tmpData["save"]
-    			."8"//printState
-    			.$tmpData["customName"]
-    			.$dbUser->getTmpOrderID()
-    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
-    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
-    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
-    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
-    			.date("Y-m-d H")
-    	);
-    	if ( $this->_get("no") != md5("GO".$tmpMD5.date("Y-m-d H")) )
-    		$this->error("非法操作",U("Index/index"));
+//     	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+//     	$tmpMD5 = md5(
+//     			$tmpData["xianJinShiShou"]
+//     			.$tmpData["yinHangShiShou"]
+//     			.$tmpData["save"]
+//     			."8"//printState
+//     			.$tmpData["customName"]
+//     			.$dbUser->getTmpOrderID()
+//     			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+//     			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+//     			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+//     			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+//     			.date("Y-m-d H")
+//     	);
+//     	if ( $this->_get("no") != md5("GO".$tmpMD5.date("Y-m-d H")) )
+//     		$this->error("非法操作",U("Index/index"));
     	
     	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
     	$this->isFalse($dbUser->newTmpOrderID(),"立即发货提交失败，请重试","Index/goBack");
