@@ -3,6 +3,11 @@ require_once(LIB_PATH."commonAction.php");
 
 class OrderAction extends myAction
 {
+	protected function _initialize()
+	{
+		 if (!$this->checkPower("canEditOrderMoney",session("userPower")))
+		 	$this->error("非法访问",U("Index/index"));
+	}
 
     public function inputPanel()//点击开始界面中的图标后进入的界面
     {
@@ -155,23 +160,19 @@ class OrderAction extends myAction
     	$this->assign("totalJine",$totalJine);
     	$this->assign("totalNum",$totalNum);
     	$this->assign("totalID",count($tmp["id"]));
-    	$this->display();
-    }
-    
-    /*
-     * 从结算页面提交的订单
-     */
-    public function toAddFromClosing()
-    {
-     	$dbUser = D("User");
-     	$dbUser->init(session("userName"));
-    	$dbTmpOrder = D("TmpOrder");
-    	$dbTmpOrder->init($dbUser->getTmpOrderID());
     	
-    	$tmp = $this->_post();
-    	array_pop($tmp);//把最后一个令牌字段弹出
-		$this->isFalse($dbTmpOrder->updateTmpOrderWithGoods($tmp),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
-    	redirect(U("Order/closingInfo"),0);
+    	//防止非法提交
+    	$this->assign("myTest",
+    			md5( $dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    				.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    				.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    				.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    				.$dbUser->getTmpOrderID()
+    				.date("Y-m-d H")
+    			   )
+    				  );
+    	
+    	$this->display();
     }
     
     /*
@@ -193,6 +194,32 @@ class OrderAction extends myAction
     */
     public function closingInfo()
     {
+    	/*
+    	 * 从结算页面提交的订单处理
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+    	$tmpMD5 = md5( $dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    				.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    				.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    				.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    				.$dbUser->getTmpOrderID()
+    				.date("Y-m-d H")
+    			   );
+    	$tmp = $this->_post();
+    	if ($tmp["myTest"] != $tmpMD5)
+    		$this->error("非法操作",U("Index/index"));
+    	array_pop($tmp);//把最后一个令牌字段弹出
+    	array_pop($tmp);//把倒数第二个myTest字段弹出
+    	$this->isFalse($dbTmpOrder->updateTmpOrderWithGoods($tmp),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+    	
+    	
+    	/*
+    	 * 本页面的显示
+    	 */
     	$orderInfo = null;
     	
     	/*
@@ -221,24 +248,56 @@ class OrderAction extends myAction
     	
     	$this->assign("originJinE",$totalJinE);
     	$this->assign("userName",$dbUser->getAllUserInfo());
+    	
+    	//防止非法提交
+    	$this->assign("myTest",
+    			md5( $dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    					.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    					.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    					.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    					.$dbUser->getTmpOrderID()
+    					.date("Y-m-d H")
+    			)
+    	);
+    	
     	$this->display();
     }
     
+    
     /*
-     * 结算页面的最终数据提交页面
+     * 结算信息总览页面
+     * note		和historyOver对应
      */
-    public function toClosingInfo()
+    public function closingOver()
     {
     	/*
-    	 * 处理用户信息
-    	 */
+    	 * 结算页面（前一个页面）的最终数据提交
+    	*/
+	    	/*
+	    	 * //处理用户信息
+	    	*/
+    	//验证是否非法提交
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$tmpMD5 = md5( $dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.$dbUser->getTmpOrderID()
+    			.date("Y-m-d H")
+    	);
+    	if ($this->_post("myTest") != $tmpMD5)
+    		$this->error("非法操作",U("Index/index"));
+    	
     	//得到用户信息数据
     	$userData["userName"] = $this->_post("userName");
     	$userData["tel"] = $this->_post("tel");
     	$userData["address"] = $this->_post("address");
     	$userData["carAddress"] = $this->_post("carAddress");
     	$userData["carNo"] = $this->_post("carNo");
-    	
+    	 
     	//处理用户信息
     	$dbUser = D("User");
     	$tmp = $dbUser->getUserInfo($userData["userName"]);
@@ -252,31 +311,29 @@ class OrderAction extends myAction
     	{
     		$this->isFalsePlus($dbUser->updateInfo($userData),$dbUser->getErrorMsg(),"Index/goBack");
     	}
-    	
+    	 
     	/*
     	 * 处理付款信息
-    	 */
+    	*/
     	//得到付款信息数据
     	$paymentData["customName"] = $this->_post("userName");
     	$paymentData["save"] = $this->_post("save");
     	$paymentData["xianJinShiShou"] = $this->_post("xianJinShiShou");
     	$paymentData["yinHangShiShou"] = $this->_post("yinHangShiShou");
-    	
+    	 
     	//更新TmpOrder中的付款信息
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
     	$this->isFalsePlus($dbTmpOrder->updateTmpOrderWithPayment($paymentData),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+    	 
     	
-    	redirect(U("Order/closingOver"),0);
-    }
-    
-    /*
-     * 结算信息总览页面
-     * note		和historyOver对应
-     */
-    public function closingOver()
-    {
+    	
+    	
+    	
+    	/*
+    	 * 本页面的显示
+    	 */
     	$orderInfo = null;
     	 
     	$dbGoods = D("Goods");
@@ -344,6 +401,8 @@ class OrderAction extends myAction
     	 * 用户信息
     	 */
     	$customName = $dbTmpOrder->getTmpOrderCustomName();
+    	if ( ($customName == null) || ($customName == null) )
+    		$this->error("客户名称不能为空",U("Index/goBack"));
     	$dbCustomUser = D("User");
     	$dbCustomUser->init($customName);
     	$tmpRe = $dbCustomUser->getUserInfo($customName);
@@ -355,6 +414,24 @@ class OrderAction extends myAction
     	$this->assign("carAddress",$tmpRe["carAddress"]);
     	$this->assign("carNo",$tmpRe["carNo"]);
 
+    	//防止非法提交
+    	$tmpMD5 = null;
+    	$tmpMD5 = md5(
+    			$tmpOrderInfo["xianJinShiShou"]
+    			.$tmpOrderInfo["yinHangShiShou"]
+    			.$tmpOrderInfo["save"]
+    			."8"//printState
+    			.$customName
+    			.$dbUser->getTmpOrderID()
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    			);
+    	$this->assign("delayGoMD5",md5("DelayGo".$tmpMD5.date("Y-m-d H")));
+    	$this->assign("goMD5",md5("GO".$tmpMD5.date("Y-m-d H")));
+    	
     	$this->display();
     }
     
@@ -367,6 +444,25 @@ class OrderAction extends myAction
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."8"//printState
+    			.$tmpData["customName"]
+    			.$dbUser->getTmpOrderID()
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    	);
+    	if ( $this->_get("no") != md5("GO".$tmpMD5.date("Y-m-d H")) )
+    		$this->error("非法操作",U("Index/index"));
+    	
     	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
     	$this->isFalse($dbUser->newTmpOrderID(),"立即发货提交失败，请重试","Index/goBack");
     	$this->display();
@@ -381,6 +477,25 @@ class OrderAction extends myAction
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."8"//printState
+    			.$tmpData["customName"]
+    			.$dbUser->getTmpOrderID()
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    	);
+    	if ( $this->_get("no") != md5("DelayGo".$tmpMD5.date("Y-m-d H")) )
+    		$this->error("非法操作",U("Index/index"));
+    	
     	$this->isFalse($dbTmpOrder->updatePrintState(0),"延迟发货提交失败，请重试","Index/goBack");
     	$this->isFalse($dbUser->newTmpOrderID(),"延迟发货提交失败，请重试","Index/goBack");
     	$this->display();

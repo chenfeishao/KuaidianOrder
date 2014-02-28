@@ -69,7 +69,7 @@ function clearInfo(k)
 		<div class="grid">
 			<?php if($list == NULL ): ?><b>购物车是空的</b>
    			<?php else: ?>
-   				<form id="form" method="post" action="<?php echo U("Order/toAddFromClosing");?>">
+   				<form id="form" method="post" action="<?php echo U("Order/closingInfo");?>">
 		            <table class="table hovered">
 		                <thead>
 			                <tr>
@@ -140,6 +140,7 @@ function clearInfo(k)
 		                    <h2 id="totalJine">总金额：<strong><?php echo ($totalJine); ?></strong></h2>
 		                </button>
 			        </div>
+			        <input name="myTest" value="<?php echo ($myTest); ?>" type="hidden">
 				</form><?php endif; ?>
 	        <div class="row">
 	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="2"></div>

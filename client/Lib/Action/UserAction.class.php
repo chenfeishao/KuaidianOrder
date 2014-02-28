@@ -1,7 +1,7 @@
 <?php
 require_once(LIB_PATH."commonAction.php");
 
-class UserAction extends Action
+class UserAction extends myAction
 {
 	
 	private function isLogin()//判断是否已经登陆

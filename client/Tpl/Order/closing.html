@@ -46,7 +46,7 @@ function clearInfo(k)
 		<div class="grid">
 			<if condition="$list eq NULL "><b>购物车是空的</b>
    			<else/>
-   				<form id="form" method="post" action="{:U("Order/toAddFromClosing")}">
+   				<form id="form" method="post" action="{:U("Order/closingInfo")}">
 		            <table class="table hovered">
 		                <thead>
 			                <tr>
@@ -122,6 +122,7 @@ function clearInfo(k)
 		                    <h2 id="totalJine">总金额：<strong>{$totalJine}</strong></h2>
 		                </button>
 			        </div>
+			        <input name="myTest" value="{$myTest}" type="hidden">
 				</form>
 			</if>
 	        <div class="row">

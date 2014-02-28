@@ -89,10 +89,10 @@
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-						<button class="span6 shortcut primary" onclick="window.location = '{:U('Order/delayGo')}'" data-click="transform">
+						<button class="span6 shortcut primary" onclick="window.location = '{:U('Order/delayGo')}?no={$delayGoMD5}'" data-click="transform">
                             <h2>延迟发货</h2>
                         </button>
-                        <button class="span6 shortcut primary" onclick="window.location = '{:U('Order/go')}'" data-click="transform">
+                        <button class="span6 shortcut primary" onclick="window.location = '{:U('Order/go')}?no={$goMD5}'" data-click="transform">
                             <h2>立即发货</h2>
                         </button>
 		            </div>

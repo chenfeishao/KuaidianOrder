@@ -1,10 +1,12 @@
 <?php
+require_once(LIB_PATH."commonAction.php");
 
-class IndexAction extends Action
+class IndexAction extends myAction
 {
 
     protected function _initialize()
     {
+    	
     }
 
     public function index()

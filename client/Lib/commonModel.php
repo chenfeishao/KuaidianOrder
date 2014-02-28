@@ -10,11 +10,11 @@ class ModelBaseOP extends Model
 	protected $id = null;
 	
 	/*
-	 * 得到原始内容
+	 * 得到原始内容，返回是否成功（供内部使用）
 	 * @param	string $arrayName;要获取的原始内容的字段名称
 	 * @return	是否成功
 	 */
-	public function getOriginArray($arrayName)
+	protected function getOriginArray($arrayName)
 	{
 		$tmp = _ORIGIN_PREFIX.$arrayName;
 		$result = NULL;
@@ -23,6 +23,21 @@ class ModelBaseOP extends Model
 			return false;
 		$this->$tmp = $result[0][$arrayName];
 		return true;
+	}
+	
+	/*
+	 * 得到原始内容，返回数组内容（供外部使用）
+	* @param	string $arrayName;要获取的原始内容的字段名称
+	* @return	array
+	*/
+	public function getOriginArrayResult($arrayName)
+	{
+		$tmp = _ORIGIN_PREFIX.$arrayName;
+		$result = NULL;
+		$result = $this->where("id=".$this->id)->select();
+		if (!$result)
+			return false;
+		return $result[0][$arrayName];
 	}
 	
 	/*

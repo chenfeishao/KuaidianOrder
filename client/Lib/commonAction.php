@@ -171,5 +171,38 @@ class myAction extends Action
 			}
 		}
 	}
+	
+	/*
+	 * 权限检测
+	 * @param	string $action;要检测的规则
+	 * 			string $userPower;要检测的power
+	 * @return	bool;是否通过检测
+	 */
+	protected function checkPower($action,$userPower)
+	{
+		switch($action)
+		{
+			case "isLogin"://是否登录
+				{
+					if ( ($userPower == "") || ($userPower == null) )
+						return false;
+					break;
+				}
+			case "canEditOrderMoney"://能不能修改订单钱数
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") && ($userPower != "营业员") )
+						return false;
+					break;
+				}
+			case "canWatchHistory"://能不能查看历史订单
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") && ($userPower != "营业员") )
+						return false;
+					break;
+				}
+			default:return false;break;
+		}
+		return true;
+	}
 }
 ?>

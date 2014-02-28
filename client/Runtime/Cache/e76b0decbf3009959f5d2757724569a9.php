@@ -96,7 +96,7 @@ function change()
            	结算<small class="on-right">相关信息</small>
         </h1>
         
-      	<form id="form" method="post" action="<?php echo U("Order/toClosingInfo");?>">
+      	<form id="form" method="post" action="<?php echo U("Order/closingOver");?>">
        		<div class="panel">
 				<div class="panel-header bg-lightBlue fg-white">
 					客户信息<h5 class="fg-white place-right">客户的登录用户名为手机号，登录密码为手机号后3位</h5>
@@ -209,6 +209,7 @@ function change()
         	<div class="row">
 	        	<div class="stepper rounded" data-role="stepper" data-steps="5" data-start="3"></div>
 	        </div>
+	        <input name="myTest" value="<?php echo ($myTest); ?>" type="hidden">
 		</form>
     </div>
 <datalist id="userNameList">

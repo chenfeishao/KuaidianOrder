@@ -12,6 +12,15 @@ create table user(
 	/*账户本身信息*/
 	userName varchar(100) NOT NULL,
 	userPassword varchar(100) NOT NULL,
+	/*
+	 *	case "root": $userPower = "根账户";break;
+	    case "admin": $userPower = "管理员";break;
+	    case "yyy": $userPower = "营业员";break;
+	    case "zs": $userPower = "钻石账户";break;
+	    case "bj": $userPower = "铂金账户";break;
+	    case "j": $userPower = "金账户";break;
+	    default: $userPower = "普通账户";break;
+	 */
 	userPower varchar(100) NOT NULL,
 	userPinYin varchar(100) NOT NULL,
 	
@@ -27,6 +36,7 @@ create table user(
 	primary key(userName)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",1,1);
+insert user values("wwxwwx2008","hhschyy125","admin","hhsc","02983106853","方欣国际食品城一楼125号(后门口)","无","无",2,2);
 
 create table tmp_order(
 	id bigint NOT NULL AUTO_INCREMENT,
@@ -63,6 +73,7 @@ create table tmp_order(
 	printState int NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
 INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
 
 create table goods(
