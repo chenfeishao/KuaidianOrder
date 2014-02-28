@@ -3,7 +3,7 @@
 var t
 function timedCount()
 {
-	url = "{:U("Order/ajaxGetTmpOrderInfo")}";
+	url = "{:U("Order/ajaxGetTmpOrderInfo")}?no={$key}";
 	$.post(url,
 		{
 		},

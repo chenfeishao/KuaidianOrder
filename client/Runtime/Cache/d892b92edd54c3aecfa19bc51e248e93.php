@@ -26,7 +26,7 @@
 var t
 function timedCount()
 {
-	url = "<?php echo U("Order/ajaxGetTmpOrderInfo");?>";
+	url = "<?php echo U("Order/ajaxGetTmpOrderInfo");?>?no=<?php echo ($key); ?>";
 	$.post(url,
 		{
 		},
@@ -54,9 +54,9 @@ function timedCount()
 						<span id="printState">全部打印完成</span>\
 						');
 				$("#printStep").progressbar("value",100);braek;
-			case "101":$("#printState").html("准备打印存根与发票联");$("#printStep").progressbar("value",33.3);braek;
+			case "101":$("#printState").html("准备重新打印存根与发票联");$("#printStep").progressbar("value",33.3);braek;
 			case "102":$("#printState").html("存根与发票联已经下发给打印机");$("#printStep").progressbar("value",66.6);braek;
-			case "105":$("#printState").html("准备打印出货单");$("#printStep").progressbar("value",33.3);tag = 105;braek;
+			case "105":$("#printState").html("准备重新打印出货单");$("#printStep").progressbar("value",33.3);tag = 105;braek;
 			default:$("#printState").html("数据库出错，请重试");$("#printStep").progressbar("value",0);braek;
 			}
 		}

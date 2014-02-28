@@ -403,9 +403,8 @@ class OrderAction extends myAction
     	$customName = $dbTmpOrder->getTmpOrderCustomName();
     	if ( ($customName == null) || ($customName == null) )
     		$this->error("客户名称不能为空",U("Index/goBack"));
-    	$dbCustomUser = D("User");
-    	$dbCustomUser->init($customName);
-    	$tmpRe = $dbCustomUser->getUserInfo($customName);
+    	$dbUser->init($customName);
+    	$tmpRe = $dbUser->getUserInfo($customName);
     	if ( ($tmpRe === false) || ($tmpRe === null) )
     		$this->error("查询用户失败，请重试",U("Index/goBack"));
     	$this->assign("customName",$customName);
@@ -415,6 +414,7 @@ class OrderAction extends myAction
     	$this->assign("carNo",$tmpRe["carNo"]);
 
     	//防止非法提交
+    	$dbUser->init(session("userName"));//上面的$dbCustomUser更改了目标
     	$tmpMD5 = null;
     	$tmpMD5 = md5(
     			$tmpOrderInfo["xianJinShiShou"]
@@ -443,28 +443,46 @@ class OrderAction extends myAction
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");
-    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$tmpOrderID = $dbUser->getTmpOrderID();
+    	$dbTmpOrder->init($tmpOrderID);
     	
     	//检查是否是非法提交
-//     	$tmpData = $dbTmpOrder->getTmpOrderInfo();
-//     	$tmpMD5 = md5(
-//     			$tmpData["xianJinShiShou"]
-//     			.$tmpData["yinHangShiShou"]
-//     			.$tmpData["save"]
-//     			."8"//printState
-//     			.$tmpData["customName"]
-//     			.$dbUser->getTmpOrderID()
-//     			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
-//     			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
-//     			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
-//     			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
-//     			.date("Y-m-d H")
-//     	);
-//     	if ( $this->_get("no") != md5("GO".$tmpMD5.date("Y-m-d H")) )
-//     		$this->error("非法操作",U("Index/index"));
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."8"//printState
+    			.$tmpData["customName"]
+    			.$dbUser->getTmpOrderID()
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    	);
+    	if ( $this->_get("no") != md5("GO".$tmpMD5.date("Y-m-d H")) )
+    		$this->error("非法操作",U("Index/index"));
     	
     	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
     	$this->isFalse($dbUser->newTmpOrderID(),"立即发货提交失败，请重试","Index/goBack");
+    	
+    	$tmpMD5 = null;
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."100"//printState
+    			.$tmpData["customName"]
+    			.$tmpOrderID
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    	);
+    	$this->assign("key",$tmpMD5);
+    	
     	$this->display();
     }
     
@@ -501,23 +519,58 @@ class OrderAction extends myAction
     	$this->display();
     }
     
+    
     /*
      * ajax获得订单打印状态
-     */
+    */
     public function ajaxGetTmpOrderInfo()
     {
-    	if ( ($this->_get("no") == "") || ($this->_get("no") == null) )
-    	{//正常打印订单的状态查询
-	    	$dbUser = D("User");
-	    	$dbUser->init(session("userName"));
-	    	$dbTmpOrder = D("TmpOrder");
-	    	$dbTmpOrder->init($dbUser->getPreTmpOrderID());
+    	/*
+    	 * 验证是否是合法访问
+    	 */
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	if ( ($this->_get("id") == "") || ($this->_get("id") == null) )
+    		$tmpOrderID = $dbUser->getPreTmpOrderID();
+    	else
+    		$tmpOrderID = $this->_get("id");
+    	$dbTmpOrder->init($tmpOrderID);
+    	
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."100"//printState
+    			.$tmpData["customName"]
+    			.$tmpOrderID
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    	);
+    	if ($this->_get("no") != $tmpMD5)
+    	{
+    		$this->error("非法访问",U("Index/index"));
+    		return false;
     	}
-	    else
-	    {//重新打印已有订单的状态查询
-	    	$dbTmpOrder = D("TmpOrder");
-	    	$tmp= $dbTmpOrder->init($this->_get("no"));
-	    }
+    	
+    	
+    	if ( ($this->_get("id") == "") || ($this->_get("id") == null) )
+    	{//正常打印订单(go页面)的状态查询
+    		$dbUser = D("User");
+    		$dbUser->init(session("userName"));
+    		$dbTmpOrder = D("TmpOrder");
+    		$dbTmpOrder->init($dbUser->getPreTmpOrderID());
+    	}
+    	else
+    	{//重新打印已有订单（printState页面）的状态查询
+    		$dbTmpOrder = D("TmpOrder");
+    		$tmp= $dbTmpOrder->init($this->_get("id"));
+    	}
     	$data = $dbTmpOrder->getTmpOrderInfo();
     	echo $data["printState"];
     }
@@ -665,9 +718,8 @@ class OrderAction extends myAction
     	* 用户信息
     	*/
     	$customName = $dbTmpOrder->getTmpOrderCustomName();
-    	$dbCustomUser = D("User");
-    	$dbCustomUser->init($customName);
-    	$tmpRe = $dbCustomUser->getUserInfo($customName);
+    	$dbUser->init($customName);
+    	$tmpRe = $dbUser->getUserInfo($customName);
     	if ( ($tmpRe === false) || ($tmpRe === null) )
     		$this->error("查询用户失败，请重试",U("Index/goBack"));
     	$this->assign("customName",$customName);
@@ -723,7 +775,30 @@ class OrderAction extends myAction
     
     public function printState()
     {
+    	/*
+    	 * 添加md5
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($this->_get("no"));
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."100"//printState
+    			.$tmpData["customName"]
+    			.$this->_get("no")
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H")
+    	);
+    	
     	$this->assign("id",$this->_get("no"));
+    	$this->assign("key",$tmpMD5);
     	$this->display();
     }
 }

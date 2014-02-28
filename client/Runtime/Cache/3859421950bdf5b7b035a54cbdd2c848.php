@@ -44,7 +44,7 @@
 				                <tr>
 				                	<th class="text-center">序号</th>
 				                    <th class="text-center">顾客名称</th>
-				                    <th class="text-center">生成时间</th>
+				                    <th class="text-center">打印时间</th>
 				                    <th class="text-center">商品</th>
 				                    <th class="text-center">状态</th>
 				                    <th class="text-center">操作</th>
@@ -72,7 +72,7 @@
 			                <tfoot>
 			                	<th class="text-center">序号</th>
 			                    <th class="text-center">顾客名称</th>
-			                    <th class="text-center">生成时间</th>
+			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">商品</th>
 			                    <th class="text-center">状态</th>
 			                    <th class="text-center">操作</th>
@@ -92,7 +92,7 @@
 				                <tr>
 				                	<th class="text-center">序号</th>
 				                    <th class="text-center">顾客名称</th>
-				                    <th class="text-center">生成时间</th>
+				                    <th class="text-center">打印时间</th>
 				                    <th class="text-center">商品</th>
 				                    <th class="text-center">操作</th>
 				                </tr>
@@ -116,7 +116,7 @@
 			                <tfoot>
 			                	<th class="text-center">序号</th>
 			                    <th class="text-center">顾客名称</th>
-			                    <th class="text-center">生成时间</th>
+			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">商品</th>
 			                    <th class="text-center">操作</th>
 			                </tfoot>
