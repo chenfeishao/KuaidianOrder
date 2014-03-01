@@ -44,12 +44,19 @@ class UserModel extends Model {
 	/*
 	 * 判断用户名和密码是否能登录
 	 * @param string $userPassword 用户密码
-	 * @return 数据库返回的结果集，数组大小应为1
+	 * @return 数据库返回的结果集，数组大小应为1。外面调用形如$re[0][]
 	 */
 	{
 		$condition['userName'] = $this->userName;
 		$condition['userPassword'] = $userPassword;
-		return $this->where($condition)->select();
+		$tmp = $this->where($condition)->select();
+		if ( ($tmp[0]["userPower"] == "root")
+				|| ($tmp[0]["userPower"] == "admin")
+				|| ($tmp[0]["userPower"] == "yyy")
+			)
+			return $tmp;
+		else
+			return false;
 	}
 	
 	/*
@@ -90,6 +97,9 @@ class UserModel extends Model {
 		/*
 		 * 验证、预处理数据
 		*/
+		if ( ($data["userName"] == "") || ($data["userName"] == null) )
+			return false;
+		
 		//拼音
 		$data["userPinYin"] = getPinYinFirstChar($data["userName"]);
 			
