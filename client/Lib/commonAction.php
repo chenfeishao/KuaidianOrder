@@ -200,6 +200,12 @@ class myAction extends Action
 						return false;
 					break;
 				}
+			case "financePower"://财务管理权限
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") && ($userPower != "营业员") )
+						return false;
+					break;
+				}
 			default:return false;break;
 		}
 		return true;
