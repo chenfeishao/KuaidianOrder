@@ -717,6 +717,7 @@ class OrderAction extends myAction
     	/*
     	* 用户信息
     	*/
+    	$dbUser = D("User");
     	$customName = $dbTmpOrder->getTmpOrderCustomName();
     	$dbUser->init($customName);
     	$tmpRe = $dbUser->getUserInfo($customName);
