@@ -20,7 +20,7 @@
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
-    <title>EasyOrder</title>
+    <title>快点订单系统</title>
 
 <script src="__PUBLIC__/metro/js/start-screen.js"></script>
 <script>
@@ -131,7 +131,7 @@ function onKeyDownDo(e)
 </head>
 <body class="metro">
 <div class="tile-area tile-area-dark">
-    <h1 class="tile-area-title fg-white">欢迎</h1>
+    <h1 class="tile-area-title fg-white">欢迎<small>游客登录用户名和密码：youke</small></h1>
 
     <div class="user-id" id="userWindows">
         <div class="user-id-image">

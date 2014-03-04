@@ -1,11 +1,11 @@
 /*创建用户及对应数据库，用户对对应的数据库享有所有权限*/
-CREATE USER 'easyOrder'@'localhost' IDENTIFIED BY "easyOrder";/*用户名easyOrder，密码easyOrder*/
-GRANT USAGE ON * . * TO 'easyOrder'@'localhost' IDENTIFIED BY "easyOrder" WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
-CREATE DATABASE IF NOT EXISTS `easyOrder` ;
-GRANT ALL PRIVILEGES ON `easyOrder` . * TO 'easyOrder'@'localhost';
+CREATE USER 'kuaidian'@'localhost' IDENTIFIED BY "kuaidian";/*用户名kuaidian，密码kuaidian*/
+GRANT USAGE ON * . * TO 'kuaidian'@'localhost' IDENTIFIED BY "kuaidian" WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+CREATE DATABASE IF NOT EXISTS `kuaidian` ;
+GRANT ALL PRIVILEGES ON `kuaidian` . * TO 'kuaidian'@'localhost';
 
 /*使用数据库*/
-use easyOrder;
+use kuaidian;
 
 /*创建表*/
 create table user(
@@ -37,6 +37,7 @@ create table user(
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",1,1);
 insert user values("wwxwwx2008","hhschyy125","admin","hhsc","02983106853","方欣国际食品城一楼125号(后门口)","无","无",2,2);
+insert user values("youke","youke","pt","youke","812346567","快点软件","门口","无",3,3);
 
 create table tmp_order(
 	id bigint NOT NULL AUTO_INCREMENT,
@@ -73,6 +74,7 @@ create table tmp_order(
 	printState int NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
 INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
 INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
 
