@@ -39,6 +39,11 @@ function getCookie(c_name)
       }
     return "";
 }
+function fleshVerify(){ 
+    //重载验证码
+    var time = new Date().getTime();
+        document.getElementById('verifyImg').src= '__APP__/Public/verify/'+time;
+}
 </script>
 <script>
 function go(id,k)
@@ -72,7 +77,19 @@ $(function(){
                                 '<div class="input-control text"><input type="text" name="userName"><button class="btn-clear"></button></div>' +
                                 '<label>密码</label>'+
                                 '<div class="input-control password"><input type="password" name="userPassword"><button class="btn-reveal"></button></div>' +
-                                '<div class="input-control checkbox"><label>请输入用户名和密码</label></div>'+
+                                '<label>验证码</label>' +
+                                '<div class="grid fluid">\
+                                	<div class="row">\
+	                                	<div class="input-control text">\
+	                                		<input type="text" name="yzm">\
+	                                		<button class="btn-clear"></button>\
+	                                	</div>\
+                                	</div>\
+                                	<div class="row">\
+                                		<img class="span5" id="verifyImg" src="__APP__/Public/verify/" onclick="fleshVerify()"/>\
+                                		<label class="span7">看不清？点击图片更换</label>\
+                                	</div>\
+                                </div>'+
                                 '<div class="form-actions">' +
                                 '<button class="button primary">登录</button>&nbsp;'+
                                 '<button class="button" type="button" onclick="$.Dialog.close()">取消</button> '+

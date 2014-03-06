@@ -20,7 +20,7 @@
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
-    <title>EasyOrder</title>
+    <title>快点订单系统</title>
 
 <script>
 function getInfo()
