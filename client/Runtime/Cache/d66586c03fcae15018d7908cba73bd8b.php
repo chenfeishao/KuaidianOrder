@@ -235,7 +235,7 @@ function onKeyDownDo(e)
 		
 		    <div class="frames">
 		    	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><div class="frame" id="___<?php echo ($i); ?>">
-			         	<?php if(is_array($vo['goods'])): foreach($vo['goods'] as $key=>$sub): ?><div class="<?php echo ($sub["className"]); ?>"  onclick='go(<?php echo ($sub["id"]); ?>,0)'>
+			         	<?php if(is_array($vo['goods'])): foreach($vo['goods'] as $key=>$sub): ?><a class="<?php echo ($sub["className"]); ?>"  href="<?php echo U("Order/inputPanel");?>?<?php echo ($sub["id"]); ?>">
 								<div class="<?php echo ($sub["content"]); ?>">
 									<?php if($sub["image"] == NULL): ?><span class="icon-tag"></span>
 					   				<?php else: ?><img src="<?php echo ($sub["image"]); ?>"/><?php endif; ?>
@@ -243,7 +243,7 @@ function onKeyDownDo(e)
 								<div class="<?php echo ($sub["brand"]); ?>">
 					                <div class="label"><?php echo ($sub["name"]); ?></div>
 					            </div>
-							</div><?php endforeach; endif; ?>
+							</a><?php endforeach; endif; ?>
 						<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 					</div><?php endforeach; endif; else: echo "" ;endif; ?>
 		   	</div>

@@ -29,6 +29,7 @@ class IndexAction extends myAction
     		{
     			$preShowInfo[$i]["name"] = $goodsInfo[$i]["name"];
     		}
+//     		$preShowInfo[$i]["id"] = AES_CBC(0, $goodsInfo[$i]["id"]);
     		$preShowInfo[$i]["id"] = $goodsInfo[$i]["id"];
     		$tmp = "";
     		switch ($goodsInfo[$i]["style"])
