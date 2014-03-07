@@ -98,7 +98,7 @@ class IndexAction extends myAction
     	}
     	
     	//检查有没有超过$blockSize个商品的标签组
-    	$blockSize=30;//3*x
+    	$blockSize=30;//3*x=30
     	$i = 0;
     	$arrayCount = count($allInfo);
     	while ($i < $arrayCount)
@@ -113,6 +113,7 @@ class IndexAction extends myAction
     				$tmp[0]["goods"] = $tmpChunk[$j];
     				$allInfo = array_merge($allInfo,$tmp);
     			}
+    			array_splice($allInfo,$i,1);
     		}
     		$arrayCount = count($allInfo);
     		$i++;
