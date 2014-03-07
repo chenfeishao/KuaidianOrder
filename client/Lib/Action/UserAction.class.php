@@ -28,6 +28,11 @@ class UserAction extends myAction
     
     public function toLogin()//判断登录是否成功
     {
+    	if (session('verify') != md5($this->_post('yzm')))
+    	{
+    		$this->error('验证码错误！',U("Index/index"));
+    	}
+    	
     	$dbUser = D("User");
     	$dbUser->init($this->_post('userName'));
     	if($result = $dbUser->login($this->_post('userPassword')))
