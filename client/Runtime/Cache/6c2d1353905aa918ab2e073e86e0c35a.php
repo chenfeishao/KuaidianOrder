@@ -110,13 +110,13 @@
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-						<button class="span4 shortcut warning" onclick="window.location = '<?php echo U('Order/repeatAllPrint');?>?no=<?php echo ($id); ?>'" data-click="transform">
+						<button class="span4 shortcut warning" onclick="window.location = '<?php echo U('Order/repeatAllPrint');?>?no=<?php echo ($id); ?>&t=<?php echo ($tkey); ?>'" data-click="transform">
                             <h2>全部三联重新打印</h2>
                         </button>
-                        <button class="span4 shortcut primary" onclick="window.location = '<?php echo U('Order/repeatOnePrint');?>?no=<?php echo ($id); ?>'" data-click="transform">
+                        <button class="span4 shortcut primary" onclick="window.location = '<?php echo U('Order/repeatOnePrint');?>?no=<?php echo ($id); ?>&t=<?php echo ($tkey); ?>'" data-click="transform">
                             <h2>打印存根联与发票联</h2>
                         </button>
-                        <button class="span4 shortcut info" onclick="window.location = '<?php echo U('Order/repeatThreePrint');?>?no=<?php echo ($id); ?>'" data-click="transform">
+                        <button class="span4 shortcut info" onclick="window.location = '<?php echo U('Order/repeatThreePrint');?>?no=<?php echo ($id); ?>&t=<?php echo ($tkey); ?>'" data-click="transform">
                             <h2>打印出库单</h2>
                         </button>
 		            </div>

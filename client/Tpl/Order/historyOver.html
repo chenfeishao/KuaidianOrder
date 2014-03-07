@@ -89,13 +89,13 @@
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-						<button class="span4 shortcut warning" onclick="window.location = '{:U('Order/repeatAllPrint')}?no={$id}'" data-click="transform">
+						<button class="span4 shortcut warning" onclick="window.location = '{:U('Order/repeatAllPrint')}?no={$id}&t={$tkey}'" data-click="transform">
                             <h2>全部三联重新打印</h2>
                         </button>
-                        <button class="span4 shortcut primary" onclick="window.location = '{:U('Order/repeatOnePrint')}?no={$id}'" data-click="transform">
+                        <button class="span4 shortcut primary" onclick="window.location = '{:U('Order/repeatOnePrint')}?no={$id}&t={$tkey}'" data-click="transform">
                             <h2>打印存根联与发票联</h2>
                         </button>
-                        <button class="span4 shortcut info" onclick="window.location = '{:U('Order/repeatThreePrint')}?no={$id}'" data-click="transform">
+                        <button class="span4 shortcut info" onclick="window.location = '{:U('Order/repeatThreePrint')}?no={$id}&t={$tkey}'" data-click="transform">
                             <h2>打印出库单</h2>
                         </button>
 		            </div>

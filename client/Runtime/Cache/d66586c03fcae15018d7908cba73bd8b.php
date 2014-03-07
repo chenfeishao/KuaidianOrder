@@ -211,7 +211,7 @@ function onKeyDownDo(e)
 	<?php if($select != NULL): ?><div class="tile-group three">
 		   <div class="tile-group-title">购物车</div>
 		   
-		   <?php if(is_array($select)): foreach($select as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?> selected"  onclick='go(<?php echo ($vo["id"]); ?>,1)'>
+		   <?php if(is_array($select)): foreach($select as $key=>$vo): ?><div class="<?php echo ($vo["className"]); ?> selected"><!-- onclick='go(<?php echo ($vo["id"]); ?>,1)' -->
 					<div class="<?php echo ($vo["content"]); ?>">
 						<?php if($vo["image"] == NULL): ?><span class="icon-tag"></span>
 		   				<?php else: ?><img src="<?php echo ($vo["image"]); ?>"/><?php endif; ?>
@@ -235,7 +235,7 @@ function onKeyDownDo(e)
 		
 		    <div class="frames">
 		    	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><div class="frame" id="___<?php echo ($i); ?>">
-			         	<?php if(is_array($vo['goods'])): foreach($vo['goods'] as $key=>$sub): ?><a class="<?php echo ($sub["className"]); ?>"  href="<?php echo U("Order/inputPanel");?>?<?php echo ($sub["id"]); ?>">
+			         	<?php if(is_array($vo['goods'])): foreach($vo['goods'] as $key=>$sub): ?><a class="<?php echo ($sub["className"]); ?>"  href="<?php echo U("Order/inputPanel");?>?id=<?php echo ($sub["id"]); ?>">
 								<div class="<?php echo ($sub["content"]); ?>">
 									<?php if($sub["image"] == NULL): ?><span class="icon-tag"></span>
 					   				<?php else: ?><img src="<?php echo ($sub["image"]); ?>"/><?php endif; ?>

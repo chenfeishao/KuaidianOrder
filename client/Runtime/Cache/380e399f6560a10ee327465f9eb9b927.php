@@ -56,6 +56,11 @@ function clearInfo(k)
 	document.getElementById(moneyName).value = "";
 	document.getElementById(jineName).value = "0";
 }
+function goDelete(url)
+{
+	if(confirm('要删除该商品吗?'))
+		location = url;
+}
 </script>
 </head>
 
@@ -115,7 +120,7 @@ function clearInfo(k)
 		                                </div>
 									</td>
 									<td style="width: 70px;">
-										<a href="<?php echo U("Order/closingDelete");?>?no=<?php echo ($i); ?>" class="button warning">删除</a>
+										<div onclick="goDelete('<?php echo U("Order/closingDelete");?>?no=<?php echo ($i); ?>');" class="button warning">删除</div>
 									</td>
 						    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 		                </tbody>

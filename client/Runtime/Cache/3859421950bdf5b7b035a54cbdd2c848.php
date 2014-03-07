@@ -22,6 +22,13 @@
     <script src="__PUBLIC__/metro/js/docs.js"></script>
     <title>快点订单系统</title>
 
+<script>
+function goDelete(url)
+{
+	if(confirm('要删除该交易吗?'))
+		location = url;
+}
+</script>
 </head>
 
 <body class="metro" onload="timedCount()">
@@ -64,7 +71,7 @@
 							    		</td>
 										<td style="width: 100px;">
 											<a href="<?php echo U("Order/historyOver");?>?no=<?php echo ($vo["id"]); ?>" class="button success">查看</a>
-											<a href="<?php echo U("Order/deleteTmpOrder");?>?no=<?php echo ($vo["id"]); ?>" class="button warning">删除</a>
+											<div onclick="goDelete('<?php echo U("Order/deleteTmpOrder");?>?no=<?php echo ($vo["id"]); ?>&t=<?php echo ($vo["tkey"]); ?>');" class="button warning">删除</div>
 										</td>
 							    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 			                </tbody>

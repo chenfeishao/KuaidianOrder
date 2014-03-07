@@ -1,4 +1,11 @@
 <include file="Public:header" />
+<script>
+function goDelete(url)
+{
+	if(confirm('要删除该交易吗?'))
+		location = url;
+}
+</script>
 </head>
 
 <body class="metro" onload="timedCount()">
@@ -42,7 +49,7 @@
 							    		</td>
 										<td style="width: 100px;">
 											<a href="{:U("Order/historyOver")}?no={$vo.id}" class="button success">查看</a>
-											<a href="{:U("Order/deleteTmpOrder")}?no={$vo.id}" class="button warning">删除</a>
+											<div onclick="goDelete('{:U("Order/deleteTmpOrder")}?no={$vo.id}&t={$vo.tkey}');" class="button warning">删除</div>
 										</td>
 							    	</tr>
 						    	</volist>

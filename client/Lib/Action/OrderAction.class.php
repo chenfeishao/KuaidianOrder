@@ -613,6 +613,21 @@ class OrderAction extends myAction
 				case '105':$undoneList[$i]["printState"] = "重新打印出货单";break;
 				default:$undoneList[$i]["printState"] = "数据库出错，请重试";break;
     		}
+    		
+    		//md5
+    		$undoneList[$i]["tkey"] = md5(
+    				$undone[$i]["xianJinShiShou"]
+    				.$undone[$i]["yinHangShiShou"]
+    				.$undone[$i]["save"]
+    				."100"//printState
+    				.$undone[$i]["customName"]
+    				.$undone[$i]["id"]
+    				.$undone[$i]["goodsIDArray"]
+    				.$undone[$i]["goodsNumArray"]
+    				.$undone[$i]["goodsMoneyArray"]
+    				.$undone[$i]["goodsSizeArray"]
+    				.date("Y-m-d H:i")
+    		);
     	
     	    //得到商品名称
     	   	$tmp = $dbTmpOrder->getArrayWithSelf($undone[$i]["goodsIDArray"]);
@@ -647,6 +662,7 @@ class OrderAction extends myAction
     	}
     	$this->assign("undoneList",$undoneList);
     	$this->assign("doneList",$doneList);
+    	
     	$this->display();
     }
     
@@ -734,6 +750,24 @@ class OrderAction extends myAction
     	$this->assign("carNo",$tmpRe["carNo"]);
     	
     	$this->assign("id",$id);
+    	
+    	$tmpMD5 = null;
+    	$tmpMD5 = md5(
+    			$tmpOrderInfo["xianJinShiShou"]
+    			.$tmpOrderInfo["yinHangShiShou"]
+    			.$tmpOrderInfo["save"]
+    			."?"//printState
+    			.$customName
+    			.$id
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H:i")
+    	);
+    	$this->assign("tkey",$tmpMD5);
+    	
+    	
     	$this->display();
     }
     
@@ -742,6 +776,37 @@ class OrderAction extends myAction
      */
     public function deleteTmpOrder()
     {
+    	/*
+    	 * 验证是否是合法访问
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$tmpOrderID = $this->_get("no");
+    	$dbTmpOrder->init($tmpOrderID);
+    	
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."100"//printState
+    			.$tmpData["customName"]
+    			.$tmpOrderID
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H:i")
+    	);
+    	if ($this->_get("t") != $tmpMD5)
+    	{
+    		$this->error("非法访问",U("Index/index"));
+    		return false;
+    	}
+    	
+    	
     	$condition["id"] = $this->_get("no");
     	$dbTmpOrder = D("TmpOrder");
     	$this->isFalsePlus($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
@@ -753,6 +818,36 @@ class OrderAction extends myAction
      */
     public function repeatAllPrint()
     {
+    	/*
+    	 * 验证是否是合法访问
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+   		$tmpOrderID = $this->_get("no");
+    	$dbTmpOrder->init($tmpOrderID);
+    	 
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."?"//printState
+    			.$tmpData["customName"]
+    			.$tmpOrderID
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H:i")
+    	);
+    	if ($this->_get("t") != $tmpMD5)
+    	{
+    		$this->error("非法访问",U("Index/index"));
+    		return false;
+    	}
+    	
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($this->_get("no"));
     	$this->isOk($dbTmpOrder->updatePrintState(1),"全部重新打印订单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
@@ -763,6 +858,38 @@ class OrderAction extends myAction
     */
     public function repeatOnePrint()
     {
+    	/*
+    	 * 验证是否是合法访问
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$tmpOrderID = $this->_get("no");
+    	$dbTmpOrder->init($tmpOrderID);
+    	
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."?"//printState
+    			.$tmpData["customName"]
+    			.$tmpOrderID
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H:i")
+    	);
+    	if ($this->_get("t") != $tmpMD5)
+    	{
+    		$this->error("非法访问",U("Index/index"));
+    		return false;
+    	}
+    	
+    	
+    	
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($this->_get("no"));
     	$this->isOk($dbTmpOrder->updatePrintState(101),"重新打印存根与发票联申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
@@ -773,6 +900,38 @@ class OrderAction extends myAction
     */
     public function repeatThreePrint()
     {
+    	/*
+    	 * 验证是否是合法访问
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$tmpOrderID = $this->_get("no");
+    	$dbTmpOrder->init($tmpOrderID);
+    	
+    	//检查是否是非法提交
+    	$tmpData = $dbTmpOrder->getTmpOrderInfo();
+    	$tmpMD5 = md5(
+    			$tmpData["xianJinShiShou"]
+    			.$tmpData["yinHangShiShou"]
+    			.$tmpData["save"]
+    			."?"//printState
+    			.$tmpData["customName"]
+    			.$tmpOrderID
+    			.$dbTmpOrder->getOriginArrayResult("goodsIDArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsNumArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsMoneyArray")
+    			.$dbTmpOrder->getOriginArrayResult("goodsSizeArray")
+    			.date("Y-m-d H:i")
+    	);
+    	if ($this->_get("t") != $tmpMD5)
+    	{
+    		$this->error("非法访问",U("Index/index"));
+    		return false;
+    	}
+    	
+    	
+    	
     	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($this->_get("no"));
     	$this->isOk($dbTmpOrder->updatePrintState(105),"重新打印出货单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));

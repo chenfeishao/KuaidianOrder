@@ -194,7 +194,7 @@ function onKeyDownDo(e)
 		   <div class="tile-group-title">购物车</div>
 		   
 		   <foreach name="select" item="vo">
-				<div class="{$vo.className} selected"  onclick='go({$vo.id},1)'>
+				<div class="{$vo.className} selected"><!-- onclick='go({$vo.id},1)' -->
 					<div class="{$vo.content}">
 						<if condition="$vo.image eq NULL"><span class="icon-tag"></span>
 		   				<else/><img src="{$vo.image}"/>
@@ -225,7 +225,7 @@ function onKeyDownDo(e)
 		    	<volist name="list" id="vo">
 			        <div class="frame" id="___{$i}">
 			         	<foreach name="vo['goods']" item="sub">
-							<a class="{$sub.className}"  href="{:U("Order/inputPanel")}?{$sub.id}">
+							<a class="{$sub.className}"  href="{:U("Order/inputPanel")}?id={$sub.id}">
 								<div class="{$sub.content}">
 									<if condition="$sub.image eq NULL"><span class="icon-tag"></span>
 					   				<else/><img src="{$sub.image}"/>
