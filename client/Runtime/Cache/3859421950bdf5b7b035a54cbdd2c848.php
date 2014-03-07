@@ -37,6 +37,7 @@ function goDelete(url)
         <h1>
             <a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	历史记录
+           	<a class="place-right" href="<?php echo U("Order/advancedQuery");?>"><i class="icon-search fg-darker smaller"></i></a>
         </h1>
         
       		<div class="panel" data-role="panel">

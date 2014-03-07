@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	
 	 
     <link href="__PUBLIC__/metro/css/metro-bootstrap.css" rel="stylesheet">
     <link href="__PUBLIC__/metro/css/metro-bootstrap-responsive.css" rel="stylesheet">
@@ -17,11 +17,10 @@
 
     <!-- Metro UI CSS JavaScript plugins -->
     <script src="__PUBLIC__/metro/js/load-metro.js"></script>
-    <script src="__PUBLIC__/metro/js/metro/metro-live-tile.js"></script>
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
-    <title>快点订餐系统——后台</title>
+    <title>快点订单系统</title>
 
 <script src="__PUBLIC__/checkInput.js"></script>
  
@@ -31,18 +30,29 @@
 
     <div class="container">
         <h1>
-       		<a class="element place-right" href="<?php echo U("User/logout");?>"><i class="icon-exit fg-darker smaller"></i></a>
-           	首页<small class="on-right"><?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
+       		<a href="<?php echo U("Order/history");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+           	历史记录高级查询<small class="on-right"><?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
                 <div class="tile-group seven">
                     <div class="row">
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Goods/add');?>'" data-click="transform">
-                            <h2>添加商品</h2>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                            <h2>收款结算</h2>
                         </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Goods/edit');?>'" data-click="transform">
-                            <h2>修改商品</h2>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                            <h2>付款结算</h2>
+                        </button>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                            <h2>费用</h2>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                            <h2>账务管理</h2>
+                        </button>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                            <h2>存取转账</h2>
                         </button>
                     </div>
                 </div>

@@ -994,6 +994,12 @@ class OrderAction extends myAction
     	$this->assign("key",$tmpMD5);
     	$this->display();
     }
+    
+    public function advancedQuery()
+    {
+    	
+    	$this->display();
+    }
 }
 
 ?>
