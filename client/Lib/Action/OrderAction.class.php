@@ -152,6 +152,14 @@ class OrderAction extends myAction
     		$orderInfo[$i]["jine"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
     		$totalJine += $orderInfo[$i]["jine"];
     		$totalNum += $orderInfo[$i]["num"];
+    		
+    		//md5
+    		$orderInfo[$i]["tkey"] = md5(
+    				"8"//printState
+    				.$dbUser->getTmpOrderID()
+    				.($i+1)
+    				.date("Y-m-d H:i")
+    		);
     	}
     	
     	//渲染list
@@ -184,6 +192,27 @@ class OrderAction extends myAction
      */
     public function closingDelete()
     {
+    	/*
+    	 * 验证是否是合法访问
+    	*/
+    	$dbUser = D("User");
+    	$dbUser->init(session("userName"));
+    	 
+    	//检查是否是非法提交
+    	$tmpMD5 = md5(
+    			"8"//printState
+    			.$dbUser->getTmpOrderID()
+    			.$this->_get("no")
+    			.date("Y-m-d H:i")
+    	);
+    	if ($this->_get("t") != $tmpMD5)
+    	{
+    		$this->error("非法访问",U("Index/index"));
+    		return false;
+    	}
+    	
+    	
+    	
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");

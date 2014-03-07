@@ -120,7 +120,7 @@ function goDelete(url)
 		                                </div>
 									</td>
 									<td style="width: 70px;">
-										<div onclick="goDelete('<?php echo U("Order/closingDelete");?>?no=<?php echo ($i); ?>');" class="button warning">删除</div>
+										<div onclick="goDelete('<?php echo U("Order/closingDelete");?>?no=<?php echo ($i); ?>&t=<?php echo ($vo["tkey"]); ?>');" class="button warning">删除</div>
 									</td>
 						    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 		                </tbody>
