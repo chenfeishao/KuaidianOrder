@@ -107,4 +107,44 @@ function getPinYinFirstChar($zh)
 	}
 	return $ret;
 }
+
+/*
+ * AES算法的CBC模式的加密算法
+ * @param	$mode;0加密模式，1解密模式
+ * 			$cleartext;待加密的字符串
+ * @reurn	string;加密后的字符串
+ */
+function AES_CBC($mode,$text)
+{
+	if ($mode === 0)//加密
+	{
+		$cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, ''); #128位 = 16字节 iv必须16字节
+		if (mcrypt_generic_init($cipher, _KEY128, _IV) != -1)
+		{
+			//如果$cleartext不是128位也就是16字节的倍数，补充NULL字符满足这个条件，返回的结果的长度一样
+			$cipherText = mcrypt_generic($cipher,$text);
+			mcrypt_generic_deinit($cipher);
+		
+			//很明显，结果也是16字节的倍数.1个字节用两位16进制表示，所以下面输出的是32的倍数位16进制的字符串
+			return bin2hex($cipherText);
+		}
+	}
+	else//解密
+	{
+		/* Open the cipher */
+		$cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
+		/* Initialize encryption module for decryption */
+		if (mcrypt_generic_init($cipher, _KEY128, _IV) != -1)
+		{
+			/* Decrypt encrypted string */
+			$decrypted = mdecrypt_generic($cipher,hex2bin($text));
+			/* Terminate decryption handle and close module */
+			mcrypt_generic_deinit($cipher);
+			mcrypt_module_close($cipher);
+			
+			/* Show string */
+			return $decrypted;
+		}
+	}
+}
 ?>
