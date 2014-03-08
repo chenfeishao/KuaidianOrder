@@ -681,9 +681,7 @@ class OrderAction extends myAction
     	}
     	else
     	{
-    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
-    				and ((createDate>='".date("Y-m-d")."' and createDate<='".date("Y-m-d")."') 
-    				or (printDate>='".date("Y-m-d")."' and printDate<='".date("Y-m-d")."'))")->select();
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
     				and ((createDate>='".date("Y-m-d")."' and createDate<='".date("Y-m-d")."') 
     				or (printDate>='".date("Y-m-d")."' and printDate<='".date("Y-m-d")."'))")->select();

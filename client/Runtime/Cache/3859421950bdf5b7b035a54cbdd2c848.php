@@ -40,7 +40,7 @@ function goDelete(url)
         </h1><?php endif; ?>
       		<div class="panel" data-role="panel">
 				<div class="panel-header bg-indigo fg-white">
-					今天未完成的订单
+					未完成的订单(所有日期)
 				</div>
 				<div style="display: block;" class="panel-content">
 					<?php if($undoneList == NULL ): ?><b>没有未完成的订单</b>
