@@ -91,13 +91,13 @@ class PrintAction extends myAction
 	    		*/
     		$data = "";
     		$data["id"] = $orderArray[$k]["id"];
-    		$data["createDate"] = date("Y-m-d H:i:s");
+    		$data["printDate"] = date("Y-m-d H:i:s");
 	    	$this->isFalsePlus($dbTmpOrder->save($data),"数据库添加打印时间出错，请重试","Index/goBack");
     		    		 
 
 	    	$output = "%30黄海水产--存根联%%%10   (博大 耘垦 安井)西北专卖%%";
     		//订单信息
-            $output .= "%10     ".$data["createDate"]."%%%00+===========================+%10";
+            $output .= "%10     ".$data["printDate"]."%%%00+===========================+%10";
     		//用户信息
     		$output .= "客户：".$customName."%%%00"
 		    				."电话：".$tmpRe["tel"]."%%"
@@ -123,7 +123,7 @@ class PrintAction extends myAction
     		$output .= "%%%%%%%%%%";
     		$output .= "%30黄海水产--发票联%%%10   (博大 耘垦 安井)西北专卖%%";
     		//订单信息
-    		$output .= "%10     ".$data["createDate"]."%%%00方欣国际食品城一楼125号(后门口)电话:029-83106853 15029483465+===========================+%10";
+    		$output .= "%10     ".$data["printDate"]."%%%00方欣国际食品城一楼125号(后门口)电话:029-83106853 15029483465+===========================+%10";
     		//用户信息
 		    $output .= "客户：".$customName."%%%00"
     			    ."电话：".$tmpRe["tel"]."%%"
@@ -260,7 +260,7 @@ class PrintAction extends myAction
 	    	
     		$output = "%30黄海水产--出货单%%";
     		//订单信息
-            $output .= "%10     ".$originAllInfo["createDate"]."%%%00+===========================+%10";
+            $output .= "%10     ".$originAllInfo["printDate"]."%%%00+===========================+%10";
     		//用户信息
     		$output .= "客户：".$customName."%%%00"
     						."位置：".$tmpRe["carAddress"]."%%%30"

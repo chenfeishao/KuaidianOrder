@@ -31,6 +31,29 @@ function isNum($str)
 
 
 /*
+ * 检查数组内容是否是日期
+* @param	array;输入数组
+* 				array[0];年
+* 				array[1];月
+* 				array[2];日
+* 				array[3];星期，两位英文缩写
+* @return	bool;日期格式是否正确
+* @NOTE：目前不检查星期是否正确
+*/
+function checkIsDate($dateArray)
+{
+	//是否是数字
+	if ( (!isNum($dateArray[0])) || (!isNum($dateArray[1])) || (!isNum($dateArray[2])) )
+		return false;
+	if (       ($dateArray[0] >= 1900) && ($dateArray[0] <= 3000) 
+			&& ($dateArray[1] >= 1) && ($dateArray[1] <= 12)
+			&& ($dateArray[2] >= 1) && ($dateArray[2] <= 31)
+		)
+		return true;
+	return false;
+}
+
+/*
  * 给数组添加中断标记并转换成字符串
  * @param	array $data;原始数据
  * @return	string;转换完成后的字符串
@@ -189,4 +212,6 @@ class RSA
 		return ;
 	}
 }
+
+
 ?>

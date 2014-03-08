@@ -53,6 +53,7 @@ create table tmp_order(
 	yinHangShiShou double NOT NULL,
 	
 	createDate datetime NOT NULL,
+	printDate datetime NOT NULL,
 	/*打印状态
 	 *  8:该条订单还没有任何有效操作
 	 * 	0：不打印
@@ -74,9 +75,9 @@ create table tmp_order(
 	printState int NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00', '8');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8');
 
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,

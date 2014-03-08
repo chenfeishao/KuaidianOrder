@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); if(($mode == 0)): ?><!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -20,7 +20,8 @@
 
     <!-- Local JavaScript -->
     <script src="__PUBLIC__/metro/js/docs.js"></script>
-    <title>快点订单系统</title><?php endif; ?>
+    <title>快点订单系统</title>
+
 <script>
 function goDelete(url)
 {
@@ -28,7 +29,7 @@ function goDelete(url)
 		location = url;
 }
 </script>
-<?php if(($mode == 0)): ?></head>
+</head>
 
 <body class="metro" onload="timedCount()">
 
@@ -37,10 +38,11 @@ function goDelete(url)
             <a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	历史记录
            	<a class="place-right" href="<?php echo U("Order/advancedQuery");?>"><i class="icon-search fg-darker smaller"></i></a>
-        </h1><?php endif; ?>
+        </h1>
+        
       		<div class="panel" data-role="panel">
 				<div class="panel-header bg-indigo fg-white">
-					今天未完成的订单
+					未完成订单
 				</div>
 				<div style="display: block;" class="panel-content">
 					<?php if($undoneList == NULL ): ?><b>没有未完成的订单</b>
@@ -62,7 +64,7 @@ function goDelete(url)
 							    		<td style="width: 50px;"><?php echo ($i); ?>
 							    		</td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
-							    		<td class="right span2"><?php echo ($vo["printDate"]); ?>
+							    		<td class="right span2"><?php echo ($vo["createDate"]); ?>
 							    		</td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?>
 							    		</td>
@@ -88,7 +90,7 @@ function goDelete(url)
 			</div>
 			<div class="panel">
 				<div class="panel-header bg-green fg-white">
-					今天已完成订单
+					已完成订单
 				</div>
 				<div class="panel-content grid fluid">
 					<?php if($doneList == NULL ): ?><b>没有已完成的订单</b>
@@ -109,7 +111,7 @@ function goDelete(url)
 							    		<td style="width: 50px;"><?php echo ($i); ?>
 							    		</td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
-							    		<td class="right span2"><?php echo ($vo["printDate"]); ?>
+							    		<td class="right span2"><?php echo ($vo["createDate"]); ?>
 							    		</td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?>
 							    		</td>
@@ -129,6 +131,7 @@ function goDelete(url)
 			            </table><?php endif; ?>
 				</div>
 			</div>
-<?php if(($mode == 0)): ?></div>
+       		
+    </div>
 </body>
-</html><?php endif; ?>
+</html>

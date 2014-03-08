@@ -610,22 +610,64 @@ class OrderAction extends myAction
     
     /*
      * 历史订单页面
+     * @param	int;模式，
+     * 				0：正常历史记录页面；
+     * 				1：按创建时间查询的区间查询显示页面
+     * 				2:按打印时间查询的区间查询显示页面
+     * 				3：按创建时间查询的多点查询显示页面
+     * 				4：按打印时间查询的多点查询显示页面
     */
-    public function history()
+    public function history($mode =0,$startDate = null,$endDate = null)
     {
     	$dbTmpOrder = D("TmpOrder");
     	$dbGoods = D("Goods");
     	/*
+    	 * 从数据库中选择
+    	 */
+    	$date1 = $startDate[0]."-".$startDate[1]."-".$startDate[2];
+    	$date2 = $endDate[0]."-".$endDate[1]."-".$endDate[2];
+    	if ($mode === 1)
+    	{
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' 
+    					and createDate>='".$date1."' and createDate<='".$date2."'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1."' and createDate<='".$date2."'")->select();
+    	}
+    	elseif ($mode === 2)
+    	{
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
+    					and printDate>='".$date1."' and printDate<='".$date2."'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1."' and printDate<='".$date2."'")->select();
+    	}
+    	elseif ($mode === 3)
+    	{
+    	}
+    	elseif ($mode === 4)
+    	{
+    	}
+    	else
+    	{
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
+    				and ((createDate>='".date("Y-m-d")."' and createDate<='".date("Y-m-d")."') 
+    				or (printDate>='".date("Y-m-d")."' and printDate<='".date("Y-m-d")."'))")->select();
+    		$done = $dbTmpOrder->where("printState='7' 
+    				and ((createDate>='".date("Y-m-d")."' and createDate<='".date("Y-m-d")."') 
+    				or (printDate>='".date("Y-m-d")."' and printDate<='".date("Y-m-d")."'))")->select();
+    	}
+    	
+    	if (!$undone)
+    		$undone = null;
+    	if (!$done)
+    		$done = null;
+    	/*
     	 * 未完成的订单信息
     	*/
-    	$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     	for ($i = 0; $i < count($undone); $i++)
     	{
     		$tmpGoodsName = null;
     		$tmp = null;
     		$undoneList[$i]["id"] = $undone[$i]["id"];
     		$undoneList[$i]["customName"] = $undone[$i]["customName"];
-    		$undoneList[$i]["createDate"] = $undone[$i]["createDate"];
+    		$undoneList[$i]["printDate"] = $undone[$i]["printDate"];
     		
     		//打印状态
     		switch ($undone[$i]["printState"])
@@ -671,14 +713,13 @@ class OrderAction extends myAction
     	/*
     	 * 已完成的订单信息
     	 */
-    	$done = $dbTmpOrder->where("printState='7'")->select();
     	for ($i = 0; $i < count($done); $i++)
     	{
     		$tmpGoodsName = null;
     		$tmp = null;
     		$doneList[$i]["id"] = $done[$i]["id"];
     		$doneList[$i]["customName"] = $done[$i]["customName"];
-    		$doneList[$i]["createDate"] = $done[$i]["createDate"];
+    		$doneList[$i]["printDate"] = $done[$i]["printDate"];
     		
     		//得到商品名称
     		$tmp = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsIDArray"]);
@@ -692,7 +733,8 @@ class OrderAction extends myAction
     	$this->assign("undoneList",$undoneList);
     	$this->assign("doneList",$doneList);
     	
-    	$this->display();
+    	$this->assign("mode",$mode);
+    	$this->display("Order:history");
     }
     
     /*
@@ -997,8 +1039,29 @@ class OrderAction extends myAction
     
     public function advancedQuery()
     {
-    	
     	$this->display();
+    }
+    
+    public function ajaxAdvancedQueryInterval()
+    {
+    	$mode = $this->_post("mode");
+    	sscanf($this->_post("startDate"),"%d年%d月%d日,星期%s",$startDate[0],$startDate[1],$startDate[2],$startDate[3]);
+    	sscanf($this->_post("endDate"),"%d年%d月%d日,星期%s",$endDate[0],$endDate[1],$endDate[2],$endDate[3]);
+    	if ( (!checkIsDate($startDate)) || (!checkIsDate($endDate)) )
+    	{
+    		$this->error("日期输入有问题，请重试","Index/goBack");
+    	}
+    	
+    	if ($mode == 1)
+    	{
+    		$this->history(1,$startDate,$endDate);
+    	}
+    	elseif ($mode == 2)
+    	{
+    		$this->history(2,$startDate,$endDate);
+    	}
+    	else
+    		$this->error("非法操作");
     }
 }
 

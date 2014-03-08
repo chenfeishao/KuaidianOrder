@@ -28,7 +28,7 @@
 
     <div class="container">
         <h1>
-            <a href="<?php echo U("Order/history");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+            <a href="<?php echo U("Index/goBack");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	订单详情<small class="on-right"><?php echo ($title); ?></small>
         </h1>
         

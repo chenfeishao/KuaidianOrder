@@ -1,4 +1,6 @@
+<if condition="($mode eq 0)">
 <include file="Public:header" />
+</if>
 <script>
 function goDelete(url)
 {
@@ -6,6 +8,7 @@ function goDelete(url)
 		location = url;
 }
 </script>
+<if condition="($mode eq 0)">
 </head>
 
 <body class="metro" onload="timedCount()">
@@ -16,10 +19,10 @@ function goDelete(url)
            	历史记录
            	<a class="place-right" href="{:U("Order/advancedQuery")}"><i class="icon-search fg-darker smaller"></i></a>
         </h1>
-        
+</if>
       		<div class="panel" data-role="panel">
 				<div class="panel-header bg-indigo fg-white">
-					未完成订单
+					今天未完成的订单
 				</div>
 				<div style="display: block;" class="panel-content">
 					<if condition="$undoneList eq NULL "><b>没有未完成的订单</b>
@@ -42,7 +45,7 @@ function goDelete(url)
 							    		<td style="width: 50px;">{$i}
 							    		</td>
 							    		<td class="span2">{$vo.customName}</td>
-							    		<td class="right span2">{$vo.createDate}
+							    		<td class="right span2">{$vo.printDate}
 							    		</td>
 							    		<td class="right span5">{$vo.goodsName}
 							    		</td>
@@ -70,7 +73,7 @@ function goDelete(url)
 			</div>
 			<div class="panel">
 				<div class="panel-header bg-green fg-white">
-					已完成订单
+					今天已完成订单
 				</div>
 				<div class="panel-content grid fluid">
 					<if condition="$doneList eq NULL "><b>没有已完成的订单</b>
@@ -92,7 +95,7 @@ function goDelete(url)
 							    		<td style="width: 50px;">{$i}
 							    		</td>
 							    		<td class="span2">{$vo.customName}</td>
-							    		<td class="right span2">{$vo.createDate}
+							    		<td class="right span2">{$vo.printDate}
 							    		</td>
 							    		<td class="right span5">{$vo.goodsName}
 							    		</td>
@@ -114,7 +117,8 @@ function goDelete(url)
 					</if>
 				</div>
 			</div>
-       		
+<if condition="($mode eq 0)">       		
     </div>
 </body>
 </html>
+</if>
