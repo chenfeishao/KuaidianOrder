@@ -31,7 +31,7 @@
     <div class="container">
         <h1>
        		<a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	更新内容<small class="on-right">2014.3.8</small>
+           	版本更新信息<small class="on-right">2014.3.8</small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <div class="accordion-frame">
-                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新</a>
+                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.5</a>
                             <div class="content">
                             	<ol>
                                 	<li>
