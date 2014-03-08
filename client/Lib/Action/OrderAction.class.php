@@ -610,12 +610,19 @@ class OrderAction extends myAction
     
     /*
      * 历史订单页面
-     * @param	int;模式，
-     * 				0：正常历史记录页面；
+     * @param	int $mode;模式，
+     * 				0：正常历史记录页面（显示当天记录）；
      * 				1：按创建时间查询的区间查询显示页面
      * 				2:按打印时间查询的区间查询显示页面
      * 				3：按创建时间查询的多点查询显示页面
      * 				4：按打印时间查询的多点查询显示页面
+     * 			array || string $startDate;日期数组||开始日期
+     * 				对于mode为1、2时：
+     * 					string;日期，如2014-12-3
+     * 				对于mode为3、4时：
+     * 					array;日期数组
+     * 						array[i];日期，如2014-12-3（已处理过）
+     * 			string $endDate;结束日期,如2014-12-3
     */
     public function history($mode =0,$startDate = null,$endDate = null)
     {
@@ -640,9 +647,37 @@ class OrderAction extends myAction
     	}
     	elseif ($mode === 3)
     	{
+    		$str = "";
+    		$str .= "createDate='".$startDate[0]."'";
+    		for ($i = 1; $i < count($startDate); $i++)
+    		{
+    			$str .= " or createDate='".$startDate[$i]."'";
+    		}
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
+    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
+    		
+    		if ($startDate === null)
+    		{
+    			$undone = null;
+    			$done = null;
+    		}
     	}
     	elseif ($mode === 4)
     	{
+    		$str = "";
+    		$str .= "printDate='".$startDate[0]."'";
+    		for ($i = 1; $i < count($startDate); $i++)
+    		{
+    			$str .= " or printDate='".$startDate[$i]."'";
+    		}
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
+    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
+    		
+    		if ($startDate === null)
+    		{
+    			$undone = null;
+    			$done = null;
+    		}
     	}
     	else
     	{
@@ -1059,6 +1094,37 @@ class OrderAction extends myAction
     	elseif ($mode == 2)
     	{
     		$this->history(2,$startDate,$endDate);
+    	}
+    	else
+    		$this->error("非法操作");
+    }
+    
+    public function ajaxAdvancedQueryMult()
+    {
+    	$mode = $this->_post("mode");
+    	$dateArray = explode(",",$this->_post("date"));
+    	array_pop($dateArray);//弹掉最后一个空的项（因为输入末尾带一个多余的逗号）
+    	if (!checkDateArray($dateArray))
+    	{
+    		$this->error("日期输入有问题，请重试","Index/goBack");
+    	}
+    	 
+    	//把dateArray变成一个数组
+    	$newDateArray = null;
+    	for ($i = 0; $i < count($dateArray); $i++)
+    	{
+    		$tmp = null;
+    		sscanf($dateArray[$i],"%d-%d-%d",$tmp[0],$tmp[1],$tmp[2]);
+    		$newDateArray[$i] = $tmp[0]."-".$tmp[1]."-".$tmp[2];
+    	}
+    	 
+    	if ($mode == 1)
+    	{
+    		$this->history(3,$newDateArray);
+    	}
+    	elseif ($mode == 2)
+    	{
+    		$this->history(4,$newDateArray);
     	}
     	else
     		$this->error("非法操作");

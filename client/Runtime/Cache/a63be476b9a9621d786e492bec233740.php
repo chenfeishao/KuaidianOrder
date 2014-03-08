@@ -24,14 +24,17 @@
 
 <script src="http://easyorder.sinaapp.com/Public/metro/js/metro.min.js"></script>
 <script>
+var dateArray = "";
 $(function(){
     var cal = $("#cal-events").calendar({
         multiSelect: true,
         getDates: function(data){
-            var r = "", out = $("#calendar-output").html("");
+            var r = "",output = "", out = $("#calendar-output").html("");
             $.each(data, function(i, d){
-                r += d + "<br />";
+                r += d + "  ;  ";
+                output += d + ",";
             });
+            dateArray = output;
             out.html(r);
         }
     });
@@ -49,7 +52,22 @@ function intervalButton(m)
 			function(data,status)
 			{
 				$("#intervalBlock").attr("style","display: none;");
-				$("#resultBlock").attr("style","display:block;").html(data);
+				$("#resultBlock").attr("style","display:block;").html("").html(data);
+			}
+		);
+}
+function multButton(m)
+{
+	url = "<?php echo U("Order/ajaxAdvancedQueryMult");?>";
+	$.post(url,
+			{
+				mode:m,
+				date:dateArray
+			},
+			function(data,status)
+			{
+				$("#multBlock").attr("style","display: none;");
+				$("#resultBlock").attr("style","display:block;").html("").html(data);
 			}
 		);
 }
@@ -87,7 +105,7 @@ function intervalButton(m)
               </div>
               <div class="accordion-frame">
                   <a class="heading bg-cyan fg-white collapsed" href="#"><h3 class="fg-white"><i class="icon-location"></i>多点查询</h3></a>
-                  <div style="display: none;" class="content">
+                  <div id="multBlock" style="display: none;" class="content">
                         <div class="row">
                             <div class="span5">
                                 <div class="calendar" id="cal-events"></div>
@@ -98,7 +116,10 @@ function intervalButton(m)
                                 	<div id="calendar-output"></div>
                                 </div>
                                 <div class="row">
-                                	<button class="span6 large primary">查询</button>
+                                	<div class="span6 button large primary" onclick="multButton(1);">查询</div>
+                                </div>
+                                <div class="row">
+                                	<div class="span6 button large primary" onclick="multButton(2);">查询(按打印时间)</div>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +128,6 @@ function intervalButton(m)
               <div class="accordion-frame">
                   <a class="heading bg-cyan fg-white" href="#"><h3 class="fg-white"><i class="icon-printer"></i>结果</h3></a>
                   <div id="resultBlock" style="display: none;" class="content">
-                  	
                   </div>
               </div>
           </div>

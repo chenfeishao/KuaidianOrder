@@ -53,6 +53,27 @@ function checkIsDate($dateArray)
 	return false;
 }
 
+
+/*
+ * 检查数组内容是否是一组日期
+ * @param	array;输入数组
+ * 				array[i];一个日期，如：2014-03-21
+ * @return	bool;日期格式是否正确
+ */
+function checkDateArray($dateArray)
+{
+	for ($i = 0; $i < count($dateArray); $i++)
+	{
+		$tmp = null;
+		sscanf($dateArray[$i],"%d-%d-%d",$tmp[0],$tmp[1],$tmp[2]);
+		if (!checkIsDate($tmp))
+			return false;
+	}
+	return true;
+}
+
+
+
 /*
  * 给数组添加中断标记并转换成字符串
  * @param	array $data;原始数据
