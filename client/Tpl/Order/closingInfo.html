@@ -14,6 +14,7 @@ function getInfo()
 			 	{
 					$("#tel").val("");
 					$("#tel").attr("placeholder","查无此人，输入信息创建新用户");
+					$("#historyMoney").html("该账户不存在");
 					
 					$("#tel").val("").attr("tabindex","2");
 			 		$("#address").val("").attr("tabindex","3");
@@ -26,6 +27,22 @@ function getInfo()
 			 		$("#address").val(data[1]).attr("tabindex","999");
 				 	$("#carAddress").val(data[2]).attr("tabindex","999");
 				 	$("#carNo").val(data[3]).attr("tabindex","999");
+				 	if (data[4] > 0)
+				 	{
+				 		$("#historyMoney").html("<b>多</b>（余额）&nbsp;&nbsp;" + data[4] + "元");
+				 	}
+				 	else if (data[4] == 0)
+				 	{
+				 		$("#historyMoney").html(data[4] + "元");
+				 	}
+				 	else if (data[4] < 0)
+				 	{
+				 		$("#historyMoney").html("<b>欠</b>（我们）&nbsp;&nbsp;" + (0 - data[4]) + "元");	
+				 	}
+				 	else
+				 	{
+				 		$("#historyMoney").html("<b>数据错误，请联系软件提供方</b>");	
+				 	}
 			 	}
 			}
 		);
@@ -158,7 +175,7 @@ function change()
 		            <div class="row">
 		                <div class="span3">
 		                    <h5><font color=black>客户历史欠付款情况总计：<br></font></h5>
-		                    <span id="history" class="place-right">暂未实现{$originHistory}</span>
+		                    <span id="historyMoney" class="place-right">该账户不存在</span>
 		                </div>
 		                <div class="span2">
 		                    <h5><font color=black>客户本次欠付款：</font></h5>

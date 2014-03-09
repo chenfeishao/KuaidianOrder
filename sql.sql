@@ -33,7 +33,7 @@ create table user(
 	/*
 	 * 账户余额，即应收应付款
 	 */
-	money bigint NOT NULL,
+	money double NOT NULL,
 	
 	/*数据库要用的信息*/
 	tmpOrderID bigint NOT NULL,

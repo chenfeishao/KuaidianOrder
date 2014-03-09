@@ -278,7 +278,6 @@ class OrderAction extends myAction
     	/*
     	 * 获取user信息
     	 */
-    	
     	$this->assign("originJinE",$totalJinE);
     	$this->assign("userName",$dbUser->getAllUserInfo());
     	

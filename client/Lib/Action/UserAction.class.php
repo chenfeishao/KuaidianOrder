@@ -102,7 +102,8 @@ class UserAction extends myAction
     	}
     	else
     	{
-    		echo $re["tel"]._AJAX_BREAK_TAG.$re["address"]._AJAX_BREAK_TAG.$re["carAddress"]._AJAX_BREAK_TAG.$re["carNo"];
+    		echo $re["tel"]._AJAX_BREAK_TAG.$re["address"]._AJAX_BREAK_TAG.$re["carAddress"]
+    						._AJAX_BREAK_TAG.$re["carNo"]._AJAX_BREAK_TAG.$re["money"];
     	}
     }
     
