@@ -49,7 +49,7 @@
                     </div>
                     <div class="row">
                         <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
-                            <h2>账务管理</h2>
+                            <h2>账务查询</h2>
                         </button>
                         <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
                             <h2>存取转账</h2>
