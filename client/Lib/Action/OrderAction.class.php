@@ -700,6 +700,7 @@ class OrderAction extends myAction
     		$tmp = null;
     		$undoneList[$i]["id"] = $undone[$i]["id"];
     		$undoneList[$i]["customName"] = $undone[$i]["customName"];
+    		$undoneList[$i]["createDate"] = $undone[$i]["createDate"];
     		$undoneList[$i]["printDate"] = $undone[$i]["printDate"];
     		
     		//打印状态
@@ -752,6 +753,7 @@ class OrderAction extends myAction
     		$tmp = null;
     		$doneList[$i]["id"] = $done[$i]["id"];
     		$doneList[$i]["customName"] = $done[$i]["customName"];
+    		$doneList[$i]["createDate"] = $done[$i]["createDate"];
     		$doneList[$i]["printDate"] = $done[$i]["printDate"];
     		
     		//得到商品名称

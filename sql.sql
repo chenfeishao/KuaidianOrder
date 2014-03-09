@@ -30,14 +30,19 @@ create table user(
 	carAddress varchar(200) NOT NULL,
 	carNo varchar(100) NOT NULL,
 	
+	/*
+	 * 账户余额，即应收应付款
+	 */
+	money bigint NOT NULL,
+	
 	/*数据库要用的信息*/
 	tmpOrderID bigint NOT NULL,
 	preTmpOrderID bigint NOT NULL,
 	primary key(userName)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",1,1);
-insert user values("wwxwwx2008","hhschyy125","admin","hhsc","02983106853","方欣国际食品城一楼125号(后门口)","无","无",2,2);
-insert user values("youke","youke","pt","youke","812346567","快点软件","门口","无",3,3);
+insert user values("wbx","wbx","root","wbx","15355494740","东大街","9路车站","陕AA1111",0,1,1);
+insert user values("wwxwwx2008","hhschyy125","admin","hhsc","02983106853","方欣国际食品城一楼125号(后门口)","无","无",0,2,2);
+insert user values("youke","youke","pt","youke","812346567","快点软件","门口","无",0,3,3);
 
 create table tmp_order(
 	id bigint NOT NULL AUTO_INCREMENT,

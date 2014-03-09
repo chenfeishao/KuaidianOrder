@@ -124,6 +124,15 @@ class UserModel extends Model {
 	public function newTmpOrderID()
 	{
 		$dbTmpOrder = D("TmpOrder");
+		/*
+		 * 将当前订单（未新建）的创建时间加上
+		 */
+		$tmpAdd["id"] = $this->getTmpOrderID();
+		$tmpAdd["createDate"] = date("Y-m-d H:i:s");
+		$tmpAddRe = $dbTmpOrder->save($tmpAdd);
+		if ( ($tmpAddRe === false) || ($tmpAddRe === null) )
+			return false;
+		
 		$tmpData["printState"] = 8;
 		$tmp = null;
 		$tmp["tmpOrderID"] = $dbTmpOrder->add($tmpData);

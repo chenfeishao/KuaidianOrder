@@ -50,8 +50,9 @@ function goDelete(url)
 				                <tr>
 				                	<th class="text-center">序号</th>
 				                    <th class="text-center">顾客名称</th>
-				                    <th class="text-center">打印时间</th>
 				                    <th class="text-center">商品</th>
+				                    <th class="text-center">创建时间</th>
+				                    <th class="text-center">打印时间</th>
 				                    <th class="text-center">状态</th>
 				                    <th class="text-center">操作</th>
 				                </tr>
@@ -62,12 +63,10 @@ function goDelete(url)
 							    		<td style="width: 50px;"><?php echo ($i); ?>
 							    		</td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
-							    		<td class="right span2"><?php echo ($vo["printDate"]); ?>
-							    		</td>
-							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?>
-							    		</td>
-							    		<td class="right span1"><?php echo ($vo["printState"]); ?>
-							    		</td>
+							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
+							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
+							    		<td class="right span1"><?php echo ($vo["printDate"]); ?></td>
+							    		<td class="right span1"><?php echo ($vo["printState"]); ?></td>
 										<td style="width: 100px;">
 											<a href="<?php echo U("Order/historyOver");?>?no=<?php echo ($vo["id"]); ?>" class="button success">查看</a>
 											<div onclick="goDelete('<?php echo U("Order/deleteTmpOrder");?>?no=<?php echo ($vo["id"]); ?>&t=<?php echo ($vo["tkey"]); ?>');" class="button warning">删除</div>
@@ -78,8 +77,9 @@ function goDelete(url)
 			                <tfoot>
 			                	<th class="text-center">序号</th>
 			                    <th class="text-center">顾客名称</th>
-			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">商品</th>
+			                    <th class="text-center">创建时间</th>
+			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">状态</th>
 			                    <th class="text-center">操作</th>
 			                </tfoot>
@@ -98,8 +98,9 @@ function goDelete(url)
 				                <tr>
 				                	<th class="text-center">序号</th>
 				                    <th class="text-center">顾客名称</th>
-				                    <th class="text-center">打印时间</th>
 				                    <th class="text-center">商品</th>
+				                    <th class="text-center">创建时间</th>
+				                    <th class="text-center">打印时间</th>
 				                    <th class="text-center">操作</th>
 				                </tr>
 			                </thead>
@@ -109,10 +110,9 @@ function goDelete(url)
 							    		<td style="width: 50px;"><?php echo ($i); ?>
 							    		</td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
-							    		<td class="right span2"><?php echo ($vo["printDate"]); ?>
-							    		</td>
-							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?>
-							    		</td>
+							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
+							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
+							    		<td class="right span1"><?php echo ($vo["printDate"]); ?></td>
 										<td style="width: 70px;">
 											<a href="<?php echo U("Order/historyOver");?>?no=<?php echo ($vo["id"]); ?>" class="button warning">查看</a>
 										</td>
@@ -122,8 +122,9 @@ function goDelete(url)
 			                <tfoot>
 			                	<th class="text-center">序号</th>
 			                    <th class="text-center">顾客名称</th>
-			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">商品</th>
+			                    <th class="text-center">创建时间</th>
+			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">操作</th>
 			                </tfoot>
 			            </table><?php endif; ?>
