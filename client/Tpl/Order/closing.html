@@ -9,7 +9,7 @@ function change(k)
 	money = document.getElementById(moneyName).value;
 	if (num == "") num = 0;
 	if (money == "") money = 0;
-	document.getElementById(jineName).value = num*money;
+	document.getElementById(jineName).value = Number(num*money).toFixed(2);
 	
 	totalID = {$totalID};
 	var totalNum = 0;
@@ -19,10 +19,10 @@ function change(k)
 		var numName = "myInputN" + i;
 		var jineName = "jine" + i;
 		totalNum += Number(document.getElementById(numName).value);
-		totalJine += Math.round(Number(document.getElementById(jineName).value));
+		totalJine += Number(document.getElementById(jineName).value);
 	}
 	document.getElementById("totalNum").innerHTML = '总数量：<strong>' + totalNum + '</strong>';
-	document.getElementById("totalJine").innerHTML = '总金额：<strong>' + totalJine + '</strong>';
+	document.getElementById("totalJine").innerHTML = '总金额：<strong>' + totalJine.toFixed(2) + '</strong>';
 }
 function clearInfo(k)
 {

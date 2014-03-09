@@ -164,6 +164,11 @@ class IndexAction extends myAction
     {
     	$this->display();
     }
+    
+    public function updateInfo()
+    {
+    	$this->display();
+    }
 }
 
 ?>

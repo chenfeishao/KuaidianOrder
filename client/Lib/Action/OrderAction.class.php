@@ -273,7 +273,7 @@ class OrderAction extends myAction
     		$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
     		$totalJinE += $orderInfo[$i]["jinE"];
     	}
-    	$totalJinE = round($totalJinE);
+    	$totalJinE = round($totalJinE,2);
     	
     	/*
     	 * 获取user信息
@@ -349,9 +349,9 @@ class OrderAction extends myAction
     	*/
     	//得到付款信息数据
     	$paymentData["customName"] = $this->_post("userName");
-    	$paymentData["save"] = $this->_post("save");
-    	$paymentData["xianJinShiShou"] = $this->_post("xianJinShiShou");
-    	$paymentData["yinHangShiShou"] = $this->_post("yinHangShiShou");
+    	$paymentData["save"] = round($this->_post("save"),2);
+    	$paymentData["xianJinShiShou"] = round($this->_post("xianJinShiShou"),2);
+    	$paymentData["yinHangShiShou"] = round($this->_post("yinHangShiShou"),2);
     	 
     	//更新TmpOrder中的付款信息
     	$dbUser->init(session("userName"));
@@ -396,11 +396,11 @@ class OrderAction extends myAction
     			$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
     			$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
     	
-    			$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+    			$orderInfo[$i]["jinE"] = round($orderInfo[$i]["num"] * $orderInfo[$i]["money"],2);//金额
     			$totalJinE += $orderInfo[$i]["jinE"];
     			$totalNum += $orderInfo[$i]["num"];
     	}
-    	 
+    	$totalJinE = round($totalJinE,2);
     	//渲染list
     	if (count($orderInfo) == 0)
     	{
@@ -413,14 +413,14 @@ class OrderAction extends myAction
     	 * 付款信息
     	 */
     	$tmpOrderInfo = $dbTmpOrder->getTmpOrderInfo();
-    	$yingShouJinE = $totalJinE - $tmpOrderInfo["save"];
-    	$benCiShiShou = $tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"];
+    	$yingShouJinE = round($totalJinE - $tmpOrderInfo["save"],2);
+    	$benCiShiShou = round($tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"],2);
     	$this->assign("save",$tmpOrderInfo["save"]);
     	$this->assign("xianJinShiShou",$tmpOrderInfo["xianJinShiShou"]);
     	$this->assign("yinHangShiShou",$tmpOrderInfo["yinHangShiShou"]);
     	$this->assign("yingShouJinE",$yingShouJinE);
     	$this->assign("benCiShiShou",$benCiShiShou);
-    	$benCiQianFuKuan = $benCiShiShou - $yingShouJinE;
+    	$benCiQianFuKuan = round($benCiShiShou - $yingShouJinE,2);
     	if ($benCiQianFuKuan == 0)
     		$benCiQianFuKuanInfo = "<strong class='text-info'>无  </strong>";
     	else if ($benCiQianFuKuan > 0)
@@ -806,7 +806,7 @@ class OrderAction extends myAction
     	$tmpSize = $dbGoods->getGoodsSize();//商品规格信息
     	$orderInfo[$i]["size"] = $tmpSize[$tmp["size"]["$i"]];//选中的规格信息
     	 
-    			$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+    			$orderInfo[$i]["jinE"] = round($orderInfo[$i]["num"] * $orderInfo[$i]["money"],2);//金额
     					$totalJinE += $orderInfo[$i]["jinE"];
     					$totalNum += $orderInfo[$i]["num"];
     	}
@@ -817,7 +817,7 @@ class OrderAction extends myAction
     			$orderInfo = null;
     	}
     	$this->assign("list",$orderInfo);
-    	$this->assign("totalJinE",$totalJinE);
+    	$this->assign("totalJinE",round($totalJinE,2));
     	 
     	/*
     	* 付款信息

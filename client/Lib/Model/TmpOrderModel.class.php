@@ -74,9 +74,9 @@ class TmpOrderModel extends OrderOP {
 			$numName = "num".($i+1);
 			$sizeName = "size".($i+1);
 			$moneyName = "money".($i+1);
-			$data['num'][$i] = $originData[$numName];
+			$data['num'][$i] = round($originData[$numName],2);
 			$data['size'][$i] = $originData[$sizeName];
-			$data['money'][$i] = $originData[$moneyName];
+			$data['money'][$i] = round($originData[$moneyName],2);
 			
 			//验证
 			if ( ($data['num'][$i] == "") || ($data['num'][$i] == null) )

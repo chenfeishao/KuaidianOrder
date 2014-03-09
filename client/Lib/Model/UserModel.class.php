@@ -163,14 +163,14 @@ class UserModel extends Model {
 		$tmpOrderInfo = $dbTmpOrder->getTmpOrderInfo();
 		$yingShouJinE = $totalJinE - $tmpOrderInfo["save"];
 		$benCiShiShou = $tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"];
-		$benCiQianFuKuan = $benCiShiShou - $yingShouJinE;
+		$benCiQianFuKuan = round($benCiShiShou - $yingShouJinE,2);
 		
 		//更新
 		$tmpCustom = null;
 		$tmpCustom["userName"] = $tmpOrderInfo["customName"];
 		$preUserName = $this->userName;
 		$this->init($tmpOrderInfo["customName"]);
-		$tmpCustom["money"] = ($this->getUserMoney() + $benCiQianFuKuan);
+		$tmpCustom["money"] = round($this->getUserMoney() + $benCiQianFuKuan,2);
 		$tmpCustomRe = $this->save($tmpCustom);
 		if ( ($tmpCustomRe === false) || ($tmpCustomRe === null) )
 			return false;

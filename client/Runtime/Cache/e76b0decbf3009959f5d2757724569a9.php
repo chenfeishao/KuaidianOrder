@@ -103,10 +103,10 @@ function change()
 	benCiQianFuKuan = document.getElementById("benCiQianFuKuan");
 	shiShou = document.getElementById("shiShou");
 	
-	yingShou.value = Number(originYingShou) - Number(save.value);
+	yingShou.value = (Number(originYingShou) - Number(save.value)).toFixed(2);
 	shiShouMoney = Number(xianJinShiShou.value) + Number(yinHangShiShou.value);
-	shiShou.innerHTML = shiShouMoney;
-	qianFuKuan = shiShouMoney - Number(yingShou.value);
+	shiShou.innerHTML = shiShouMoney.toFixed(2);
+	qianFuKuan = (shiShouMoney - Number(yingShou.value)).toFixed(2);
 	if (qianFuKuan == 0) 
 	{
 		$("#benCiQianFuKuan").removeClass("text-warning").removeClass("text-info").removeClass("text-success").addClass('text-info');
