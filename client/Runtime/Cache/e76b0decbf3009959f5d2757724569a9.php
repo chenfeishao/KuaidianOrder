@@ -23,6 +23,7 @@
     <title>快点订单系统</title>
 
 <script>
+var newUserTag = true;
 function getInfo()
 {
 	url = "<?php echo U("User/ajaxGetUserInfo");?>";
@@ -35,6 +36,8 @@ function getInfo()
 				data = data.split("<?php require_once(CONF_PATH."MyConfigINI.php");echo _AJAX_BREAK_TAG;?>");
 			 	if (data[0] == "错误的用户名")//用户名不存在
 			 	{
+			 		newUserTag = true;
+			 		
 					$("#tel").val("");
 					$("#tel").attr("placeholder","查无此人，输入信息创建新用户");
 					$("#historyMoney").html("该账户不存在");
@@ -46,6 +49,8 @@ function getInfo()
 			 	}
 			 	else
 			 	{
+			 		newUserTag = false;
+			 		
 			 		$("#tel").val(data[0]).attr("tabindex","999");
 			 		$("#address").val(data[1]).attr("tabindex","999");
 				 	$("#carAddress").val(data[2]).attr("tabindex","999");
@@ -69,6 +74,22 @@ function getInfo()
 			 	}
 			}
 		);
+}
+function blur123()
+{
+	if ($("#userName").val() == "")
+	{
+		alert('  用户名为空  这是不合法的输入');
+		newUserTag = false;
+	}
+	if (newUserTag)
+	{
+		strInfo = $("#userName").val() + '  是新用户，确定要添加吗';
+		if(!confirm(strInfo))
+		{
+			$("#userName").val("");
+		}
+	}
 }
 function change()
 {
@@ -123,7 +144,7 @@ function change()
 						<div class="span3">
 							<label><font color=black>客户名称*</font></label>
 		                   	<div class="input-control text" data-role="input-control">
-		                       <input id="userName" name="userName" type="text" tabindex="1" autofocus="" list="userNameList" oninput="getInfo(event);">
+		                       <input id="userName" name="userName" type="text" tabindex="1" autofocus="" list="userNameList" oninput="getInfo(event);" onblur="blur123();">
 		                       <button type="button" class="btn-clear"></button>
 		                    </div>
 		                </div>
