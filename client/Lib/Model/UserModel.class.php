@@ -32,6 +32,13 @@ class UserModel extends Model {
 		return $this->tmpOrderID;
 	}
 	
+	public function getUserMoney()
+	{
+		$condition['userName'] = $this->userName;
+		$result = $this->where($condition)->select();
+		return $result[0]["money"];
+	}
+	
 	public function getPreTmpOrderID()
 	{
 		$condition['userName'] = $this->userName;
@@ -124,8 +131,10 @@ class UserModel extends Model {
 	public function newTmpOrderID()
 	{
 		$dbTmpOrder = D("TmpOrder");
+		$dbTmpOrder->init($this->getTmpOrderID());
 		/*
-		 * 将当前订单（未新建）的创建时间加上
+		 * 更新将当前订单（未新建）的信息
+		 * 	1.加上订单创建时间
 		 */
 		$tmpAdd["id"] = $this->getTmpOrderID();
 		$tmpAdd["createDate"] = date("Y-m-d H:i:s");
@@ -133,6 +142,45 @@ class UserModel extends Model {
 		if ( ($tmpAddRe === false) || ($tmpAddRe === null) )
 			return false;
 		
+		/*
+		 * 	更新客户账户余额（money）
+		 */
+		//货物信息
+		$tmp["id"] = $dbTmpOrder->getArray("goodsIDArray");
+		$tmp["num"] = $dbTmpOrder->getArray("goodsNumArray");
+		$tmp["money"] = $dbTmpOrder->getArray("goodsMoneyArray");
+		$tmp["size"] = $dbTmpOrder->getArray("goodsSizeArray");
+		$totalJinE = 0;
+		for ($i = 0; $i < count($tmp["id"]); $i++)
+		{
+			$orderInfo[$i]["num"] = $tmp["num"]["$i"];
+			$orderInfo[$i]["money"] = $tmp["money"]["$i"];
+   
+			$orderInfo[$i]["jinE"] = $orderInfo[$i]["num"] * $orderInfo[$i]["money"];//金额
+			$totalJinE += $orderInfo[$i]["jinE"];
+		}
+		 //付款信息
+		$tmpOrderInfo = $dbTmpOrder->getTmpOrderInfo();
+		$yingShouJinE = $totalJinE - $tmpOrderInfo["save"];
+		$benCiShiShou = $tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"];
+		$benCiQianFuKuan = $benCiShiShou - $yingShouJinE;
+		
+		//更新
+		$tmpCustom = null;
+		$tmpCustom["userName"] = $tmpOrderInfo["customName"];
+		$preUserName = $this->userName;
+		$this->init($tmpOrderInfo["customName"]);
+		$tmpCustom["money"] = ($this->getUserMoney() + $benCiQianFuKuan);
+		$tmpCustomRe = $this->save($tmpCustom);
+		if ( ($tmpCustomRe === false) || ($tmpCustomRe === null) )
+			return false;
+		
+		
+		/*
+		 *  着手创建新的TmpOrder记录
+		 *  更新操作员表单数据 
+		 */
+		$this->init($preUserName);
 		$tmpData["printState"] = 8;
 		$tmp = null;
 		$tmp["tmpOrderID"] = $dbTmpOrder->add($tmpData);
