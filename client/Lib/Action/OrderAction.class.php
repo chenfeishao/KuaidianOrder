@@ -636,22 +636,22 @@ class OrderAction extends myAction
     	if ($mode === 1)
     	{
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' 
-    					and createDate>='".$date1."' and createDate<='".$date2."'")->select();
-    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1."' and createDate<='".$date2."'")->select();
+    					and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
     	}
     	elseif ($mode === 2)
     	{
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
-    					and printDate>='".$date1."' and printDate<='".$date2."'")->select();
-    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1."' and printDate<='".$date2."'")->select();
+    					and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
     	}
     	elseif ($mode === 3)
     	{
     		$str = "";
-    		$str .= "createDate='".$startDate[0]."'";
+    		$str .= "(createDate>='".$startDate[0]." 00:00:00' and createDate<='".$startDate[0]." 23:59:59')";
     		for ($i = 1; $i < count($startDate); $i++)
     		{
-    			$str .= " or createDate='".$startDate[$i]."'";
+    			$str .= " or (createDate>='".$startDate[$i]." 00:00:00' and createDate<='".$startDate[$i]." 23:59:59')";
     		}
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
     		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
@@ -665,10 +665,10 @@ class OrderAction extends myAction
     	elseif ($mode === 4)
     	{
     		$str = "";
-    		$str .= "printDate='".$startDate[0]."'";
+    		$str .= "(printDate>='".$startDate[0]." 00:00:00' and printDate<='".$startDate[0]." 23:59:59')";
     		for ($i = 1; $i < count($startDate); $i++)
     		{
-    			$str .= " or printDate='".$startDate[$i]."'";
+    			$str .= " or (printDate>='".$startDate[$i]." 00:00:00' and printDate<='".$startDate[$i]." 23:59:59')";
     		}
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
     		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
@@ -683,8 +683,8 @@ class OrderAction extends myAction
     	{
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
-    				and ((createDate>='".date("Y-m-d")."' and createDate<='".date("Y-m-d")."') 
-    				or (printDate>='".date("Y-m-d")."' and printDate<='".date("Y-m-d")."'))")->select();
+    				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
+    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->select();
     	}
     	
     	if (!$undone)

@@ -40,7 +40,8 @@ function goDelete(url)
         </h1><?php endif; ?>
       		<div class="panel" data-role="panel">
 				<div class="panel-header bg-indigo fg-white">
-					未完成的订单(所有日期)
+					<?php if(($mode == 0)): ?>未完成的订单(所有日期)
+					<?php else: ?>当天未完成的订单<?php endif; ?>
 				</div>
 				<div style="display: block;" class="panel-content">
 					<?php if($undoneList == NULL ): ?><b>没有未完成的订单</b>
@@ -88,7 +89,8 @@ function goDelete(url)
 			</div>
 			<div class="panel">
 				<div class="panel-header bg-green fg-white">
-					今天已完成订单
+					<?php if(($mode == 0)): ?>今天已完成订单
+					<?php else: ?>当天完成的订单<?php endif; ?>
 				</div>
 				<div class="panel-content grid fluid">
 					<?php if($doneList == NULL ): ?><b>没有已完成的订单</b>
