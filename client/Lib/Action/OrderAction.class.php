@@ -625,6 +625,9 @@ class OrderAction extends myAction
     */
     public function history($mode =0,$startDate = null,$endDate = null)
     {
+    	import('ORG.Util.Page');// 导入分页类
+    	$page = null;
+    	
     	$dbTmpOrder = D("TmpOrder");
     	$dbGoods = D("Goods");
     	/*
@@ -680,16 +683,29 @@ class OrderAction extends myAction
     	}
     	else
     	{
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' 
+    				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
+    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->count();
+    		$page = new Page($tmpOrderCount,3);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
     				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
-    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->select();
+    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
+    	//分页
+    	$page->setConfig('header','条订单');
+    	$show = $page->show();// 分页显示输出\
+    	dump($show);
+    	$this->assign('page',$show);// 赋值分页输出
+    	
     	
     	if (!$undone)
     		$undone = null;
     	if (!$done)
     		$done = null;
+
     	/*
     	 * 未完成的订单信息
     	*/
@@ -770,6 +786,7 @@ class OrderAction extends myAction
     	$this->assign("mode",$mode);
     	$this->display("Order:history");
     }
+    
     
     /*
      * 在历史界面的查看某一条单子的详细信息的界面
@@ -917,6 +934,7 @@ class OrderAction extends myAction
     	$this->isFalsePlus($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
     	redirect(U("Order/history"),0);
     }
+    
     
     /*
      * 重新打印3联
