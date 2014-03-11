@@ -73,6 +73,8 @@ function multButton(m)
 }
 function changePage(obj)
 {
+	if (obj.id == "")
+		return;
 	$.get(obj.id,
 			function(data,status)
 			{

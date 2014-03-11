@@ -93,9 +93,8 @@ function goDelete(url)
 					<?php else: ?>当天完成的订单<?php endif; ?>
 				</div>
 				<div class="panel-content grid fluid">
-					<?php if($doneList == NULL ): ?><b>没有已完成的订单</b>
-   					<?php else: ?>
-						<table class="table hovered">
+					<?php if($doneList == NULL ): ?><b>没有已完成的订单</b><?php endif; ?>
+   					<?php if($doneList != NULL ): ?><table class="table hovered">
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
@@ -131,23 +130,17 @@ function goDelete(url)
 			            </table>
 			            <div class="pagination">
                            <ul>
-                               	<?php if($prePage != ''): ?><li class="first"><a href='<?php echo ($theFirst); ?>'><i class="icon-first-2"></i></a></li>
-                               		<li class="prev"><a href='<?php echo ($prePage); ?>'><i class="icon-previous"></i></a></li>
-                               	<?php else: ?>
-                               		<li class="first disabled"><a href='<?php echo ($theFirst); ?>'><i class="icon-first-2"></i></a></li>
-                               		<li class="prev disabled"><a href='<?php echo ($prePage); ?>'><i class="icon-previous"></i></a></li><?php endif; ?>
+                               	<?php
+ if ($prePage != '') { if ($mode == 0) { echo "<li class='first'><a href='".$theFirst."'><i class='icon-first-2'></i></a></li>"; echo "<li class='prev'><a href='".$prePage."'><i class='icon-previous'></i></a></li>"; } else { echo "<li class='first' onclick='changePage(this);' id='".$theFirst."'><a><i class='icon-first-2'></i></a></li>"; echo "<li class='prev' onclick='changePage(this);' id='".$prePage."'><a><i class='icon-previous'></i></a></li>"; } } else { if ($mode == 0) { echo "<li class='first disabled'><a href='".$theFirst."'><i class='icon-first-2'></i></a></li>"; echo "<li class='prev disabled'><a href='".$prePage."'><i class='icon-previous'></i></a></li>"; } else { echo "<li class='first disabled' id='".$theFirst."' onclick='changePage(this);'><a><i class='icon-first-2'></i></a></li>"; echo "<li class='prev disabled' id='".$prePage."' onclick='changePage(this);'><a><i class='icon-previous'></i></a></li>"; } } ?>
                                	<?php echo ($linkPage); ?>
-                               	<?php if($nextPage != ''): ?><li class="spaces"><a>...</a></li>
-                               		<li><a href='<?php echo ($theEnd); ?>'><?php echo ($totalPages); ?></a>
-                               		<li class="next"><a href='<?php echo ($nextPage); ?>'><i class="icon-next"></i></a></li>
-                               		<li class="last"><a href='<?php echo ($theEnd); ?>'><i class="icon-last-2"></i></a></li>
-                               	<?php else: ?>
-                               		<li class="next disabled"><a href='<?php echo ($nextPage); ?>'><i class="icon-next"></i></a></li>
-                               		<li class="last disabled"><a href='<?php echo ($theEnd); ?>'><i class="icon-last-2"></i></a></li><?php endif; ?>
-                           </ul>
+                               	<?php
+ if ($nextPage != '') { echo "<li class='spaces'><a>...</a></li>"; if ($mode == 0) { echo "<li><a href='".$theEnd."'>".$totalPages."</a>"; echo "<li class='next'><a href='".$nextPage."'><i class='icon-next'></i></a></li>"; echo "<li class='last'><a href='".$theEnd."'><i class='icon-last-2'></i></a></li>"; } else { echo "<li id='".$theEnd."' onclick='changePage(this);'><a>".$totalPages."</a>"; echo "<li class='next' id='".$nextPage."' onclick='changePage(this);'><a><i class='icon-next'></i></a></li>"; echo "<li class='last' id='".$theEnd."' onclick='changePage(this);'><a><i class='icon-last-2'></i></a></li>"; } } else { if ($mode == 0) { echo "<li class='next disabled'><a href='".$nextPage."'><i class='icon-next'></i></a></li>"; echo "<li class='last disabled'><a href='".$theEnd."'><i class='icon-last-2'></i></a></li>"; } else { echo "<li class='next disabled' id='".$nextPage."' onclick='changePage(this);'><a><i class='icon-next'></i></a></li>"; echo "<li class='last disabled' id='".$theEnd."' onclick='changePage(this);'><a><i class='icon-last-2'></i></a></li>"; } } ?>
+                         </ul>
                        </div><?php endif; ?>
 				</div>
 			</div>
 <?php if(($mode == 0)): ?></div>
 </body>
 </html><?php endif; ?>
+
+<?php ?>

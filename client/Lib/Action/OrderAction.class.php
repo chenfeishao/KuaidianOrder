@@ -628,13 +628,9 @@ class OrderAction extends myAction
     {
     	import('ORG.Util.Page_co8bit');// 导入分页类
     	$page = null;
-    	$recordNum = 20;//每页显示的记录数
-    	//得到现在是第几页
-    	if ( ($this->_get("p") == null) || ($this->_get("p") == "") )
-    		$nowPageNum = 1;
-    	else
-    		$nowPageNum = $this->_get("p");
-    	
+    	$recordNum = 1;//每页显示的记录数
+    	$rollPage0 = 20;//页面上有多少个分页栏，在模式0下
+    	$rollPageNEQ0 = 15;//页面上有多少个分页栏，在模式不为0下
     	
     	$dbTmpOrder = D("TmpOrder");
     	$dbGoods = D("Goods");
@@ -646,7 +642,7 @@ class OrderAction extends myAction
     	if ($mode === 1)
     	{
     		$tmpOrderCount = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->count();
-    		$page = new Page($tmpOrderCount,$recordNum);// 实例化分页类 传入总记录数和每页显示的记录数
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
     		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' 
     					and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
@@ -655,9 +651,13 @@ class OrderAction extends myAction
     	}
     	elseif ($mode === 2)
     	{
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
     					and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
-    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	elseif ($mode === 3)
     	{
@@ -667,8 +667,13 @@ class OrderAction extends myAction
     		{
     			$str .= " or (createDate>='".$startDate[$i]." 00:00:00' and createDate<='".$startDate[$i]." 23:59:59')";
     		}
+    		
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and (".$str.")")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
-    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
+    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     		
     		if ($startDate === null)
     		{
@@ -684,8 +689,13 @@ class OrderAction extends myAction
     		{
     			$str .= " or (printDate>='".$startDate[$i]." 00:00:00' and printDate<='".$startDate[$i]." 23:59:59')";
     		}
+    		
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and (".$str.")")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
-    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
+    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     		
     		if ($startDate === null)
     		{
@@ -698,7 +708,7 @@ class OrderAction extends myAction
     		$tmpOrderCount = $dbTmpOrder->where("printState='7' 
     				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
     				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->count();
-    		$page = new Page($tmpOrderCount,$recordNum);// 实例化分页类 传入总记录数和每页显示的记录数
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPage0);// 实例化分页类 传入总记录数和每页显示的记录数
     		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
@@ -719,10 +729,9 @@ class OrderAction extends myAction
     		$page->setConfig("currentLabel","li class='active'");
     		$page->setConfig('otherLabel','li');
     	}
-    	$this->assign($page->show());//分页输出
-    	$this->assign("offset",($nowPageNum - 1) * $recordNum);//第多少页
-    	
-    	dump($page->show());
+    	$pageShow = $page->show();//输出分页信息
+    	$this->assign($pageShow);
+    	$this->assign("offset",($pageShow["nowPage"] - 1) * $recordNum);//第多少页的偏移量
     	
     	if (!$undone)
     		$undone = null;
@@ -1148,8 +1157,15 @@ class OrderAction extends myAction
     
     public function ajaxAdvancedQueryMult()
     {
-    	$mode = $this->_post("mode");
-    	$dateArray = explode(",",$this->_post("date"));
+    	if (!isset($_POST["mode"]))//翻页进来
+    	{
+    		$isNew = 0;
+    	}
+    	else
+    		$isNew = 1;
+    	
+    	$mode = $this->_param("mode");
+    	$dateArray = explode(",",$this->_param("date"));
     	array_pop($dateArray);//弹掉最后一个空的项（因为输入末尾带一个多余的逗号）
     	if (!checkDateArray($dateArray))
     	{
@@ -1167,11 +1183,11 @@ class OrderAction extends myAction
     	 
     	if ($mode == 1)
     	{
-    		$this->history(3,$newDateArray);
+    		$this->history(3,$newDateArray,$isNew);
     	}
     	elseif ($mode == 2)
     	{
-    		$this->history(4,$newDateArray);
+    		$this->history(4,$newDateArray,$isNew);
     	}
     	else
     		$this->error("非法操作");
