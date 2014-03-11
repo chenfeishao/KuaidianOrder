@@ -129,7 +129,6 @@ function goDelete(url)
 			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">操作</th>
 			                </tfoot>
-			                <?php echo ($page); ?>
 			            </table><?php endif; ?>
 				</div>
 			</div>

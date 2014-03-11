@@ -625,7 +625,7 @@ class OrderAction extends myAction
     */
     public function history($mode =0,$startDate = null,$endDate = null)
     {
-    	import('ORG.Util.Page');// 导入分页类
+    	import('ORG.Util.Page_co8bit');// 导入分页类
     	$page = null;
     	
     	$dbTmpOrder = D("TmpOrder");
@@ -695,11 +695,10 @@ class OrderAction extends myAction
     				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	//分页
-    	$page->setConfig('header','条订单');
+    	$page->setConfig('classText','asd');
     	$show = $page->show();// 分页显示输出\
-    	dump($show);
     	$this->assign('page',$show);// 赋值分页输出
-    	
+    	dump($show);
     	
     	if (!$undone)
     		$undone = null;
