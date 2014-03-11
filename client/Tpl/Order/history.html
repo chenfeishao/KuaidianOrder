@@ -97,8 +97,7 @@ function goDelete(url)
 			                <tbody class="grid fluid text-center">
 			                	<volist name="doneList" id="vo">
 							    	<tr>
-							    		<td style="width: 50px;">{$i}
-							    		</td>
+							    		<td style="width: 50px;">{$i+$offset}</td>
 							    		<td class="span2">{$vo.customName}</td>
 							    		<td class="right span5">{$vo.goodsName}</td>
 							    		<td class="right span1">{$vo.createDate}</td>
@@ -119,6 +118,27 @@ function goDelete(url)
 			                    <th class="text-center">操作</th>
 			                </tfoot>
 			            </table>
+			            <div class="pagination">
+                           <ul>
+                               	<if condition="$prePage neq ''">
+                               		<li class="first"><a href='{$theFirst}'><i class="icon-first-2"></i></a></li>
+                               		<li class="prev"><a href='{$prePage}'><i class="icon-previous"></i></a></li>
+                               	<else/>
+                               		<li class="first disabled"><a href='{$theFirst}'><i class="icon-first-2"></i></a></li>
+                               		<li class="prev disabled"><a href='{$prePage}'><i class="icon-previous"></i></a></li>
+                               	</if>
+                               	{$linkPage}
+                               	<if condition="$nextPage neq ''">
+                               		<li class="spaces"><a>...</a></li>
+                               		<li><a href='{$theEnd}'>{$totalPages}</a>
+                               		<li class="next"><a href='{$nextPage}'><i class="icon-next"></i></a></li>
+                               		<li class="last"><a href='{$theEnd}'><i class="icon-last-2"></i></a></li>
+                               	<else/>
+                               		<li class="next disabled"><a href='{$nextPage}'><i class="icon-next"></i></a></li>
+                               		<li class="last disabled"><a href='{$theEnd}'><i class="icon-last-2"></i></a></li>
+                               	</if>
+                           </ul>
+                       </div>
 					</if>
 				</div>
 			</div>

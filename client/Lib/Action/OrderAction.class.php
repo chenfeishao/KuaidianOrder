@@ -622,11 +622,19 @@ class OrderAction extends myAction
      * 					array;日期数组
      * 						array[i];日期，如2014-12-3（已处理过）
      * 			string $endDate;结束日期,如2014-12-3
+     * 			bool $isNew;是不是新页面，默认为1.为0代表是从其他页面翻页过来的
     */
-    public function history($mode =0,$startDate = null,$endDate = null)
+    public function history($mode = 0,$startDate = null,$endDate = null,$isNew = 1)
     {
     	import('ORG.Util.Page_co8bit');// 导入分页类
     	$page = null;
+    	$recordNum = 20;//每页显示的记录数
+    	//得到现在是第几页
+    	if ( ($this->_get("p") == null) || ($this->_get("p") == "") )
+    		$nowPageNum = 1;
+    	else
+    		$nowPageNum = $this->_get("p");
+    	
     	
     	$dbTmpOrder = D("TmpOrder");
     	$dbGoods = D("Goods");
@@ -637,9 +645,13 @@ class OrderAction extends myAction
     	$date2 = $endDate[0]."-".$endDate[1]."-".$endDate[2];
     	if ($mode === 1)
     	{
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->count();
+    		$page = new Page($tmpOrderCount,$recordNum);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' 
     					and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
-    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	elseif ($mode === 2)
     	{
@@ -686,7 +698,7 @@ class OrderAction extends myAction
     		$tmpOrderCount = $dbTmpOrder->where("printState='7' 
     				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
     				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->count();
-    		$page = new Page($tmpOrderCount,3);// 实例化分页类 传入总记录数和每页显示的记录数
+    		$page = new Page($tmpOrderCount,$recordNum);// 实例化分页类 传入总记录数和每页显示的记录数
     		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
@@ -695,10 +707,22 @@ class OrderAction extends myAction
     				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	//分页
-    	$page->setConfig('classText','asd');
-    	$show = $page->show();// 分页显示输出\
-    	$this->assign('page',$show);// 赋值分页输出
-    	dump($show);
+    	if ($mode !== 0)//高级查询页面的分页
+    	{
+    		$page->setConfig("currentLabel","li class='active'");
+    		$page->setConfig('otherLabel',"li onclick='changePage(this);'");
+    		$page->setConfig("hasHref",false);
+    	}
+    	else//普通查询页面的分页
+    	{
+    		$page->setConfig("hasHref",true);
+    		$page->setConfig("currentLabel","li class='active'");
+    		$page->setConfig('otherLabel','li');
+    	}
+    	$this->assign($page->show());//分页输出
+    	$this->assign("offset",($nowPageNum - 1) * $recordNum);//第多少页
+    	
+    	dump($page->show());
     	
     	if (!$undone)
     		$undone = null;
@@ -1095,9 +1119,16 @@ class OrderAction extends myAction
     
     public function ajaxAdvancedQueryInterval()
     {
-    	$mode = $this->_post("mode");
-    	sscanf($this->_post("startDate"),"%d年%d月%d日,星期%s",$startDate[0],$startDate[1],$startDate[2],$startDate[3]);
-    	sscanf($this->_post("endDate"),"%d年%d月%d日,星期%s",$endDate[0],$endDate[1],$endDate[2],$endDate[3]);
+    	if (!isset($_POST["mode"]))//翻页进来
+    	{
+    		$isNew = 0;
+	    }
+	    else
+	    	$isNew = 1;
+	    
+	    $mode = $this->_param("mode");
+	    sscanf($this->_param("startDate"),"%d年%d月%d日,星期%s",$startDate[0],$startDate[1],$startDate[2],$startDate[3]);
+	    sscanf($this->_param("endDate"),"%d年%d月%d日,星期%s",$endDate[0],$endDate[1],$endDate[2],$endDate[3]);
     	if ( (!checkIsDate($startDate)) || (!checkIsDate($endDate)) )
     	{
     		$this->error("日期输入有问题，请重试","Index/goBack");
@@ -1105,11 +1136,11 @@ class OrderAction extends myAction
     	
     	if ($mode == 1)
     	{
-    		$this->history(1,$startDate,$endDate);
+    		$this->history(1,$startDate,$endDate,$isNew);
     	}
     	elseif ($mode == 2)
     	{
-    		$this->history(2,$startDate,$endDate);
+    		$this->history(2,$startDate,$endDate,$isNew);
     	}
     	else
     		$this->error("非法操作");

@@ -109,8 +109,7 @@ function goDelete(url)
 							
 			                <tbody class="grid fluid text-center">
 			                	<?php if(is_array($doneList)): $i = 0; $__LIST__ = $doneList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
-							    		<td style="width: 50px;"><?php echo ($i); ?>
-							    		</td>
+							    		<td style="width: 50px;"><?php echo ($i+$offset); ?></td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
 							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
@@ -129,7 +128,24 @@ function goDelete(url)
 			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">操作</th>
 			                </tfoot>
-			            </table><?php endif; ?>
+			            </table>
+			            <div class="pagination">
+                           <ul>
+                               	<?php if($prePage != ''): ?><li class="first"><a href='<?php echo ($theFirst); ?>'><i class="icon-first-2"></i></a></li>
+                               		<li class="prev"><a href='<?php echo ($prePage); ?>'><i class="icon-previous"></i></a></li>
+                               	<?php else: ?>
+                               		<li class="first disabled"><a href='<?php echo ($theFirst); ?>'><i class="icon-first-2"></i></a></li>
+                               		<li class="prev disabled"><a href='<?php echo ($prePage); ?>'><i class="icon-previous"></i></a></li><?php endif; ?>
+                               	<?php echo ($linkPage); ?>
+                               	<?php if($nextPage != ''): ?><li class="spaces"><a>...</a></li>
+                               		<li><a href='<?php echo ($theEnd); ?>'><?php echo ($totalPages); ?></a>
+                               		<li class="next"><a href='<?php echo ($nextPage); ?>'><i class="icon-next"></i></a></li>
+                               		<li class="last"><a href='<?php echo ($theEnd); ?>'><i class="icon-last-2"></i></a></li>
+                               	<?php else: ?>
+                               		<li class="next disabled"><a href='<?php echo ($nextPage); ?>'><i class="icon-next"></i></a></li>
+                               		<li class="last disabled"><a href='<?php echo ($theEnd); ?>'><i class="icon-last-2"></i></a></li><?php endif; ?>
+                           </ul>
+                       </div><?php endif; ?>
 				</div>
 			</div>
 <?php if(($mode == 0)): ?></div>
