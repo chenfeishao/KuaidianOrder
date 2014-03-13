@@ -31,7 +31,7 @@
     <div class="container">
         <h1>
        		<a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	版本更新信息<small class="on-right">2014.3.8</small>
+           	版本更新信息<small class="on-right">2014.3.13</small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
@@ -46,9 +46,19 @@
                                 	到后台管理界面登录，然后选择  浏览商品  ，然后选择一个具体的商品，进入后就能修改该商品的信息了。
                                 	</li>
                                 	<li>
+                                	<b>在  结算信息页面  加入了历史欠付款情况</b><br>
+                                	相应的添加了账户余额功能。
+                                	</li>
+                                	<li>
+                                	<b>金额计算精确到小数点后两位</b><br>
+                                	</li>
+                                	<li>
                                 	<b>对于历史记录页面添加了分页</b><br>
                                 	对于大量数据可以翻页了。<br>
                                 	默认每页显示20条记录。
+                                	</li>
+                                	<li>
+                                	<b>在  结算信息页面  添加了新用户确认功能</b><br>
                                 	</li>
                                 	<li>
                                 	<b>给后台管理系统登陆界面添加了验证码</b><br>
@@ -60,7 +70,7 @@
                             </div>
                         </div>
                         <div class="accordion-frame">
-                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.5</a>
+                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新</a>
                             <div class="content">
                             	<strong>V1.1.2版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.8</strong>
                             	<ol>
