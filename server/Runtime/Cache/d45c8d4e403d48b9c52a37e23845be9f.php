@@ -1,6 +1,6 @@
 <?php if (!defined('THINK_PATH')) exit();?><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+<title>快点订餐系统——后台</title>
 <!-- Bootstrap -->   <link href="__PUBLIC__/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
    <style type="text/css">
@@ -57,7 +57,7 @@ function fleshVerify(){
         <input type="text" class="input-block-level" placeholder="验证码" name="yzm">
         <div class="row">
         	<img id="verifyImg" class="span2" src='<?php echo U("Public/verify");?>' onclick="fleshVerify();"/>
-        	<div class="span2">请输入左侧的验证码。<br><b>注意：区分大小写</b></div>
+        	<div class="span2">请输入左侧的验证码。<br></div>
         </div>
         <br>
         <button class="btn btn-large btn-primary" type="submit">登录</button>
