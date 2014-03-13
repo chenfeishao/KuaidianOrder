@@ -148,7 +148,7 @@ function onKeyDownDo(e)
 </head>
 <body class="metro">
 <div class="tile-area tile-area-dark">
-    <h1 class="tile-area-title fg-white">欢迎<small>V1.1.2&nbsp;&nbsp;&nbsp;<a href="<?php echo U("Index/updateInfo");?>">点此查看本次版本更新内容</a></small></h1>
+    <h1 class="tile-area-title fg-white">欢迎<small>V1.1.3&nbsp;&nbsp;&nbsp;<a href="<?php echo U("Index/updateInfo");?>">点此查看本次版本更新内容</a></small></h1>
 
     <div class="user-id" id="userWindows">
         <div class="user-id-image">
