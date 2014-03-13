@@ -32,7 +32,7 @@
     <div class="container">
         <h1>
        		<a class="element place-right" href="<?php echo U("User/logout");?>"><i class="icon-exit fg-darker smaller"></i></a>
-           	首页<small class="on-right"><?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
+           	首页<small class="on-right"><?php echo (session('serverUserName')); ?>&nbsp;<?php echo (session('serverUserPower')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
@@ -41,8 +41,8 @@
                         <button class="shortcut primary" onclick="window.location = '<?php echo U('Goods/add');?>'" data-click="transform">
                             <h2>添加商品</h2>
                         </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Goods/edit');?>'" data-click="transform">
-                            <h2>修改商品</h2>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Goods/watch');?>'" data-click="transform">
+                            <h2>浏览商品</h2>
                         </button>
                     </div>
                 </div>

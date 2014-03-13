@@ -17,9 +17,9 @@ class IndexAction extends myAction
     
     public function main()
     {
-    	if (!$this->checkPower("serverPower",session("SeverUserPower")))
+    	if (!$this->checkPower("serverPower",session("serverUserPower")))
     		$this->error("非法访问",U("Index/index"));
-    	
+
     	$this->display();
     }
     

@@ -36,6 +36,13 @@
       }
 
     </style>
+<script>
+function fleshVerify(){ 
+    //重载验证码
+    var time = new Date().getTime();
+        document.getElementById('verifyImg').src= '__APP__/Public/verify/'+time;
+}
+</script>
 </head>
 <html>
 
@@ -48,7 +55,10 @@
         <input type="text" class="input-block-level" placeholder="用户名" name="userName">
         <input type="password" class="input-block-level" placeholder="密码" name="userPassword">
         <input type="text" class="input-block-level" placeholder="验证码" name="yzm">
-        <div class="row"><img class="span2" src='<?php echo U("Public/verify");?>' /></div>
+        <div class="row">
+        	<img id="verifyImg" class="span2" src='<?php echo U("Public/verify");?>' onclick="fleshVerify();"/>
+        	<div class="span2">请输入左侧的验证码。<br><b>注意：区分大小写</b></div>
+        </div>
         <br>
         <button class="btn btn-large btn-primary" type="submit">登录</button>
       </form>

@@ -226,7 +226,7 @@ function onKeyDownDo(e)
 
 
     <div class="tile-group eleven">
-        <div class="tile-group-title">货物清单</div>
+        <div class="tile-group-title">商品</div>
         
         <div class="tab-control" data-effect="fade" data-role="tab-control">
 		    <ul class="tabs">

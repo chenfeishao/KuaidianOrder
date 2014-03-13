@@ -10,7 +10,7 @@ class UserAction extends myAction
 	
 	private function isLogin()//判断是否已经登陆
 	{
-		if (session('?SeverUserName'))//如果用户已经存在
+		if (session('?serverUserName'))//如果用户已经存在
 		{
 			return true;
 		}
@@ -42,7 +42,7 @@ class UserAction extends myAction
     	if($result = $dbUser->login($this->_post('userPassword')))
     	{
     		//设置session
-    		session('SeverUserName',$result['userName']);
+    		session('serverUserName',$result['userName']);
     		switch ($result['userPower'])
     		{
     			case "root": $userPower = "根账户";break;
@@ -53,8 +53,8 @@ class UserAction extends myAction
     			case "j": $userPower = "金账户";break;
     			default: $userPower = "普通账户";break;
     		}
-    		session('SeverUserPower',$userPower);
-    		cookie('SeverUserName',$result['userName']);
+    		session('serverUserPower',$userPower);
+    		cookie('serverUserName',$result['userName']);
     		
     		$this->success('登陆成功',U('Index/main'));
     	}
@@ -67,18 +67,18 @@ class UserAction extends myAction
     public function logout()//安全退出
     {
     	//判断session是否存在
-    	if (!session('?SeverUserName'))
+    	if (!session('?serverUserName'))
     	{
     		$this->error('非法登录',U('Index/index'));
     	}
     
     	//删除session
-    	session('SeverUserName',null);
-    	session('SeverUserPower',null);
-    	cookie('SeverUserName',null);
+    	session('serverUserName',null);
+    	session('serverUserPower',null);
+    	cookie('serverUserName',null);
     
     	//再次判断session是否存在
-    	if ( (session('?SeverUserName')) || (session('?SeverUserPower')) )
+    	if ( (session('?serverUserName')) || (session('?serverUserPower')) )
     		$this->error('退出失败');
     	else
     		$this->success('退出成功',U('Index/index'));////////////////////////////////////////////////////////
