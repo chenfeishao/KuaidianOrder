@@ -1,0 +1,16 @@
+<volist name="list" id="vo">
+   	<tr>
+   		<td style="width: 50px;">{$i}
+   		</td>
+   		<td class="span2">{$vo.customName}</td>
+   		<td class="right span5">{$vo.goodsName}</td>
+   		<td class="right span1">{$vo.createDate}</td>
+   		<td class="right span1">{$vo.printDate}</td>
+   		<td class="right span1">{$vo.printState}</td>
+		<td style="width: 100px;">
+			<a href="{:U("Order/historyOver")}?no={$vo.id}" class="button success">查看</a>
+			<div onclick="goDelete('{:U("Order/deleteTmpOrder")}?no={$vo.id}&t={$vo.tkey}');" class="button warning">删除</div>
+		</td>
+	</tr>
+</volist>
+{$page}

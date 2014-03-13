@@ -1,10 +1,16 @@
 <?php
+require_once(LIB_PATH."commonAction.php");
 
-class UserAction extends Action
+class UserAction extends myAction
 {
+	protected function _initialize()
+	{
+		header("Content-Type:text/html; charset=utf-8");
+	}
+	
 	private function isLogin()//判断是否已经登陆
 	{
-		if (session('?SeverUserName'))//如果用户已经存在
+		if (session('?serverUserName'))//如果用户已经存在
 		{
 			return true;
 		}
@@ -26,13 +32,18 @@ class UserAction extends Action
     
     public function toLogin()//判断登录是否成功
     {
+    	if(session('verify') != md5($this->_post('yzm')))
+    	{
+    		$this->error('验证码错误！',U("Index/index"));
+    	}
+    	
     	$dbUser = D("User");
     	$dbUser->init($this->_post('userName'));
     	if($result = $dbUser->login($this->_post('userPassword')))
     	{
     		//设置session
-    		session('SeverUserName',$result[0]['userName']);
-    		switch ($result[0]['userPower'])
+    		session('serverUserName',$result['userName']);
+    		switch ($result['userPower'])
     		{
     			case "root": $userPower = "根账户";break;
     			case "admin": $userPower = "管理员";break;
@@ -42,8 +53,8 @@ class UserAction extends Action
     			case "j": $userPower = "金账户";break;
     			default: $userPower = "普通账户";break;
     		}
-    		session('SeverUserPower',$userPower);
-    		cookie('SeverUserName',$result[0]['userName']);
+    		session('serverUserPower',$userPower);
+    		cookie('serverUserName',$result['userName']);
     		
     		$this->success('登陆成功',U('Index/main'));
     	}
@@ -56,18 +67,18 @@ class UserAction extends Action
     public function logout()//安全退出
     {
     	//判断session是否存在
-    	if (!session('?SeverUserName'))
+    	if (!session('?serverUserName'))
     	{
     		$this->error('非法登录',U('Index/index'));
     	}
     
     	//删除session
-    	session('SeverUserName',null);
-    	session('SeverUserPower',null);
-    	cookie('SeverUserName',null);
+    	session('serverUserName',null);
+    	session('serverUserPower',null);
+    	cookie('serverUserName',null);
     
     	//再次判断session是否存在
-    	if ( (session('?SeverUserName')) || (session('?SeverUserPower')) )
+    	if ( (session('?serverUserName')) || (session('?serverUserPower')) )
     		$this->error('退出失败');
     	else
     		$this->success('退出成功',U('Index/index'));////////////////////////////////////////////////////////

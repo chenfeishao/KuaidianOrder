@@ -35,7 +35,13 @@ class UserModel extends Model {
 	{
 		$condition['userName'] = $this->userName;
 		$condition['userPassword'] = $userPassword;
-		return $this->where($condition)->select();
+		$tmp = $this->where($condition)->select();
+		if ( ($tmp[0]["userPower"] == "root")
+				|| ($tmp[0]["userPower"] == "admin")
+			)
+			return $tmp[0];
+		else
+			return false;
 	}
 }
 ?>

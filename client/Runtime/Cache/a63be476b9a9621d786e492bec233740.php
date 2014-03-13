@@ -71,6 +71,19 @@ function multButton(m)
 			}
 		);
 }
+function changePage(obj)
+{
+	if (obj.id == "")
+		return;
+	$.get(obj.id,
+			function(data,status)
+			{
+				$("#multBlock").attr("style","display: none;");
+				$("#intervalBlock").attr("style","display: none;");
+				$("#resultBlock").attr("style","display:block;").html("").html(data);
+			}
+		);
+}
 </script>
 </head>
 

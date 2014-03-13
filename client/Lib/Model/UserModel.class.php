@@ -61,7 +61,7 @@ class UserModel extends Model {
 				|| ($tmp[0]["userPower"] == "admin")
 				|| ($tmp[0]["userPower"] == "yyy")
 			)
-			return $tmp;
+			return $tmp[0];
 		else
 			return false;
 	}

@@ -75,21 +75,6 @@ function checkDateArray($dateArray)
 
 
 /*
- * 给数组添加中断标记并转换成字符串
- * @param	array $data;原始数据
- * @return	string;转换完成后的字符串
- */
-function transformWithSpecalBreakTag($data)
-{
-	$re = "";
-	for ($i = 0; $i < count($data); $i++)
-	{
-		$re .= _SPECAL_BREAK_FLAG.$data[$i];
-	}
-	return $re;
-}
-
-/*
  * 得到一个汉字的拼音
 * @param	char $s0;要转换的中文汉字
 * @return	char;中文汉字的拼音首字母

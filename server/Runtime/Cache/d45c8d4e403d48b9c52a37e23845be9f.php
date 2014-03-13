@@ -1,6 +1,6 @@
 <?php if (!defined('THINK_PATH')) exit();?><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+<title>快点订餐系统——后台</title>
 <!-- Bootstrap -->   <link href="__PUBLIC__/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
    <style type="text/css">
@@ -36,6 +36,13 @@
       }
 
     </style>
+<script>
+function fleshVerify(){ 
+    //重载验证码
+    var time = new Date().getTime();
+        document.getElementById('verifyImg').src= '__APP__/Public/verify/'+time;
+}
+</script>
 </head>
 <html>
 
@@ -47,6 +54,12 @@
         <h2 class="form-signin-heading">登录</h2>
         <input type="text" class="input-block-level" placeholder="用户名" name="userName">
         <input type="password" class="input-block-level" placeholder="密码" name="userPassword">
+        <input type="text" class="input-block-level" placeholder="验证码" name="yzm">
+        <div class="row">
+        	<img id="verifyImg" class="span2" src='<?php echo U("Public/verify");?>' onclick="fleshVerify();"/>
+        	<div class="span2">请输入左侧的验证码。<br></div>
+        </div>
+        <br>
         <button class="btn btn-large btn-primary" type="submit">登录</button>
       </form>
 

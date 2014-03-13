@@ -622,9 +622,16 @@ class OrderAction extends myAction
      * 					array;日期数组
      * 						array[i];日期，如2014-12-3（已处理过）
      * 			string $endDate;结束日期,如2014-12-3
+     * 			bool $isNew;是不是新页面，默认为1.为0代表是从其他页面翻页过来的
     */
-    public function history($mode =0,$startDate = null,$endDate = null)
+    public function history($mode = 0,$startDate = null,$endDate = null,$isNew = 1)
     {
+    	import('ORG.Util.Page_co8bit');// 导入分页类
+    	$page = null;
+    	$recordNum = 1;//每页显示的记录数
+    	$rollPage0 = 20;//页面上有多少个分页栏，在模式0下
+    	$rollPageNEQ0 = 15;//页面上有多少个分页栏，在模式不为0下
+    	
     	$dbTmpOrder = D("TmpOrder");
     	$dbGoods = D("Goods");
     	/*
@@ -634,15 +641,23 @@ class OrderAction extends myAction
     	$date2 = $endDate[0]."-".$endDate[1]."-".$endDate[2];
     	if ($mode === 1)
     	{
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' 
     					and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
-    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	elseif ($mode === 2)
     	{
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
     					and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
-    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
+    		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	elseif ($mode === 3)
     	{
@@ -652,8 +667,13 @@ class OrderAction extends myAction
     		{
     			$str .= " or (createDate>='".$startDate[$i]." 00:00:00' and createDate<='".$startDate[$i]." 23:59:59')";
     		}
+    		
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and (".$str.")")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
-    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
+    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     		
     		if ($startDate === null)
     		{
@@ -669,8 +689,13 @@ class OrderAction extends myAction
     		{
     			$str .= " or (printDate>='".$startDate[$i]." 00:00:00' and printDate<='".$startDate[$i]." 23:59:59')";
     		}
+    		
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' and (".$str.")")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
-    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")->select();
+    		$done = $dbTmpOrder->where("printState='7' and (".$str.")")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     		
     		if ($startDate === null)
     		{
@@ -680,16 +705,39 @@ class OrderAction extends myAction
     	}
     	else
     	{
+    		$tmpOrderCount = $dbTmpOrder->where("printState='7' 
+    				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
+    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->count();
+    		$page = new Page($tmpOrderCount,$recordNum,$rollPage0);// 实例化分页类 传入总记录数和每页显示的记录数
+    		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
     				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
-    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")->select();
+    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")
+    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
+    	//分页
+    	if ($mode !== 0)//高级查询页面的分页
+    	{
+    		$page->setConfig("currentLabel","li class='active'");
+    		$page->setConfig('otherLabel',"li onclick='changePage(this);'");
+    		$page->setConfig("hasHref",false);
+    	}
+    	else//普通查询页面的分页
+    	{
+    		$page->setConfig("hasHref",true);
+    		$page->setConfig("currentLabel","li class='active'");
+    		$page->setConfig('otherLabel','li');
+    	}
+    	$pageShow = $page->show();//输出分页信息
+    	$this->assign($pageShow);
+    	$this->assign("offset",($pageShow["nowPage"] - 1) * $recordNum);//第多少页的偏移量
     	
     	if (!$undone)
     		$undone = null;
     	if (!$done)
     		$done = null;
+
     	/*
     	 * 未完成的订单信息
     	*/
@@ -770,6 +818,7 @@ class OrderAction extends myAction
     	$this->assign("mode",$mode);
     	$this->display("Order:history");
     }
+    
     
     /*
      * 在历史界面的查看某一条单子的详细信息的界面
@@ -917,6 +966,7 @@ class OrderAction extends myAction
     	$this->isFalsePlus($dbTmpOrder->where($condition)->delete(),"删除失败，请重试","Order/history");//返回0代表影响了0个，而不是删除了0个
     	redirect(U("Order/history"),0);
     }
+    
     
     /*
      * 重新打印3联
@@ -1078,9 +1128,16 @@ class OrderAction extends myAction
     
     public function ajaxAdvancedQueryInterval()
     {
-    	$mode = $this->_post("mode");
-    	sscanf($this->_post("startDate"),"%d年%d月%d日,星期%s",$startDate[0],$startDate[1],$startDate[2],$startDate[3]);
-    	sscanf($this->_post("endDate"),"%d年%d月%d日,星期%s",$endDate[0],$endDate[1],$endDate[2],$endDate[3]);
+    	if (!isset($_POST["mode"]))//翻页进来
+    	{
+    		$isNew = 0;
+	    }
+	    else
+	    	$isNew = 1;
+	    
+	    $mode = $this->_param("mode");
+	    sscanf($this->_param("startDate"),"%d年%d月%d日,星期%s",$startDate[0],$startDate[1],$startDate[2],$startDate[3]);
+	    sscanf($this->_param("endDate"),"%d年%d月%d日,星期%s",$endDate[0],$endDate[1],$endDate[2],$endDate[3]);
     	if ( (!checkIsDate($startDate)) || (!checkIsDate($endDate)) )
     	{
     		$this->error("日期输入有问题，请重试","Index/goBack");
@@ -1088,11 +1145,11 @@ class OrderAction extends myAction
     	
     	if ($mode == 1)
     	{
-    		$this->history(1,$startDate,$endDate);
+    		$this->history(1,$startDate,$endDate,$isNew);
     	}
     	elseif ($mode == 2)
     	{
-    		$this->history(2,$startDate,$endDate);
+    		$this->history(2,$startDate,$endDate,$isNew);
     	}
     	else
     		$this->error("非法操作");
@@ -1100,8 +1157,15 @@ class OrderAction extends myAction
     
     public function ajaxAdvancedQueryMult()
     {
-    	$mode = $this->_post("mode");
-    	$dateArray = explode(",",$this->_post("date"));
+    	if (!isset($_POST["mode"]))//翻页进来
+    	{
+    		$isNew = 0;
+    	}
+    	else
+    		$isNew = 1;
+    	
+    	$mode = $this->_param("mode");
+    	$dateArray = explode(",",$this->_param("date"));
     	array_pop($dateArray);//弹掉最后一个空的项（因为输入末尾带一个多余的逗号）
     	if (!checkDateArray($dateArray))
     	{
@@ -1119,11 +1183,11 @@ class OrderAction extends myAction
     	 
     	if ($mode == 1)
     	{
-    		$this->history(3,$newDateArray);
+    		$this->history(3,$newDateArray,$isNew);
     	}
     	elseif ($mode == 2)
     	{
-    		$this->history(4,$newDateArray);
+    		$this->history(4,$newDateArray,$isNew);
     	}
     	else
     		$this->error("非法操作");

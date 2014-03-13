@@ -93,9 +93,8 @@ function goDelete(url)
 					<?php else: ?>当天完成的订单<?php endif; ?>
 				</div>
 				<div class="panel-content grid fluid">
-					<?php if($doneList == NULL ): ?><b>没有已完成的订单</b>
-   					<?php else: ?>
-						<table class="table hovered">
+					<?php if($doneList == NULL ): ?><b>没有已完成的订单</b><?php endif; ?>
+   					<?php if($doneList != NULL ): ?><table class="table hovered">
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
@@ -109,8 +108,7 @@ function goDelete(url)
 							
 			                <tbody class="grid fluid text-center">
 			                	<?php if(is_array($doneList)): $i = 0; $__LIST__ = $doneList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
-							    		<td style="width: 50px;"><?php echo ($i); ?>
-							    		</td>
+							    		<td style="width: 50px;"><?php echo ($i+$offset); ?></td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
 							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
@@ -129,9 +127,20 @@ function goDelete(url)
 			                    <th class="text-center">打印时间</th>
 			                    <th class="text-center">操作</th>
 			                </tfoot>
-			            </table><?php endif; ?>
+			            </table>
+			            <div class="pagination">
+                           <ul>
+                               	<?php
+ if ($prePage != '') { if ($mode == 0) { echo "<li class='first'><a href='".$theFirst."'><i class='icon-first-2'></i></a></li>"; echo "<li class='prev'><a href='".$prePage."'><i class='icon-previous'></i></a></li>"; } else { echo "<li class='first' onclick='changePage(this);' id='".$theFirst."'><a><i class='icon-first-2'></i></a></li>"; echo "<li class='prev' onclick='changePage(this);' id='".$prePage."'><a><i class='icon-previous'></i></a></li>"; } } else { if ($mode == 0) { echo "<li class='first disabled'><a href='".$theFirst."'><i class='icon-first-2'></i></a></li>"; echo "<li class='prev disabled'><a href='".$prePage."'><i class='icon-previous'></i></a></li>"; } else { echo "<li class='first disabled' id='".$theFirst."' onclick='changePage(this);'><a><i class='icon-first-2'></i></a></li>"; echo "<li class='prev disabled' id='".$prePage."' onclick='changePage(this);'><a><i class='icon-previous'></i></a></li>"; } } ?>
+                               	<?php echo ($linkPage); ?>
+                               	<?php
+ if ($nextPage != '') { echo "<li class='spaces'><a>...</a></li>"; if ($mode == 0) { echo "<li><a href='".$theEnd."'>".$totalPages."</a>"; echo "<li class='next'><a href='".$nextPage."'><i class='icon-next'></i></a></li>"; echo "<li class='last'><a href='".$theEnd."'><i class='icon-last-2'></i></a></li>"; } else { echo "<li id='".$theEnd."' onclick='changePage(this);'><a>".$totalPages."</a>"; echo "<li class='next' id='".$nextPage."' onclick='changePage(this);'><a><i class='icon-next'></i></a></li>"; echo "<li class='last' id='".$theEnd."' onclick='changePage(this);'><a><i class='icon-last-2'></i></a></li>"; } } else { if ($mode == 0) { echo "<li class='next disabled'><a href='".$nextPage."'><i class='icon-next'></i></a></li>"; echo "<li class='last disabled'><a href='".$theEnd."'><i class='icon-last-2'></i></a></li>"; } else { echo "<li class='next disabled' id='".$nextPage."' onclick='changePage(this);'><a><i class='icon-next'></i></a></li>"; echo "<li class='last disabled' id='".$theEnd."' onclick='changePage(this);'><a><i class='icon-last-2'></i></a></li>"; } } ?>
+                         </ul>
+                       </div><?php endif; ?>
 				</div>
 			</div>
 <?php if(($mode == 0)): ?></div>
 </body>
 </html><?php endif; ?>
+
+<?php ?>

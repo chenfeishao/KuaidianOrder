@@ -1,5 +1,8 @@
 <?php
-class GoodsModel extends Model {
+require_once(LIB_PATH."commonModel.php");
+
+class GoodsModel extends ModelBaseOP
+{
 
 	// 自动验证设置
 	protected $_validate = array(
@@ -28,6 +31,21 @@ class GoodsModel extends Model {
 		$this->goodsID = $id;
 	}
 	
+	/*
+	 * 得到解析后的商品信息（用于修改页面的显示）
+	 */
+	public function getInfo()
+	{
+		$condition["id"] = $this->goodsID;
+		$tmpRe = $this->where($condition)->select();
+		$re = $tmpRe[0];
+		$tmpRe = null;
+		
+		$re["warehouse"] = str_replace(_SPECAL_BREAK_FLAG,"；",$re["warehouse"]);
+		$re["size"] = str_replace(_SPECAL_BREAK_FLAG,"；",$re["size"]);
+		return $re;
+	}
+	
 	public function getGoodsName()
 	{
 		$condition['id'] = $this->goodsID;
@@ -38,13 +56,17 @@ class GoodsModel extends Model {
 	/*
 	 * 依据表单添加商品
 	 * @param	$data;表单的数据
+	 * 			int $mode;
+	 * 				0为添加新商品
+	 * 				1为修改商品
+	 * 			int id;当为修改模式的时候，传入修改商品的id
 	 * @return	int:
 	 * 				true:添加成功
 	 * 				false:添加到数据库时数据非法或者查询错误
 	 * 				正数:如果是自增主键则返回主键值，否则返回1
 	 * 				-1:库存数据格式错误
 	 */
-	public function addGoodsFromForm($data)
+	public function addOrEditGoodsFromForm($data,$mode = 0,$id = 0)
 	{
 		//处理表单数据格式
 		//拼音首字母
@@ -58,7 +80,9 @@ class GoodsModel extends Model {
 		//warehouse
 		if ($data["warehouse"] != "默认仓库：")//用户有输入则处理
 		{
+			//检查warehouse是不是按格式，且每一个都是数字
 			$tmp = explode("；",$data["warehouse"]);
+			array_pop($tmp);//把最后一个弹出
 			for ($i = 0; $i < count($tmp); $i++)
 			{
 				$tmp[$i] = explode("：",$tmp[$i]);
@@ -71,7 +95,11 @@ class GoodsModel extends Model {
 					}
 				}
 			}
-			$data["warehouse"] = transformSpecalBreakTag(explode("；",$data["warehouse"]));
+			
+			//把原来的东西写入数据库
+			$tmpWarehouse = explode("；",$data["warehouse"]);
+			array_pop($tmpWarehouse);//把最后一个弹出
+			$data["warehouse"] = $this->transformSpecalBreakTag($tmpWarehouse);
 		}
 		else
 		{
@@ -79,7 +107,9 @@ class GoodsModel extends Model {
 		}
 
 		//size
-		$data["size"] = transformSpecalBreakTag(explode("；",$data["size"]));
+		$tmpSize = explode("；",$data["size"]);
+		array_pop($tmpSize);//把最后一个弹出
+		$data["size"] = $this->transformSpecalBreakTag($tmpSize);
 		
 		//high and wide
 		$highWide = "tile";
@@ -103,7 +133,9 @@ class GoodsModel extends Model {
 		}
 		$data["highWide"] = $highWide;
 		
-		//color
+		/*
+		 * color
+		 */
 		$colorArray = array("black","white","lime","green","emerald","teal","cyan","cobalt","indigo","violet","pink","magenta","crimson","red","orange","amber","yellow","brown","olive","steel","mauve","taupe","gray","dark","darker","transparent","darkBrown","darkCrimson","darkMagenta","darkIndigo","darkCyan","darkCobalt","darkTeal","darkEmerald","darkGreen","darkOrange","darkRed","darkPink","darkViolet","darkBlue","lightBlue","lightTeal","lightOlive","lightOrange","lightPink","lightRed","lightGreen");
 		//bgColor
 		if ( ($data["bgColor"] == "") || ($data["bgColor"] == null) )
@@ -123,7 +155,13 @@ class GoodsModel extends Model {
 			}
 		}
 		
-		return $this->add($data);
+		if ($mode === 0)
+			return $this->add($data);
+		else
+		{
+			$data["id"] = $id;
+			return $this->save($data);
+		}
 	}
 }
 ?>

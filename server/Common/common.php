@@ -31,20 +31,54 @@ function isNum($str)
 
 
 /*
- * 给数组添加中断标记并转换成字符串
- * @param	array $data;原始数据
- * @return	string;转换完成后的字符串
- */
-function transformSpecalBreakTag($data)
+ * 检查数组内容是否是日期
+* @param	array;输入数组
+* 				array[0];年
+* 				array[1];月
+* 				array[2];日
+* 				array[3];星期，两位英文缩写
+* @return	bool;日期格式是否正确
+* @NOTE：目前不检查星期是否正确
+*/
+function checkIsDate($dateArray)
 {
-	$re = "";
-	for ($i = 0; $i < count($data); $i++)
-	{
-		$re .= $data[$i]._SPECAL_BREAK_FLAG;
-	}
-	return $re;
+	//是否是数字
+	if ( (!isNum($dateArray[0])) || (!isNum($dateArray[1])) || (!isNum($dateArray[2])) )
+		return false;
+	if (       ($dateArray[0] >= 1900) && ($dateArray[0] <= 3000) 
+			&& ($dateArray[1] >= 1) && ($dateArray[1] <= 12)
+			&& ($dateArray[2] >= 1) && ($dateArray[2] <= 31)
+		)
+		return true;
+	return false;
 }
 
+
+/*
+ * 检查数组内容是否是一组日期
+ * @param	array;输入数组
+ * 				array[i];一个日期，如：2014-03-21
+ * @return	bool;日期格式是否正确
+ */
+function checkDateArray($dateArray)
+{
+	for ($i = 0; $i < count($dateArray); $i++)
+	{
+		$tmp = null;
+		sscanf($dateArray[$i],"%d-%d-%d",$tmp[0],$tmp[1],$tmp[2]);
+		if (!checkIsDate($tmp))
+			return false;
+	}
+	return true;
+}
+
+
+
+/*
+ * 得到一个汉字的拼音
+* @param	char $s0;要转换的中文汉字
+* @return	char;中文汉字的拼音首字母
+*/
 function getfirstchar($s0)
 {
 	$fchar = ord($s0{0});
@@ -79,6 +113,11 @@ function getfirstchar($s0)
 	return null;
 }
 
+/*
+ * 得到一串汉字的拼音
+ * @param	string $zh;要转换的中文汉字
+ * @return	string;中文汉字的拼音首字母
+ */
 function getPinYinFirstChar($zh)
 {
 	$ret = "";
@@ -97,4 +136,88 @@ function getPinYinFirstChar($zh)
 	}
 	return $ret;
 }
+
+/*
+ * AES算法的CBC模式的加密算法
+ * @param	$mode;0加密模式，1解密模式
+ * 			$cleartext;待加密的字符串
+ * @reurn	string;加密后的字符串
+ */
+function AES_CBC($mode,$text)
+{
+	if ($mode === 0)//加密
+	{
+		$cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, ''); #128位 = 16字节 iv必须16字节
+		if (mcrypt_generic_init($cipher, _KEY128, _IV) != -1)
+		{
+			//如果$cleartext不是128位也就是16字节的倍数，补充NULL字符满足这个条件，返回的结果的长度一样
+			$cipherText = mcrypt_generic($cipher,$text);
+			mcrypt_generic_deinit($cipher);
+		
+			//很明显，结果也是16字节的倍数.1个字节用两位16进制表示，所以下面输出的是32的倍数位16进制的字符串
+			return bin2hex($cipherText);
+		}
+	}
+	else//解密
+	{
+		/* Open the cipher */
+		$cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
+		/* Initialize encryption module for decryption */
+		if (mcrypt_generic_init($cipher, _KEY128, _IV) != -1)
+		{
+			/* Decrypt encrypted string */
+			$decrypted = mdecrypt_generic($cipher,hex2bin($text));
+			/* Terminate decryption handle and close module */
+			mcrypt_generic_deinit($cipher);
+			mcrypt_module_close($cipher);
+			
+			/* Show string */
+			return $decrypted;
+		}
+	}
+}
+
+class RSA
+{
+	/**
+	 * 公钥加密
+	 *
+	 * @param string 明文
+	 * @param string 证书文件（.crt）
+	 * @return string 密文（base64编码）
+	 */
+	function publickey_encodeing($sourcestr, $fileName)
+	{
+		$key_content = file_get_contents($fileName);
+		$pubkeyid    = openssl_get_publickey($key_content);
+	
+		if (openssl_public_encrypt($sourcestr, $crypttext, $pubkeyid))
+		{
+			return base64_encode("".$crypttext);
+		}
+	}
+	
+	/**
+	 * 私钥解密
+	 *
+	 * @param string 密文（二进制格式且base64编码）
+	 * @param string 密钥文件（.pem / .key）
+	 * @param string 密文是否来源于JS的RSA加密
+	 * @return string 明文
+	 */
+	function privatekey_decodeing($crypttext, $fileName, $fromjs = FALSE)
+	{
+		$key_content = file_get_contents($fileName);
+		$prikeyid    = openssl_get_privatekey($key_content);
+		$crypttext   = base64_decode($crypttext);
+		$padding = $fromjs ? OPENSSL_NO_PADDING : OPENSSL_PKCS1_PADDING;
+		if (openssl_private_decrypt($crypttext, $sourcestr, $prikeyid, $padding))
+		{
+			return $fromjs ? rtrim(strrev($sourcestr), "/0") : "".$sourcestr;
+		}
+		return ;
+	}
+}
+
+
 ?>

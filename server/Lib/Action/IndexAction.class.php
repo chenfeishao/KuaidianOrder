@@ -1,6 +1,7 @@
 <?php
+require_once(LIB_PATH."commonAction.php");
 
-class IndexAction extends Action
+class IndexAction extends myAction
 {
 
     protected function _initialize()
@@ -16,6 +17,9 @@ class IndexAction extends Action
     
     public function main()
     {
+    	if (!$this->checkPower("serverPower",session("serverUserPower")))
+    		$this->error("非法访问",U("Index/index"));
+
     	$this->display();
     }
     
