@@ -34,18 +34,18 @@ class UserAction extends myAction
     
     public function toLogin()//判断登录是否成功
     {
-    	if (session('verify') != md5($this->_post('yzm')))
+    	if ( session('verify') != md5($this->_post('yzm')) )
     	{
     		$this->error('验证码错误！',U("Index/index"));
     	}
     	
     	$dbUser = D("User");
     	$dbUser->init($this->_post('userName'));
-    	if($result = $dbUser->login($this->_post('userPassword')))
+    	if ( $result = $dbUser->login($this->_post('userPassword')) )
     	{
     		//设置session
-    		session('userName',$result[0]['userName']);
-    		switch ($result[0]['userPower'])
+    		session('userName',$result['userName']);
+    		switch ($result['userPower'])
     		{
     			case "root": $userPower = "根账户";break;
     			case "admin": $userPower = "管理员";break;
@@ -56,7 +56,7 @@ class UserAction extends myAction
     			default: $userPower = "普通账户";break;
     		}
     		session('userPower',$userPower);
-    		cookie('userName',$result[0]['userName']);
+    		cookie('userName',$result['userName']);
     		
     		$this->success('登陆成功',U('Index/index'));
     	}

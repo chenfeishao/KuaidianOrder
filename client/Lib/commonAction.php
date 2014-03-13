@@ -206,6 +206,12 @@ class myAction extends Action
 						return false;
 					break;
 				}
+			case "serverPower"://后台管理权限
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") )
+						return false;
+					break;
+				}
 			default:return false;break;
 		}
 		return true;

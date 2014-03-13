@@ -26,5 +26,10 @@ return array(
 // 	'TMPL_ACTION_ERROR' => APP_PATH . 'Tpl/PC/dispatch_jump.tpl',
 	//默认成功跳转对应的模板文件
 // 	'TMPL_ACTION_SUCCESS' => APP_PATH . 'Tpl/PC/dispatch_jump.tpl',
+	
+	'TOKEN_ON'=>true,  // 是否开启令牌验证
+	'TOKEN_NAME'=>'__hash__',    // 令牌验证的表单隐藏字段名称
+	'TOKEN_TYPE'=>'md5',  //令牌哈希验证规则 默认为MD5
+	'TOKEN_RESET'=>true,  //令牌验证出错后是否重置令牌 默认为true
 );
 ?>

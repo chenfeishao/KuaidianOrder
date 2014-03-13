@@ -133,5 +133,88 @@ class myAction extends Action
 			}
 		}
 	}
+	
+	/*
+	 * 当$ok为false时进行跳转。这里$ok要严格为false才可。否则都认为是true
+	* @param	boolean $ok;判断量
+	* 			string $falseStr;$ok为假时的提示符
+	* 			string $falseU;$ok为假时的跳转U操作参数
+	* 			string $param;跳转地址附带的get参数
+	* 			int $time;跳转时间
+	* @Note		这里$ok要严格为false才可。否则都认为是true
+	*/
+	protected function isFalsePlus($ok,$falseStr,$falseU = 0,$param = 0,$time = -1)
+	{
+		if ($time == -1)//默认跳转时间
+		{
+			if ($ok === false)
+			{
+				if ($falseU === 0)
+					$this->error($falseStr);
+				else if ($param === 0)
+					$this->error($falseStr,U($falseU));
+				else
+					$this->error($falseStr,U($falseU,$param));
+			}
+		}
+		else//延时跳转
+		{
+			if ($ok === false)
+			{
+				$this->assign('waitSecond',$time);
+				if ($falseU === 0)
+					$this->error($falseStr);
+				else if ($param === 0)
+					$this->error($falseStr,U($falseU));
+				else
+					$this->error($falseStr,U($falseU,$param));
+			}
+		}
+	}
+	
+	/*
+	 * 权限检测
+	 * @param	string $action;要检测的规则
+	 * 			string $userPower;要检测的power
+	 * @return	bool;是否通过检测
+	 */
+	protected function checkPower($action,$userPower)
+	{
+		switch($action)
+		{
+			case "isLogin"://是否登录
+				{
+					if ( ($userPower == "") || ($userPower == null) )
+						return false;
+					break;
+				}
+			case "canEditOrderMoney"://能不能修改订单钱数
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") && ($userPower != "营业员") )
+						return false;
+					break;
+				}
+			case "canWatchHistory"://能不能查看历史订单
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") && ($userPower != "营业员") )
+						return false;
+					break;
+				}
+			case "financePower"://财务管理权限
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") && ($userPower != "营业员") )
+						return false;
+					break;
+				}
+			case "serverPower"://后台管理权限
+				{
+					if ( ($userPower != "根账户") && ($userPower != "管理员") )
+						return false;
+					break;
+				}
+			default:return false;break;
+		}
+		return true;
+	}
 }
 ?>

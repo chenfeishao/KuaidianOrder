@@ -1,11 +1,15 @@
 <?php
-include(LIB_PATH."commonAction.php");
+require_once(LIB_PATH."commonAction.php");
+
 class GoodsAction extends myAction
 {
 
     protected function _initialize()
     {
         header("Content-Type:text/html; charset=utf-8");
+        
+        if (!$this->checkPower("serverPower",session("SeverUserPower")))
+        	$this->error("非法访问",U("Index/index"));
     }
 
     public function add()
@@ -39,8 +43,6 @@ class GoodsAction extends myAction
 		{
 			$this->success("商品添加成功",U("Goods/add"));
 		}
-		
-    	$this->display();
     }
     
 }
