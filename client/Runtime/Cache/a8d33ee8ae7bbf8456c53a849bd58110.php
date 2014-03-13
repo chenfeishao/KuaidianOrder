@@ -38,9 +38,32 @@
             	<div class="row">
             		<div class="accordion with-marker span12 place-left margin10" data-role="accordion" data-closeany="false">
                         <div class="accordion-frame">
-                            <a class="heading bg-lightBlue fg-white" href="#">V1.1.2版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.8</a>
+                            <a class="heading bg-lightBlue fg-white" href="#">V1.1.3版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.13</a>
                             <div style="display: block;" class="content">
                                 <ol>
+                                	<li>
+                                	<b>完成了修改商品信息的页面，现在可以修改商品信息了</b><br>
+                                	到后台管理界面登录，然后选择  浏览商品  ，然后选择一个具体的商品，进入后就能修改该商品的信息了。
+                                	</li>
+                                	<li>
+                                	<b>对于历史记录页面添加了分页</b><br>
+                                	对于大量数据可以翻页了。<br>
+                                	默认每页显示20条记录。
+                                	</li>
+                                	<li>
+                                	<b>给后台管理系统登陆界面添加了验证码</b><br>
+                                	</li>
+                                	<li>
+                                	<b>给后台管理系统加入了权限管理系统</b><br>
+                                	</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="accordion-frame">
+                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.5</a>
+                            <div class="content">
+                            	<strong>V1.1.2版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.8</strong>
+                            	<ol>
                                 	<li>
                                 	<b>将订单时间拆分为  打印时间  与  创建时间</b><br>
                                 	</li>
@@ -70,16 +93,6 @@
                                 	</li>
                                 	<li>
                                 	<b>添加了AES加密算法</b><br>
-                                	</li>
-                                </ol>
-                            </div>
-                        </div>
-                        <div class="accordion-frame">
-                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.5</a>
-                            <div class="content">
-                            	<ol>
-                                	<li>
-                                	<b>软件上线</b><br>
                                 	</li>
                                 </ol>
                             </div>
