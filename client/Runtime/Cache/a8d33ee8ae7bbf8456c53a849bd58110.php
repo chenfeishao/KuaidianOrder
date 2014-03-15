@@ -31,16 +31,28 @@
     <div class="container">
         <h1>
        		<a href="<?php echo U("Index/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	版本更新信息<small class="on-right">2014.3.13</small>
+           	版本更新信息<small class="on-right">2014.3.16</small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
             	<div class="row">
             		<div class="accordion with-marker span12 place-left margin10" data-role="accordion" data-closeany="false">
                         <div class="accordion-frame">
-                            <a class="heading bg-lightBlue fg-white" href="#">V1.1.3版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.13</a>
+                            <a class="heading bg-lightBlue fg-white" href="#">V2.0版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.16</a>
                             <div style="display: block;" class="content">
                                 <ol>
+                                	<li>
+                                	<b>程序的数据库操作实现了事务</b><br>
+                                	完全确保数据一致。
+                                	</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="accordion-frame">
+                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新</a>
+                            <div class="content">
+                            	<strong>V1.1.3版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.13</strong>
+                            	<ol>
                                 	<li>
                                 	<b>验证码不区分大小写。（SAE平台下仍需要区分大小写）</b><br>
                                 	直接用小写输入即可。
@@ -71,11 +83,7 @@
                                 	<b>给后台管理系统加入了权限管理系统</b><br>
                                 	</li>
                                 </ol>
-                            </div>
-                        </div>
-                        <div class="accordion-frame">
-                            <a class="heading ribbed-green fg-white collapsed" href="#">之前的更新</a>
-                            <div class="content">
+                                <br><br><br>
                             	<strong>V1.1.2版本更新&nbsp;&nbsp;&nbsp;&nbsp;2014.3.8</strong>
                             	<ol>
                                 	<li>
