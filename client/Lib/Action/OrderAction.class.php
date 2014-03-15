@@ -483,8 +483,16 @@ class OrderAction extends myAction
     	if ( $this->_get("no") != md5("GO".$tmpMD5.date("Y-m-d H")) )
     		$this->error("非法操作",U("Index/index"));
     	
-    	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
-    	$this->isFalse($dbUser->newTmpOrderID(),"立即发货提交失败，请重试","Index/goBack");
+    	$dbTmpOrder->startTrans();
+    	if ( $dbTmpOrder->updatePrintState(1) && $dbUser->newTmpOrderID() )
+    		$dbTmpOrder->commit();
+    	else
+    	{
+    		$dbTmpOrder->rollback();
+    		$this->error("立即发货提交失败，请重试",U("Index/goBack"));
+    	}
+//     	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
+//     	$this->isFalse($dbUser->newTmpOrderID(),"立即发货提交失败，请重试","Index/goBack");
     	
     	$tmpMD5 = null;
     	$tmpMD5 = md5(
@@ -533,8 +541,17 @@ class OrderAction extends myAction
     	if ( $this->_get("no") != md5("DelayGo".$tmpMD5.date("Y-m-d H")) )
     		$this->error("非法操作",U("Index/index"));
     	
-    	$this->isFalse($dbTmpOrder->updatePrintState(0),"延迟发货提交失败，请重试","Index/goBack");
-    	$this->isFalse($dbUser->newTmpOrderID(),"延迟发货提交失败，请重试","Index/goBack");
+    	$dbTmpOrder->startTrans();
+    	if ( $dbTmpOrder->updatePrintState(0) && $dbUser->newTmpOrderID() )
+    		$dbTmpOrder->commit();
+    	else
+    	{
+    		$dbTmpOrder->rollback();
+    		$this->error("延迟发货提交失败，请重试",U("Index/goBack"));
+    	}
+//     	$this->isFalse($dbTmpOrder->updatePrintState(0),"延迟发货提交失败，请重试","Index/goBack");
+//     	$this->isFalse($dbUser->newTmpOrderID(),"延迟发货提交失败，请重试","Index/goBack");
+    	
     	$this->display();
     }
     
@@ -1079,6 +1096,9 @@ class OrderAction extends myAction
     	$this->isOk($dbTmpOrder->updatePrintState(105),"重新打印出货单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
     }    
     
+    /*
+     * 重新打印的时候显示打印状态的页面
+     */
     public function printState()
     {
     	/*
