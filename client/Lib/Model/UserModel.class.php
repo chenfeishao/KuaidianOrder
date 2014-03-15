@@ -209,6 +209,8 @@ class UserModel extends Model {
 	*/
 	public function sign($originData)
 	{
+		$tag = true;
+		
 		$data = $this->checkUserInfo($originData);
 		if ($data === false)
 		{
@@ -218,12 +220,13 @@ class UserModel extends Model {
 		$data["userPower"] = "pt";
 		$data["userPassword"] = $data["tel"];
 		$dbTmpOrder = D("TmpOrder");
+		$dbTmpOrder->startTrans();
 		$tmpNewID = null;
 		$tmpNewID = $dbTmpOrder->add($dbTmpOrder->prepareNewTmpOrderInfo());
 		if ( ($tmpNewID === null) || ($tmpNewID === false) )
 		{
 			$this->errorMsg = "数据库通信失败，请重试";
-			return false;
+			$tag = false;
 		}
 		$data["tmpOrderID"] = $tmpNewID;
 		$data["preTmpOrderID"] = $tmpNewID;
@@ -235,7 +238,17 @@ class UserModel extends Model {
 		if ($re === false)
 		{
 			$this->errorMsg = "用户添加失败，请重试";
+			$tag = false;
 		}
+		if ($tag)
+		{
+			$dbTmpOrder->commit();
+		}
+		else
+		{
+			$dbTmpOrder->rollback();
+		}
+		
 		return $re;
 	}
 	
