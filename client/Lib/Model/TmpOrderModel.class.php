@@ -55,6 +55,20 @@ class TmpOrderModel extends OrderOP {
 	}
 	
 	/*
+	 * 新建一个tmpOrder记录所需要准备的数据
+	 * @return	array;新建一个tmpOrder记录所需要准备的数据
+	 * 				array["printState"] = 8;
+	 * 				array[""] = ;
+	 */
+	public function prepareNewTmpOrderInfo()
+	{
+		$data = null;
+		$data["printState"] = 8;
+		
+		return $data;
+	}
+	
+	/*
 	 * 从结算页面创建最终数据
 	 * @param	array[i] $originData;_post方法传来的数据
 	 * @return	bool 是否更新成功
@@ -122,10 +136,12 @@ class TmpOrderModel extends OrderOP {
 		//更新数据
 		if ($tag > 0)
 		{
-			if ( $this->serializeAndUpdate("goodsNumArray",$data['num']) &&
-				 $this->serializeAndUpdate("goodsSizeArray",$data['size']) &&
-				 $this->serializeAndUpdate("goodsMoneyArray",$data['money'])
-				)
+			$tmpData = null;
+			$tmpData["id"] = $this->id;
+			$tmpData["goodsNumArray"] = $this->transformSpecalBreakTag($data['num']);
+			$tmpData["goodsSizeArray"] = $this->transformSpecalBreakTag($data['size']);
+			$tmpData["goodsMoneyArray"] = $this->transformSpecalBreakTag($data['money']);
+			if ( falseOrNULL($this->save($tmpData)) )
 			{
 				$tag = true;
 			}
@@ -164,11 +180,13 @@ class TmpOrderModel extends OrderOP {
 	 */
 	public function deleteFromTmpOrder($No)
 	{
-		return ( ($this->deleteOne("goodsIDArray",$No)) &&
-				 ($this->deleteOne("goodsNumArray",$No)) &&
-				 ($this->deleteOne("goodsSizeArray",$No)) &&
-				 ($this->deleteOne("goodsMoneyArray",$No))
-				);
+		$data = null;
+		$data["id"] = $this->id;
+		$data["goodsIDArray"] = $this->deleteOne("goodsIDArray",$No);
+		$data["goodsNumArray"] = $this->deleteOne("goodsNumArray",$No);
+		$data["goodsSizeArray"] = $this->deleteOne("goodsSizeArray",$No);
+		$data["goodsMoneyArray"] = $this->deleteOne("goodsMoneyArray",$No);
+		return falseOrNULL($this->save($data));
 	}
 	
 	/*
@@ -203,7 +221,7 @@ class TmpOrderModel extends OrderOP {
 		}
 		
 		$data["id"] = $this->id;
-		return $this->save($data);
+		return falseOrNULL($this->save($data));
 	}
 	
 	/*

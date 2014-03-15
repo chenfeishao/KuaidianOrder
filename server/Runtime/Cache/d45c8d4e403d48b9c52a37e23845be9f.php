@@ -57,7 +57,7 @@ function fleshVerify(){
         <input type="text" class="input-block-level" placeholder="验证码" name="yzm">
         <div class="row">
         	<img id="verifyImg" class="span2" src='<?php echo U("Public/verify");?>' onclick="fleshVerify();"/>
-        	<div class="span2">请输入左侧的验证码。<br></div>
+        	<div class="span2">请输入左侧的验证码。<br><b>注意：区分大小写</b></div>
         </div>
         <br>
         <button class="btn btn-large btn-primary" type="submit">登录</button>

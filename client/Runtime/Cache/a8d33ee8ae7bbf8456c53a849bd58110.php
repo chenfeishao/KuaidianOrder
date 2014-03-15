@@ -42,7 +42,7 @@
                             <div style="display: block;" class="content">
                                 <ol>
                                 	<li>
-                                	<b>验证码不区分大小写</b><br>
+                                	<b>验证码不区分大小写。（SAE平台下仍需要区分大小写）</b><br>
                                 	直接用小写输入即可。
                                 	</li>
                                 	<li>

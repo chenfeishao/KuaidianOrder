@@ -30,15 +30,6 @@ class OrderAction extends myAction
     
     public function inputPanelIn()//在开始界面上弹出来的界面
     {
-    	/*
-    	 * 如果传的是name的话  废弃
-    	*
-    	if ( (($this->_get("id") == "") || ($this->_get("id") == null)) ||
-    			(($this->_get("name") != "") || ($this->_get("name") != null)) )//通过name传过来的值
-    	{
-    
-    	}
-    	*/
     	$dbGoods = D("Goods");
     	if (!$dbGoods->checkID($this->_get("id")))
     	{
@@ -54,13 +45,13 @@ class OrderAction extends myAction
     
     public function edit()//修改订单界面
     {
-    	$db = D("Goods");
+    	$dbGoods = D("Goods");
     	if (!isNum($this->_get("id")))
     	{
     		$this->error("商品选择不正确，请重新选择",U("Index/index"));
     	}
-    	$db->init($this->_get("id"));
-    	$this->assign("goodsName",$db->getGoodsName());//$db在下面用了，所以要在这里渲染
+    	$dbGoods->init($this->_get("id"));
+    	$this->assign("goodsName",$dbGoods->getGoodsName());//$db在下面用了，所以要在这里渲染
     	
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
@@ -258,7 +249,6 @@ class OrderAction extends myAction
     	/*
     	 * 获取tmpOrder信息
     	*/
-    	$dbGoods = D("Goods");
     	$dbUser = D("User");
     	$dbUser->init(session("userName"));
     	$dbTmpOrder = D("TmpOrder");
@@ -331,7 +321,6 @@ class OrderAction extends myAction
     	$userData["carNo"] = $this->_post("carNo");
     	 
     	//处理用户信息
-    	$dbUser = D("User");
     	$tmp = $dbUser->getUserInfo($userData["userName"]);
     	if ($tmp === false)
     		$this->error("数据库查询失败，请重试",U("Index/goBack"));
@@ -343,7 +332,7 @@ class OrderAction extends myAction
     	{
     		$this->isFalsePlus($dbUser->updateInfo($userData),$dbUser->getErrorMsg(),"Index/goBack");
     	}
-    	 
+
     	/*
     	 * 处理付款信息
     	*/
@@ -369,9 +358,7 @@ class OrderAction extends myAction
     	$orderInfo = null;
     	 
     	$dbGoods = D("Goods");
-    	$dbUser = D("User");
     	$dbUser->init(session("userName"));
-    	$dbTmpOrder = D("TmpOrder");
     	$dbTmpOrder->init($dbUser->getTmpOrderID());
     	
     	/*
@@ -628,7 +615,7 @@ class OrderAction extends myAction
     {
     	import('ORG.Util.Page_co8bit');// 导入分页类
     	$page = null;
-    	$recordNum = 1;//每页显示的记录数
+    	$recordNum = 20;//每页显示的记录数
     	$rollPage0 = 20;//页面上有多少个分页栏，在模式0下
     	$rollPageNEQ0 = 15;//页面上有多少个分页栏，在模式不为0下
     	

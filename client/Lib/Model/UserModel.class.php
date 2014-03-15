@@ -218,20 +218,20 @@ class UserModel extends Model {
 		$data["userPower"] = "pt";
 		$data["userPassword"] = $data["tel"];
 		$dbTmpOrder = D("TmpOrder");
-		$tmp = null;
-		$tmpData["printState"] = 8;
-		$tmp = $dbTmpOrder->add($tmpData);
-		if ( ($tmp === null) || ($tmp === false) )
+		$tmpNewID = null;
+		$tmpNewID = $dbTmpOrder->add($dbTmpOrder->prepareNewTmpOrderInfo());
+		if ( ($tmpNewID === null) || ($tmpNewID === false) )
 		{
 			$this->errorMsg = "数据库通信失败，请重试";
 			return false;
 		}
-		$data["tmpOrderID"] = $tmp;
-		$data["preTmpOrderID"] = $tmp;
+		$data["tmpOrderID"] = $tmpNewID;
+		$data["preTmpOrderID"] = $tmpNewID;
+		
 		/*
 		 * 添加用户
 		*/
-		$re = $this->add($data);
+		$re = $this->add($data);//TODO:这里如果user->add失败，则会产生一个空的多余的tmpOrder记录
 		if ($re === false)
 		{
 			$this->errorMsg = "用户添加失败，请重试";
@@ -261,7 +261,7 @@ class UserModel extends Model {
 		{
 			return false;
 		}
-		return $this->save($tmp);
+		return falseOrNULL($this->save($tmp));
 	}
 	
 }

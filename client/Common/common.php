@@ -1,10 +1,24 @@
 <?php
 include(CONF_PATH."MyConfigINI.php");
-function show_db_errorxx(){
+
+function show_db_errorxx()
+{
 	exit('系统访问量大，请稍等添加数据');
 }
 
-
+/*
+ * 测试变量是否为空或false
+ * @param	$tmp;要测试的变量
+ * @return	bool;
+ * 				false;为bool或null
+ */
+function falseOrNULL($tmp)
+{
+	if ( ($tmp === null) || ($tmp === false) )
+		return false;
+	else
+		return true;
+}
 
 /*
  * 判断是否是数字（带小数点的）

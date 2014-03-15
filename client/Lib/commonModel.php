@@ -132,13 +132,13 @@ class ModelBaseOP extends Model
 	 * 删除name字段的第No个数据（与数据库通信）
 	 * @param	string $name;字段名称
 	 * 			int $No;第多少个数据
-	 * @return	bool;删除是否成功
+	 * @return	string;序列化后可以直接更新数据库的字符串
 	 */
 	public function deleteOne($name,$No)
 	{
 		$data = $this->getArray($name);
 		array_splice($data,$No,1);
-		return $this->serializeAndUpdate($name,$data);
+		return $this->transformSpecalBreakTag($data);
 	}
 }
 ?>

@@ -53,6 +53,12 @@ function change()
                     <div class="row">
                         <form id="form" method="post" action="<?php echo U("Order/toOneOrderIn");?>">
                             <fieldset>
+                            	<label><font color=black>规格</font></label>
+                                <div class="input-control select">
+									<select name="size">
+										<?php if(is_array($sizeArray)): foreach($sizeArray as $key=>$vo): ?><option value="<?php echo ($key); ?>"><?php echo ($vo); ?></option><?php endforeach; endif; ?>
+									</select>
+								</div>
                                 <label><font color=black>数量</font></label>
                                 <div class="input-control text" data-role="input-control">
                                     <input id="myInputN" name="num" tabindex="1" type="number" onclick="inputPanel.setNum(0)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
@@ -63,12 +69,6 @@ function change()
                                     <input id="myInputM"  name="money" tabindex="2" type="number" onclick="inputPanel.setNum(1)" onkeydown="return onKeyDownCheckNum(event)" oninput="change();">
                                     <button type="button" class="btn-clear"></button>
                                 </div>
-                                <label><font color=black>规格</font></label>
-                                <div class="input-control select">
-									<select name="size">
-										<?php if(is_array($sizeArray)): foreach($sizeArray as $key=>$vo): ?><option value="<?php echo ($key); ?>"><?php echo ($vo); ?></option><?php endforeach; endif; ?>
-									</select>
-								</div>
                                 <label><font color=black>金额</font></label>
                                 <div class="input-control text" data-role="input-control">
                                     <input id="total" name="total" type="text" value="0" disabled="">
