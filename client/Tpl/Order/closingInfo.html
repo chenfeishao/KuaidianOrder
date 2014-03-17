@@ -144,7 +144,7 @@ function change()
 		                <div class="span6">
 		                    <label><font color=black>停车位置</font></label>
 		                    <div class="input-control text" data-role="input-control">
-		                       <input id="carAddress" name="carAddress" type="text" tabindex="4">
+		                       <input id="carAddress" name="carAddress" type="text" tabindex="4" list="addressList">
 		                       <button type="button" class="btn-clear"></button>
 		                    </div>
 		                </div>
@@ -231,6 +231,28 @@ function change()
     <foreach name="userName" item="vo">
         <option label="{$vo.userPinYin}{$vo.userName}" value="{$vo.userName}"/>
     </foreach>
+</datalist>
+<datalist id="addressList">
+	<option label="x5qd新5千吨" value="新5千吨"/>
+	<option label="3qd3千吨" value="3千吨"/>
+	<option label="8qd8千吨" value="8千吨"/>
+	<option label="4q5bdk4千5百吨库" value="4千5百吨库"/>
+	<option label="l5qd老5千吨" value="老5千吨"/>
+	<option label="xqtcc西区停车场" value="西区停车场"/>
+	<option label="zml中门里" value="中门里"/>
+	<option label="tq停前" value="停前"/>
+	<option label="dxtccmk地下停车场门口" value="地下停车场门口"/>
+	<option label="tdb铁道边（院子里）" value="铁道边（院子里）"/>
+	<option label="gdtcc干东停车场" value="干东停车场"/>
+	<option label="nhmk农行门口" value="农行门口"/>
+	<option label="ghmk工行门口" value="工行门口"/>
+	<option label="xmwxb西门外西边" value="西门外西边"/>
+	<option label="cwcjdmk城外城酒店门口" value="城外城酒店门口"/>
+	<option label="gdqx干东桥下" value="干东桥下"/>
+	<option label="gdbqx干东北桥下" value="干东北桥下"/>
+	<option label="xqx西桥下" value="西桥下"/>
+	<option label="dtkmk大唐库门口" value="大唐库门口"/>
+	<option label="dtklm大唐库里面" value="大唐库里面"/>
 </datalist>
 </body>
 </html>
