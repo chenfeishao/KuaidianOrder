@@ -6,7 +6,7 @@ function show_db_errorxx()
 	exit('系统访问量大，请稍等添加数据');
 }
 
-/*
+/**
  * 测试变量是否为空或false
  * @param	$tmp;要测试的变量
  * @return	bool;
@@ -20,7 +20,7 @@ function falseOrNULL($tmp)
 		return true;
 }
 
-/*
+/**
  * 判断是否是数字（带小数点的）
  * @param	string $str;要判断的字符串
  * @author	co8bit<me@co8bit.com>
@@ -32,7 +32,7 @@ function isNumWithPoint($str)
 
 
 
-/*
+/**
  * 判断是否是数字（不带小数点的）
 * @param	string $str;要判断的字符串
 * @author	co8bit<me@co8bit.com>
@@ -44,7 +44,7 @@ function isNum($str)
 
 
 
-/*
+/**
  * 检查数组内容是否是日期
 * @param	array;输入数组
 * 				array[0];年
@@ -68,7 +68,7 @@ function checkIsDate($dateArray)
 }
 
 
-/*
+/**
  * 检查数组内容是否是一组日期
  * @param	array;输入数组
  * 				array[i];一个日期，如：2014-03-21
@@ -88,7 +88,7 @@ function checkDateArray($dateArray)
 
 
 
-/*
+/**
  * 得到一个汉字的拼音
 * @param	char $s0;要转换的中文汉字
 * @return	char;中文汉字的拼音首字母
@@ -127,7 +127,7 @@ function getfirstchar($s0)
 	return null;
 }
 
-/*
+/**
  * 得到一串汉字的拼音
  * @param	string $zh;要转换的中文汉字
  * @return	string;中文汉字的拼音首字母
@@ -151,11 +151,11 @@ function getPinYinFirstChar($zh)
 	return $ret;
 }
 
-/*
+/**
  * AES算法的CBC模式的加密算法
  * @param	$mode;0加密模式，1解密模式
  * 			$cleartext;待加密的字符串
- * @reurn	string;加密后的字符串
+ * @return	string;加密后的字符串
  */
 function AES_CBC($mode,$text)
 {

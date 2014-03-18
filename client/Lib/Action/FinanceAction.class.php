@@ -19,6 +19,37 @@ class FinanceAction extends myAction
         $this->display();
     }
     
+    /**
+     * 应收款页面
+     */
+    public function ar()
+    {
+    	
+    }
+    
+    /**
+     * 应付款页面
+     */
+    public function ap()
+    {
+    	
+    }
+    
+    /**
+     * 费用页面
+     */
+    public function cost()
+    {
+    	
+    }
+    
+    /**
+     * 财务查询页面
+     */
+    public function query()
+    {
+    	
+    }
 }
 
 ?>

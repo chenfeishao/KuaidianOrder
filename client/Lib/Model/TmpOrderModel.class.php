@@ -3,12 +3,12 @@ require_once(LIB_PATH."OrderOP.php");
 
 class TmpOrderModel extends OrderOP {
 
-	/*
+	/**
 	 * updateTmpOrder方法出错返回的消息
 	 */
 	protected $updateTmpOrderError = "";
 	
-	/*
+	/**
 	 * 初始化临时订单的ID，即用户账户内存的tmpOrderID
 	*/
 	public function init($id)
@@ -28,7 +28,7 @@ class TmpOrderModel extends OrderOP {
 			array('money','/^-?\d+(\.\d+)?$/','单价必须为数字！',1,'regex'),
 	);
 	
-	/*
+	/**
 	 * 自动验证用
 	 * 检查所选商品id是否是数字，且是否在正确范围内
 	 * @param	string $data;表单数据中的id字段
@@ -40,7 +40,7 @@ class TmpOrderModel extends OrderOP {
 		return $dbGoods->checkID($data);
 	}
 	
-	/*
+	/**
 	 * 自动验证用
 	 * 检查规格是否是数字，且是否在正确范围内
 	 * @NOTE	当选择的商品id错误的时候，因为查不出来数据，所以$tmp为0，这里永远为false
@@ -54,7 +54,7 @@ class TmpOrderModel extends OrderOP {
 		return $dbGoods->checkSize($data["size"]);
 	}
 	
-	/*
+	/**
 	 * 新建一个tmpOrder记录所需要准备的数据
 	 * @return	array;新建一个tmpOrder记录所需要准备的数据
 	 * 				array["printState"] = 8;
@@ -68,7 +68,7 @@ class TmpOrderModel extends OrderOP {
 		return $data;
 	}
 	
-	/*
+	/**
 	 * 从结算页面创建最终数据
 	 * @param	array[i] $originData;_post方法传来的数据
 	 * @return	bool 是否更新成功
@@ -164,7 +164,7 @@ class TmpOrderModel extends OrderOP {
 		}
 	}
 	
-	/*
+	/**
 	 * 获得出错的updateTmpOrderWith*方法返回的消息
 	 * @return updateTmpOrder方法出错返回的消息
 	 */
@@ -173,7 +173,7 @@ class TmpOrderModel extends OrderOP {
 		return $this->updateTmpOrderError;
 	}
 	
-	/*
+	/**
 	 * 删除购物车内的一条商品
 	 * @param	int $No;要删除的商品在tmpOrder中的位置，即序号i
 	 * @return	bool；删除是否成功
@@ -189,7 +189,7 @@ class TmpOrderModel extends OrderOP {
 		return falseOrNULL($this->save($data));
 	}
 	
-	/*
+	/**
 	 * 从closingInof页面创建最终付款数据
 	* @param	array[i] $data;_post方法传来的数据
 	* @return	bool 是否更新成功
@@ -224,7 +224,7 @@ class TmpOrderModel extends OrderOP {
 		return falseOrNULL($this->save($data));
 	}
 	
-	/*
+	/**
 	 * 得到数据表内的customName字段
 	 * @NOTE	使用前要先init
 	 * @return	string;customName的值
@@ -236,7 +236,7 @@ class TmpOrderModel extends OrderOP {
 		return $tmp[0]["customName"];
 	}
 	
-	/*
+	/**
 	 * 得到指定tmpOrderID的条目下的所有字段值
 	 * @return	array;所有字段的数组
 	 * @note:	使用前要先init
@@ -250,7 +250,7 @@ class TmpOrderModel extends OrderOP {
 			return $tmp[0];
 	}
 	
-	/*
+	/**
 	 * 更新打印状态
 	* @param	int $state;当前状态
 	* @return	bool;更新是否成功

@@ -24,7 +24,7 @@ class GoodsModel extends ModelBaseOP
 		return $this->select();
 	}
 	
-	/*
+	/**
 	 * 得到商品规格信息
 	 * @return	array sizeArray[i];一个size数组
 	 */
@@ -33,7 +33,7 @@ class GoodsModel extends ModelBaseOP
 		return $this->getArray("size");
 	}
 	
-	/*
+	/**
 	 * 检查商品id是否是数字，且是否在正确范围内
 	* @param	string $id;id字段
 	* @return	bool;
@@ -48,7 +48,7 @@ class GoodsModel extends ModelBaseOP
 		return ( isNum($id) && ($tmp == 1) );
 	}
 	
-	/*
+	/**
 	* 检查规格是否是数字，且是否在正确范围内
 	* @NOTE	当选择的商品id错误的时候，因为查不出来数据，所以$tmp为0，这里永远为false
 	* @param	int $sizeNo;要验证的size编号

@@ -4,7 +4,7 @@ class UserModel extends Model {
 	private $userName = "";
 	private $tmpOrderID = "";
 	
-	/*
+	/**
 	 * 错误信息
 	* NOTE：	用getErrorMsg得到
 	*/
@@ -47,12 +47,12 @@ class UserModel extends Model {
 		return $this->preTmpOrderID;
 	}
 	
-	public function login($userPassword)
-	/*
+	/**
 	 * 判断用户名和密码是否能登录
 	 * @param string $userPassword 用户密码
 	 * @return 数据库返回的结果集，数组大小应为1。外面调用形如$re[0][]
 	 */
+	public function login($userPassword)
 	{
 		$condition['userName'] = $this->userName;
 		$condition['userPassword'] = $userPassword;
@@ -66,7 +66,7 @@ class UserModel extends Model {
 			return false;
 	}
 	
-	/*
+	/**
 	 * 得到所有用户的用户信息
 	* @return	array;所有用户所有字段的数组
 	*/
@@ -75,7 +75,7 @@ class UserModel extends Model {
 		return $this->select();
 	}
 	
-	/*
+	/**
 	 * 得到指定用户的用户信息
 	 * @param	string $name;用户名
 	* @return	array;
@@ -92,7 +92,7 @@ class UserModel extends Model {
 			return $tmp[0];
 	}
 	
-	/*
+	/**
 	 * 检查用户信息是否符合规定，并自动填充拼音
 	 * @param	array $data;要检查的信息
 	 * @return	
@@ -122,7 +122,7 @@ class UserModel extends Model {
 		return $data;
 	}
 	
-	/*
+	/**
 	 * 订单完成后User新建一条TmpOrder中的记录，并更新User内的tmpOrderID
 	* @param	string $userName;//当前账户用户名
 	* @return	bool;是否成功
@@ -200,7 +200,7 @@ class UserModel extends Model {
 		}
 	}
 	
-	/*
+	/**
 	 * 新用户注册
 	* @param	$data;用户相关信息
 	* @return	int；注册是否成功
@@ -252,7 +252,7 @@ class UserModel extends Model {
 		return $re;
 	}
 	
-	/*
+	/**
 	 * 返回错误信息
 	*/
 	public function getErrorMsg()
@@ -260,7 +260,7 @@ class UserModel extends Model {
 		return $this->errorMsg;
 	}
 	
-	/*
+	/**
 	 * 更新用户信息
 	 * @param	更新
 	 * @return	

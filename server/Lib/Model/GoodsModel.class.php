@@ -31,7 +31,7 @@ class GoodsModel extends ModelBaseOP
 		$this->goodsID = $id;
 	}
 	
-	/*
+	/**
 	 * 得到解析后的商品信息（用于修改页面的显示）
 	 */
 	public function getInfo()
@@ -53,7 +53,7 @@ class GoodsModel extends ModelBaseOP
 		return $tmp[0]["name"];
 	}
 	
-	/*
+	/**
 	 * 依据表单添加商品
 	 * @param	$data;表单的数据
 	 * 			int $mode;

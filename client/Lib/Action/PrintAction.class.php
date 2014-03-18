@@ -8,7 +8,7 @@ class PrintAction extends myAction
     {
     }
 
-    /*
+    /**
      * 打印第一联单子。目前这里也打印第二联单子
      */
     public function printOneOrder()
@@ -182,7 +182,7 @@ class PrintAction extends myAction
     	}
     }
     
-    /*
+    /**
      * 库房那边的打印机输出页面
      */
     public function printThreeOrder()

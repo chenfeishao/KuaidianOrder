@@ -1,8 +1,7 @@
 <?php
 class myAction extends Action
 {
-	protected function isOk($ok,$trueStr,$trueU,$falseStr,$falseU = 0,$trueUParam = 0,$falseUParam = 0,$time = -1)
-	/*
+	/**
 	 * 判读是否成功执行操作，并支持成功跳转和失败跳转
 	 * @param	bool $ok;判断量
 	 * 			string $trueStr;为真提示符
@@ -15,6 +14,7 @@ class myAction extends Action
 	 * @note 	1.立即跳转需要传入U函数参数
 	 * 			2.原地跳转需传参数时，需要传入跳转地址
 	 */
+	protected function isOk($ok,$trueStr,$trueU,$falseStr,$falseU = 0,$trueUParam = 0,$falseUParam = 0,$time = -1)
 	{
 		//$this->assign('waitSecond',135);
 	
@@ -97,8 +97,7 @@ class myAction extends Action
 		}
 	}
 	
-	protected function isFalse($ok,$falseStr,$falseU = 0,$param = 0,$time = -1)
-	/*
+	/**
 	 * 当$ok为false时进行跳转
 	 * @param	boolean $ok;判断量
 	 * 			string $falseStr;$ok为假时的提示符
@@ -106,6 +105,7 @@ class myAction extends Action
 	 * 			string $param;跳转地址附带的get参数
 	 * 			int $time;跳转时间
 	 */
+	protected function isFalse($ok,$falseStr,$falseU = 0,$param = 0,$time = -1)
 	{
 		if ($time == -1)//默认跳转时间
 		{
@@ -134,7 +134,7 @@ class myAction extends Action
 		}
 	}
 	
-	/*
+	/**
 	 * 当$ok为false时进行跳转。这里$ok要严格为false才可。否则都认为是true
 	* @param	boolean $ok;判断量
 	* 			string $falseStr;$ok为假时的提示符
@@ -172,7 +172,7 @@ class myAction extends Action
 		}
 	}
 	
-	/*
+	/**
 	 * 权限检测
 	 * @param	string $action;要检测的规则
 	 * 			string $userPower;要检测的power

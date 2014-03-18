@@ -107,7 +107,7 @@ class OrderAction extends myAction
     		$this->error("订单提交失败，请重试",U("Order/inputPanel","id=".$this->_post('id')));
     }
     
-    /*
+    /**
      * 结算页面
      */
     public function closing()
@@ -178,7 +178,7 @@ class OrderAction extends myAction
     	$this->display();
     }
     
-    /*
+    /**
      * 结算页面中删除一条商品的TmpOrder记录
      */
     public function closingDelete()
@@ -213,7 +213,7 @@ class OrderAction extends myAction
     	redirect(U("Order/closing"),0);
     }
     
-    /*
+    /**
      * 结算的相关信息页面
     */
     public function closingInfo()
@@ -286,7 +286,7 @@ class OrderAction extends myAction
     }
     
     
-    /*
+    /**
      * 结算信息总览页面
      * note		和historyOver对应
      */
@@ -454,7 +454,7 @@ class OrderAction extends myAction
     	$this->display();
     }
     
-    /*
+    /**
      * 立即发货页面
      */
     public function go()
@@ -513,7 +513,7 @@ class OrderAction extends myAction
     	$this->display();
     }
     
-    /*
+    /**
      * 延迟发送页面
      */
     public function delayGo()
@@ -556,7 +556,7 @@ class OrderAction extends myAction
     }
     
     
-    /*
+    /**
      * ajax获得订单打印状态
     */
     public function ajaxGetTmpOrderInfo()
@@ -611,7 +611,7 @@ class OrderAction extends myAction
     	echo $data["printState"];
     }
     
-    /*
+    /**
      * 历史订单页面
      * @param	int $mode;模式，
      * 				0：正常历史记录页面（显示当天记录）；
@@ -824,7 +824,7 @@ class OrderAction extends myAction
     }
     
     
-    /*
+    /**
      * 在历史界面的查看某一条单子的详细信息的界面
      * note		和closingOver对应
      */
@@ -929,7 +929,7 @@ class OrderAction extends myAction
     	$this->display();
     }
     
-    /*
+    /**
      * 在历史页面，删除未完成的打印单
      */
     public function deleteTmpOrder()
@@ -972,7 +972,7 @@ class OrderAction extends myAction
     }
     
     
-    /*
+    /**
      * 重新打印3联
      */
     public function repeatAllPrint()
@@ -1012,7 +1012,7 @@ class OrderAction extends myAction
     	$this->isOk($dbTmpOrder->updatePrintState(1),"全部重新打印订单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
     }
     
-    /*
+    /**
      * 重新打印第1联和第2联
     */
     public function repeatOnePrint()
@@ -1054,7 +1054,7 @@ class OrderAction extends myAction
     	$this->isOk($dbTmpOrder->updatePrintState(101),"重新打印存根与发票联申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
     }
     
-    /*
+    /**
      * 重新打印第3联
     */
     public function repeatThreePrint()
@@ -1096,7 +1096,7 @@ class OrderAction extends myAction
     	$this->isOk($dbTmpOrder->updatePrintState(105),"重新打印出货单申请成功","Order/printState","重新打印请求失败，请重试","Index/goBack_2",array('no'=>$this->_get("no")));
     }    
     
-    /*
+    /**
      * 重新打印的时候显示打印状态的页面
      */
     public function printState()

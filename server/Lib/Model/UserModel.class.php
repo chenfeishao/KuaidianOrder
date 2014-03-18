@@ -26,12 +26,12 @@ class UserModel extends Model {
 		return $this->tmpOrderID;
 	}
 	
-	public function login($userPassword)
-	/*
+	/**
 	 * 判断用户名和密码是否能登录
 	 * @param string $userPassword 用户密码
 	 * @return 数据库返回的结果集，数组大小应为1
 	 */
+	public function login($userPassword)
 	{
 		$condition['userName'] = $this->userName;
 		$condition['userPassword'] = $userPassword;

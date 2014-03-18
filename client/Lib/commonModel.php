@@ -3,13 +3,13 @@ require_once(CONF_PATH."MyConfigINI.php");
 
 class ModelBaseOP extends Model
 {
-	/*
+	/**
 	 * 数据索引id
 	 * Note:	需要在继承类中初始化
 	 */
 	protected $id = null;
 	
-	/*
+	/**
 	 * 得到原始内容，返回是否成功（供内部使用）
 	 * @param	string $arrayName;要获取的原始内容的字段名称
 	 * @return	是否成功
@@ -25,7 +25,7 @@ class ModelBaseOP extends Model
 		return true;
 	}
 	
-	/*
+	/**
 	 * 得到原始内容，返回数组内容（供外部使用）
 	* @param	string $arrayName;要获取的原始内容的字段名称
 	* @return	array
@@ -40,7 +40,7 @@ class ModelBaseOP extends Model
 		return $result[0][$arrayName];
 	}
 	
-	/*
+	/**
 	 * 得到一个数组解析后的内容
 	 * @param string $arrayName;要解析的原始内容数组的名称(字段名称)
 	 * @return array a[i] = 一项
@@ -54,7 +54,7 @@ class ModelBaseOP extends Model
 		return $tmp;
 	}
 	
-	/*
+	/**
 	 * 得到一个数组解析后的内容（自己带需要解析的数组，不需要与数据库通信）
 	* @param string $arrayName;要解析的原始内容的数组
 	* @return array a[i] = 一项
@@ -66,7 +66,7 @@ class ModelBaseOP extends Model
 		return $tmp;
 	}
 	
-	/*
+	/**
 	 * 序列化数组，即给数组添加中断标记并转换成字符串。（不跟数据库通信）
 	* @param	array $data;需要转换的原始数据
 	* @return	string;转换完成后的字符串
@@ -81,7 +81,7 @@ class ModelBaseOP extends Model
 		return $re;
 	}
 	
-	/*
+	/**
 	 * 序列化数组，给数组添加自定义的中断标记并转换成字符串。
 	* @param	array $data;需要转换的原始数据
 	* 			string $tag;中断标记
@@ -99,7 +99,7 @@ class ModelBaseOP extends Model
 		return $re;
 	}
 	
-	/*
+	/**
 	 * 序列化数组，并更新数据库内容
 	* @param	string $name;要更新的数据在数据库中的字段名
 	* 			array $data;需要转换的原始数据
@@ -115,7 +115,7 @@ class ModelBaseOP extends Model
 			return true;
 	}
 	
-	/*
+	/**
 	 * 给原始数组后面追加内容。（不跟数据库通信）
 	 * @param	string $arrayName;要追加的数组名称(字段名称)
 	 * 			string $value;要追加的值
@@ -128,7 +128,7 @@ class ModelBaseOP extends Model
 		return $this->$tmp .= $value._SPECAL_BREAK_FLAG;
 	}
 	
-	/*
+	/**
 	 * 删除name字段的第No个数据（与数据库通信）
 	 * @param	string $name;字段名称
 	 * 			int $No;第多少个数据

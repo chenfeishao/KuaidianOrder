@@ -37,22 +37,19 @@
             <div class="grid">
                 <div class="tile-group seven">
                     <div class="row">
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/ar');?>'" data-click="transform">
                             <h2>收款结算</h2>
                         </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/ap');?>'" data-click="transform">
                             <h2>付款结算</h2>
                         </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/cost');?>'" data-click="transform">
                             <h2>费用</h2>
                         </button>
                     </div>
                     <div class="row">
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/query');?>'" data-click="transform">
                             <h2>账务查询</h2>
-                        </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('');?>'" data-click="transform">
-                            <h2>存取转账</h2>
                         </button>
                     </div>
                 </div>

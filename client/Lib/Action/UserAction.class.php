@@ -86,7 +86,7 @@ class UserAction extends myAction
     		$this->success('退出成功',U('Index/index'));////////////////////////////////////////////////////////
     }
     
-    /*
+    /**
      * ajax得到用户信息的页面
      */
     public function ajaxGetUserInfo()
