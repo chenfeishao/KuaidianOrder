@@ -1,0 +1,255 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/metro/js/start-screen.js"></script>
+<script>
+function getCookie(c_name)
+{
+    if (document.cookie.length>0)
+      {
+          var c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                var c_end = document.cookie.indexOf(";",c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+      }
+    return "";
+}
+function fleshVerify(){ 
+    //重载验证码
+    var time = new Date().getTime();
+        document.getElementById('verifyImg').src= '__APP__/Public/verify/'+time;
+}
+</script>
+<script>
+function go(id,k)
+{
+	if (k == 0)
+	{
+		url = "{:U("Order/inputPanel")}" + "?id=" + id;
+	}
+	else
+	{
+		url = "{:U("Order/edit")}" + "?id=" + id;
+	}
+	window.location = url;
+}
+
+$(function(){
+    $("#userWindows").on('click', function(){
+        if ( (getCookie('userName') == "") || (getCookie('userName') == null) )
+        {
+            $.Dialog({
+                shadow: true,
+                overlay: true,
+                draggable: true,
+                icon: '<span class="icon-windows"></span>',
+                title: '用户登录',
+                width: 400,
+                padding: 10,
+                onShow: function(){
+                    var content = '<form class="user-input" method="post" action="{:U("User/toLogin")}">' +
+                                '<label>用户名</label>' +
+                                '<div class="input-control text"><input type="text" name="userName"><button class="btn-clear"></button></div>' +
+                                '<label>密码</label>'+
+                                '<div class="input-control password"><input type="password" name="userPassword"><button class="btn-reveal"></button></div>' +
+                                '<label>验证码</label>' +
+                                '<div class="grid fluid">\
+                                	<div class="row">\
+	                                	<div class="input-control text">\
+	                                		<input type="text" name="yzm">\
+	                                		<button class="btn-clear"></button>\
+	                                	</div>\
+                                	</div>\
+                                	<div class="row">\
+                                		<img class="span5" id="verifyImg" src="__APP__/Public/verify/" onclick="fleshVerify()"/>\
+                                		<label class="span7">看不清？点击图片更换<br><b>注意：区分大小写</b></label>\
+                                	</div>\
+                                </div>'+
+                                '<div class="form-actions">' +
+                                '<button class="button primary">登录</button>&nbsp;'+
+                                '<button class="button" type="button" onclick="$.Dialog.close()">取消</button> '+
+                                '</div>'+
+                                '</form>';
+                    $.Dialog.content(content);
+                }
+            });
+        }
+        else
+        {
+            window.location='{:U("User/logout")}';
+        }
+    });
+});
+var tag = 0;
+function onKeyDownDo(e)
+{
+	var input;
+	
+	if(window.event) // IE
+    {
+    	input = e.keyCode;
+    }
+	else if (e.which) // Netscape/Firefox/Opera
+    {
+		input = e.which;
+    }
+	
+	if ( (e.which == 13) && (tag == 1) )
+	{
+        $.Dialog({
+            shadow: true,
+            overlay: true,
+            draggable: true,
+            icon: '<span class="icon-cart"></span>',
+            title: '详细',
+            width: 1000,//还需要改下面html里的宽高
+            padding: 10,
+            onShow: function(_dialog){
+            	url = "{:U("Order/inputPanelIn")}" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
+                var html = [
+                    '<iframe width="1000" height="580" src=\"'+url+'\" frameborder="0" allowfullscreen></iframe>'
+                ].join("");
+                $.Dialog.content(html);
+            }
+        });
+		
+		tag = 0;
+		$("#quickSelect").val("");
+	}
+	else if ( (e.which == 13) && (tag == 0) )
+		tag++;
+}
+</script>
+</head>
+<body class="metro">
+<div class="tile-area tile-area-dark">
+    <h1 class="tile-area-title fg-white">欢迎<small>V2.0&nbsp;&nbsp;&nbsp;<a href="{:U("Index/updateInfo")}">点此查看更新内容</a>&nbsp;&nbsp;&nbsp;登录用户名和密码：youke&nbsp;&nbsp;&nbsp;后台地址：域名/server.php</small></h1>
+
+    <div class="user-id" id="userWindows">
+        <div class="user-id-image">
+            <if condition="$Think.session.userName eq NULL "><span class="icon-user no-display1"></span>
+			<else/><img src="__PUBLIC__/metro/images/Battlefield_4_Icon.png">
+			</if>
+        </div>
+        <div class="user-id-name">
+            <span class="first-name">
+           		<if condition="$Think.session.userName eq NULL ">未登录
+   				<else/>{$Think.session.userName}
+   				</if>
+    		</span>
+            <span class="last-name">
+            	<if condition="$Think.session.userPower eq NULL "> 
+   				<else/>{$Think.session.userPower}
+   				</if>
+            </span>
+        </div>
+    </div>
+
+    <div class="tile-group two">
+        <div class="tile-group-title">开始</div>
+
+		<div class="tile double ribbed-amber">
+            <div class="input-control text span3 place-left margin10" style="margin-left: 10px">
+                <input autofocus="" id="quickSelect" name="quick" type="text" list="product" onclick='$(this).val("");' onkeydown="onKeyDownDo(event)">
+	        </div>
+	        <div class="brand">
+	            <div class="label"><h3 class="no-margin fg-white"><span class="icon-search"></span><span class="place-right">快速选择商品</span></h3></div>
+	        </div>
+        </div>
+        
+        <a href="{:U("Order/closing")}" class="tile bg-violet">
+            <div class="tile-content icon">
+                <span class="icon-basket"></span>
+            </div>
+            <div class="brand">
+                <div class="label">结账</div>
+            </div>
+        </a>
+
+        <a href="{:U("Order/history")}" class="tile bg-darkOrange">
+            <div class="tile-content icon">
+                <span class="icon-history"></span>
+            </div>
+            <div class="brand">
+                <div class="label">历史出货记录</div>
+            </div>
+        </a>
+        
+        <a href="{:U("Finance/index")}" class="tile bg-lightGreen">
+            <div class="tile-content icon">
+                <span class="icon-book"></span>
+            </div>
+            <div class="brand">
+                <div class="label">财务管理</div>
+            </div>
+        </a>
+    </div> <!-- End group -->
+
+
+
+	<if condition="$select neq NULL">
+		<div class="tile-group three">
+		   <div class="tile-group-title">购物车</div>
+		   
+		   <foreach name="select" item="vo">
+				<div class="{$vo.className} selected"><!-- onclick='go({$vo.id},1)' -->
+					<div class="{$vo.content}">
+						<if condition="$vo.image eq NULL"><span class="icon-tag"></span>
+		   				<else/><img src="{$vo.image}"/>
+		   				</if>
+					</div>
+					<div class="{$vo.brand}">
+		                <div class="label">{$vo.name}</div>
+		                <div class="badge">{$vo.num}</div>
+		            </div>
+				</div>
+			</foreach>
+		
+		</div>
+	</if>
+
+
+    <div class="tile-group six">
+        <div class="tile-group-title">商品</div>
+        
+        <div class="tab-control" data-effect="fade" data-role="tab-control">
+		    <ul class="tabs">
+		        <volist name="list" id="vo">
+		        	 <li><a href="#___{$i}">{$vo.tabName}</a></li>
+		   		</volist>
+		    </ul>
+		
+		    <div class="frames">
+		    	<volist name="list" id="vo">
+			        <div class="frame" id="___{$i}">
+			         	<foreach name="vo['goods']" item="sub">
+							<a class="{$sub.className}"  href="{:U("Order/inputPanel")}?id={$sub.id}">
+								<div class="{$sub.content}">
+									<if condition="$sub.image eq NULL"><span class="icon-tag"></span>
+					   				<else/><img src="{$sub.image}"/>
+					   				</if>
+								</div>
+								<div class="{$sub.brand}">
+					                <div class="label">{$sub.name}</div>
+					            </div>
+							</a>
+						</foreach>
+						<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+					</div>
+		   		</volist>
+		   	</div>
+		</div>
+		
+    </div> <!-- End group -->
+</div>
+
+<datalist id="product">
+    <foreach name="productList" item="vo">
+        <option label="{$vo.pyname}{$vo.name}" value="{$vo.name}" id="{$vo.name}" src="{$vo.id}"/>
+    </foreach>
+</datalist>
+
+</body>
+</html>

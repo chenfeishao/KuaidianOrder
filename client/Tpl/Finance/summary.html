@@ -1,0 +1,63 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/checkInput.js"></script>
+ 
+</head>
+
+<body class="metro">
+
+    <div class="container">
+        <h1>
+       		<a href="{:U("Index/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+           	今日销售汇总<small class="on-right">{$Think.session.userName}&nbsp{$Think.session.userPower}</small>
+        </h1>
+        <div class="tile-area no-padding clearfix">
+            <div class="grid">
+            	<div class="panel">
+					<div class="panel-header bg-indigo fg-white">
+						汇总
+					</div>
+				<div class="panel-content grid fluid">
+					<if condition="$list eq NULL "><b>没有完成的订单</b>
+   					<else/>
+                		<table class="table hovered">
+			                <thead>
+				                <tr>
+				                	<th class="text-center">序号</th>
+				                    <th class="text-center">商品名称</th>
+				                    <th class="text-center">销售总数量</th>
+				                    <th class="text-center">平均单价</th>
+				                    <th class="text-center">销售总金额</th>
+				                </tr>
+			                </thead>
+							
+			                <tbody class="grid fluid text-center">
+			                	<volist name="list" id="vo">
+							    	<tr>
+							    		<td style="width: 50px;">{$i}
+							    		</td>
+							    		<td class="span2">{$vo.name}</td>
+							    		<td class="right span5">{$vo.num}</td>
+							    		<td class="right span1">{$vo.price}</td>
+							    		<td class="right span1">{$vo.totalPrice}</td>
+							    	</tr>
+						    	</volist>
+			                </tbody>
+			
+			                <tfoot>
+			                	 <tr>
+				                	<th class="text-center">序号</th>
+				                    <th class="text-center">商品名称</th>
+				                    <th class="text-center">销售总数量</th>
+				                    <th class="text-center">平均单价</th>
+				                    <th class="text-center">销售总金额</th>
+				                </tr>
+			                </tfoot>
+			            </table>
+			           </if>
+			       </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
