@@ -11,9 +11,9 @@ return array(
 	// 数据库配置信息
 	'DB_TYPE'   => 'mysql', // 数据库类型
 	'DB_HOST'   => 'localhost', // 服务器地址
-	'DB_NAME'   => 'easyOrder', // 数据库名
-	'DB_USER'   => 'easyOrder', // 用户名
-	'DB_PWD'    => 'easyOrder', // 密码
+	'DB_NAME'   => 'kuaidian_sae', // 数据库名
+	'DB_USER'   => 'kuaidian_sae', // 用户名
+	'DB_PWD'    => 'kuaidian_sae', // 密码
 	'DB_PORT'   => 3306, // 端口
 	'DB_PREFIX' => '', // 数据库表前缀
 	

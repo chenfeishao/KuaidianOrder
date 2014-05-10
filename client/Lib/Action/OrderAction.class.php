@@ -616,7 +616,7 @@ class OrderAction extends myAction
      * @param	int $mode;模式，
      * 				0：正常历史记录页面（显示当天记录）；
      * 				1：按创建时间查询的区间查询显示页面
-     * 				2:按打印时间查询的区间查询显示页面
+     * 				2：按打印时间查询的区间查询显示页面
      * 				3：按创建时间查询的多点查询显示页面
      * 				4：按打印时间查询的多点查询显示页面
      * 			array || string $startDate;日期数组||开始日期
@@ -649,7 +649,7 @@ class OrderAction extends myAction
     		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
     		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' 
-    					and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->select();
+    					and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")->order('createDate')->select();
     		$done = $dbTmpOrder->where("printState='7' and createDate>='".$date1." 00:00:00' and createDate<='".$date2." 23:59:59'")
     				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
@@ -659,9 +659,9 @@ class OrderAction extends myAction
     		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
     		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'
-    					and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->select();
+    					and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")->order('printDate')->select();
     		$done = $dbTmpOrder->where("printState='7' and printDate>='".$date1." 00:00:00' and printDate<='".$date2." 23:59:59'")
-    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
+    				->order('printDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	elseif ($mode === 3)
     	{
@@ -675,7 +675,7 @@ class OrderAction extends myAction
     		$tmpOrderCount = $dbTmpOrder->where("printState='7' and (".$str.")")->count();
     		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
     		
-    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->order('createDate')->select();
     		$done = $dbTmpOrder->where("printState='7' and (".$str.")")
     				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     		
@@ -697,9 +697,9 @@ class OrderAction extends myAction
     		$tmpOrderCount = $dbTmpOrder->where("printState='7' and (".$str.")")->count();
     		$page = new Page($tmpOrderCount,$recordNum,$rollPageNEQ0);// 实例化分页类 传入总记录数和每页显示的记录数
     		
-    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->select();
+    		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8' and (".$str.")")->order('printDate')->select();
     		$done = $dbTmpOrder->where("printState='7' and (".$str.")")
-    				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
+    				->order('printDate')->limit($page->firstRow.','.$page->listRows)->select();
     		
     		if ($startDate === null)
     		{
@@ -716,8 +716,7 @@ class OrderAction extends myAction
     		
     		$undone = $dbTmpOrder->where("printState<>'7' and printState<>'8'")->select();
     		$done = $dbTmpOrder->where("printState='7' 
-    				and ((createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59') 
-    				or (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59'))")
+    				and (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59')")
     				->order('createDate')->limit($page->firstRow.','.$page->listRows)->select();
     	}
     	//分页
