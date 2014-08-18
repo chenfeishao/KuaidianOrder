@@ -43,6 +43,9 @@
                         <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/ap');?>'" data-click="transform">
                             <h2>付款结算</h2>
                         </button>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/contacts');?>'" data-click="transform">
+                            <h2>往来管理</h2>
+                        </button>
                         <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/cost');?>'" data-click="transform">
                             <h2>费用</h2>
                         </button>

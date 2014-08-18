@@ -1,0 +1,88 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/metro/js/start-screen.js"></script>
+<script>
+var tag = 0;
+function onKeyDownDo(e)
+{
+	var input;
+	
+	if(window.event) // IE
+    {
+    	input = e.keyCode;
+    }
+	else if (e.which) // Netscape/Firefox/Opera
+    {
+		input = e.which;
+    }
+	
+	if ( (e.which == 13) && (tag == 1) )
+	{
+		url = "{:U("Finance/ardo")}" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
+		
+		tag = 0;
+		$("#quickSelect").val("");
+		
+		window.location = url;
+	}
+	else if ( (e.which == 13) && (tag == 0) )
+		tag++;
+}
+</script>
+</head>
+<body class="metro">
+<div class="tile-area tile-area-dark">
+    <h1 class="tile-area-title fg-white">
+    	<a href="{:U("Finance/index")}"><i class="icon-arrow-left-3 fg-white smaller"></i></a>
+    	选择账户
+    </h1>
+
+    
+
+    <div class="tile-group two">
+        <div class="tile-group-title">开始</div>
+
+		<div class="tile double ribbed-amber">
+            <div class="input-control text span3 place-left margin10" style="margin-left: 10px">
+                <input autofocus="" id="quickSelect" name="quick" type="text" list="product" onclick='$(this).val("");' onkeydown="onKeyDownDo(event)">
+	        </div>
+	        <div class="brand">
+	            <div class="label"><h3 class="no-margin fg-white"><span class="icon-search"></span><span class="place-right">快速选择</span></h3></div>
+	        </div>
+        </div>
+    </div> <!-- End group -->
+
+    <div class="tile-group eleven">
+        <div class="tile-group-title">账户</div>
+        
+        <div class="tab-control" data-effect="fade" data-role="tab-control">
+		    <ul class="tabs">
+		        <volist name="list" id="vo">
+		        	 <li><a href="#___{$i}">{$vo.tabName}</a></li>
+		   		</volist>
+		    </ul>
+		
+		   	<div class="frames">
+		    	<volist name="list" id="vo">
+			        <div class="frame" id="___{$i}">
+			         	<foreach name="vo['account']" item="sub">
+							    <eq name="i" value="value">value</eq><!-- 没有意义，但是刚好可以让方块中间空开，所以就加上了 -->
+							<a class="{$sub.class}"  href="{:U("Finance/ardo")}?id={$sub.name}" data-click="transform">
+                            	<h2>{$sub.name}</h2>
+        					</a>
+						</foreach>
+						<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+					</div>
+		   		</volist>
+		   	</div>
+		</div>
+    </div> <!-- End group -->
+</div>
+
+<datalist id="product">
+    <foreach name="accountList" item="vo">
+        <option label="{$vo.pyname}{$vo.name}" value="{$vo.name}" id="{$vo.name}" src="{$vo.name}"/>
+    </foreach>
+</datalist>
+
+</body>
+</html>

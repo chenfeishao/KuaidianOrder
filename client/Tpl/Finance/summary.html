@@ -7,7 +7,7 @@
 
     <div class="container">
         <h1>
-       		<a href="{:U("Index/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+       		<a href="{:U("Finance/index")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	今日销售汇总<small class="on-right">{$Think.session.userName}&nbsp{$Think.session.userPower}</small>
         </h1>
         <div class="tile-area no-padding clearfix">
@@ -23,7 +23,9 @@
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
+				                	<th class="text-center">商品序号</th>
 				                    <th class="text-center">商品名称</th>
+				                    <th class="text-center">规格</th>
 				                    <th class="text-center">销售总数量</th>
 				                    <th class="text-center">平均单价</th>
 				                    <th class="text-center">销售总金额</th>
@@ -35,10 +37,12 @@
 							    	<tr>
 							    		<td style="width: 50px;">{$i}
 							    		</td>
+							    		<td class="right span1">{$vo.id}</td>
 							    		<td class="span2">{$vo.name}</td>
-							    		<td class="right span5">{$vo.num}</td>
-							    		<td class="right span1">{$vo.price}</td>
-							    		<td class="right span1">{$vo.totalPrice}</td>
+							    		<td class="span2">{$vo.size}</td>
+							    		<td class="right span2">{$vo.num}</td>
+							    		<td class="right span2">{$vo.price}</td>
+							    		<td class="right span2">{$vo.totalPrice}</td>
 							    	</tr>
 						    	</volist>
 			                </tbody>
@@ -46,13 +50,25 @@
 			                <tfoot>
 			                	 <tr>
 				                	<th class="text-center">序号</th>
+				                	<th class="text-center">商品序号</th>
 				                    <th class="text-center">商品名称</th>
+				                    <th class="text-center">规格</th>
 				                    <th class="text-center">销售总数量</th>
 				                    <th class="text-center">平均单价</th>
 				                    <th class="text-center">销售总金额</th>
 				                </tr>
 			                </tfoot>
 			            </table>
+			            <div class="row">
+			           		<div class="span1"></div>
+				       			<div class="notice span5 marker-on-top fg-white text-center">
+				                    <h2 id="totalNum">总数量：<strong>{$totalNum}</strong></h2>
+				                </div>
+			                <div class="span1"></div>
+				                <div class="notice span5 marker-on-top bg-red fg-white text-center">
+				                    <h2 id="totalJine">总金额：<strong>{$totalMoney}</strong></h2>
+				                </div>
+			       		</div>
 			           </if>
 			       </div>
             </div>

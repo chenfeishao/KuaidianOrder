@@ -93,7 +93,7 @@ class ModelBaseOP extends Model
 		$re = "";
 		for ($i = 0; $i < (count($data) - 1); $i++)
 		{
-		$re .= $data[$i].$tag;
+			$re .= $data[$i].$tag;
 		}
 		$re .= $data[count($data) - 1];
 		return $re;

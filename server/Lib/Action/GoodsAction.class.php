@@ -107,14 +107,13 @@ class GoodsAction extends myAction
     	}
     	
     	//检查有没有超过$blockSize个商品的标签组
-    	$blockSize=33;//3*x=30
     	$i = 0;
     	$arrayCount = count($allInfo);
     	while ($i < $arrayCount)
     	{
-    		if (count($allInfo[$i]["goods"]) > $blockSize)
+    		if (count($allInfo[$i]["goods"]) > BLOCKSIZE)
     		{
-    			$tmpChunk = array_chunk($allInfo[$i]["goods"],$blockSize);
+    			$tmpChunk = array_chunk($allInfo[$i]["goods"],BLOCKSIZE);
     			for ($j = 0; $j < count($tmpChunk); $j++)
     			{
     				$tmp = null;
