@@ -100,6 +100,7 @@ class FinanceAction extends myAction
     	$id	=		$this->_get("id");
     	empty($id) && $this->error("非法操作",U("Finance/index"));
     	$this->assign("id",$id);
+    	session("ardoID",$id);
     	$this->display();
     }
     
@@ -108,13 +109,26 @@ class FinanceAction extends myAction
      */
     public function toar()
     {
-    	$id	=		$this->_post("id");
+    	$id	=		session("ardoID");
     	$money	=	$this->_post("money");
     	$remark	=	$this->_post("remark");
     	empty($id) && $this->error("非法操作",U("Finance/index"));
     	empty($money) && $this->error("请填写金额",U("Finance/ardo",array("id"=>$id)));
     	
+    	//TODO:检测id是否存在合法
     	
+    	D("Finance")->startTrans();
+    	if ( D("Finance")->newFinance($id,$money,$remark,0) )
+    	{
+    		if (D("User")->updateMoney(1,$id,$money))
+    			D("Finance")->commit();
+    	}
+    	else
+    	{
+    		D("Finance")->rollback();
+    		$this->error("应收款创建失败，请重试",U("Index/goBack_2"));
+    	}
+    	$this->success("应收款创建成功",U("Finance/index"));
     }
     
     /**

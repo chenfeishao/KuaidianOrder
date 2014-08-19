@@ -47,7 +47,6 @@ function check()
                             	<label><font color=black>从何处收款</font></label>
                                 <div class="input-control text" data-role="input-control">
                                     <input type="text"  disabled value="<?php echo ($id); ?>">
-                                     <input type="hidden" name="id"  value="<?php echo ($id); ?>" />
                                     <button type="button" class="btn-clear"></button>
                                 </div>
                                 <label><font color=black>金额</font></label>
@@ -138,6 +137,7 @@ function inputPanel()
                 break;
             }
         }
+        this.max = 2;
         
         //0自动获得焦点
         document.getElementsByTagName("input")[1].parentNode.className = "input-control text info-state";

@@ -113,3 +113,20 @@ create table goods(
 	
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+
+create table finance(
+	id bigint NOT NULL AUTO_INCREMENT,
+	userID LONGTEXT NOT NULL,/*哪一个用户的账单*/
+	money double NOT NULL,
+	
+	/*记录模式：
+	 *		0：应收款
+	 *		1：应付款
+	 */
+	mode int NOT NULL,
+	
+	remark LONGTEXT NOT NULL,
+	createDate datetime NOT NULL,
+	primary key(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

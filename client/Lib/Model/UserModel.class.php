@@ -277,5 +277,33 @@ class UserModel extends Model {
 		return falseOrNULL($this->save($tmp));
 	}
 	
+	
+	/**
+	 * 更新账户剩余金额
+	 * @param		$mode;加还是减;0是加，1是减
+	 * 						$id;user表的主键
+	 * 						$money;钱数增量
+	 * @return	bool;是否成功
+	 */
+	public function updateMoney($mode,$id,$money)
+	{
+		$this->startTrans();//TODO:这是锁定么？
+		$nowMoney = $this->where(array("userName"=>$id))->getField("money");
+		if ($mode ==  0)
+			$nowMoney += $money;
+		else
+			$nowMoney -= $money;
+		$re = $this->where(array("userName"=>$id))->setField("money",$nowMoney);
+		if ($re >= 0)
+		{
+			$this->commit();
+			return true;
+		}
+		else
+		{
+			$this->rollback();
+			return false;
+		}
+	}
 }
 ?>
