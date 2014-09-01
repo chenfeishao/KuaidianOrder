@@ -123,6 +123,7 @@ create table finance(
 	/*记录模式：
 	 *		0：应收款
 	 *		1：应付款
+	 *		2：费用
 	 */
 	mode int NOT NULL,
 	

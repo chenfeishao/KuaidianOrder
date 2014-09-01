@@ -40,7 +40,7 @@ function onKeyDownDo(e)
 	
 	if ( (e.which == 13) && (tag == 1) )
 	{
-		url = "<?php echo U("Finance/ardo");?>" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
+		url = "<?php echo U("Finance/apdo");?>" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
 		
 		tag = 0;
 		$("#quickSelect").val("");
@@ -56,7 +56,7 @@ function onKeyDownDo(e)
 <div class="tile-area tile-area-dark">
     <h1 class="tile-area-title fg-white">
     	<a href="<?php echo U("Finance/index");?>"><i class="icon-arrow-left-3 fg-white smaller"></i></a>
-    	收款结算——选择账户
+    	付款结算——选择账户
     </h1>
 
     
@@ -85,7 +85,7 @@ function onKeyDownDo(e)
 		   	<div class="frames">
 		    	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><div class="frame" id="___<?php echo ($i); ?>">
 			         	<?php if(is_array($vo['account'])): foreach($vo['account'] as $key=>$sub): if(($i) == "value"): ?>value<?php endif; ?><!-- 没有意义，但是刚好可以让方块中间空开，所以就加上了 -->
-							<a class="<?php echo ($sub["class"]); ?>"  href="<?php echo U("Finance/ardo");?>?id=<?php echo ($sub["name"]); ?>" data-click="transform">
+							<a class="<?php echo ($sub["class"]); ?>"  href="<?php echo U("Finance/apdo");?>?id=<?php echo ($sub["name"]); ?>" data-click="transform">
                             	<h2><?php echo ($sub["name"]); ?></h2>
         					</a><?php endforeach; endif; ?>
 						<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

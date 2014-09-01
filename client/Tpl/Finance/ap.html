@@ -17,7 +17,7 @@ function onKeyDownDo(e)
 	
 	if ( (e.which == 13) && (tag == 1) )
 	{
-		url = "{:U("Finance/ardo")}" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
+		url = "{:U("Finance/apdo")}" + "?id=" + $("#"+$("#quickSelect").val()).attr("src");
 		
 		tag = 0;
 		$("#quickSelect").val("");
@@ -33,7 +33,7 @@ function onKeyDownDo(e)
 <div class="tile-area tile-area-dark">
     <h1 class="tile-area-title fg-white">
     	<a href="{:U("Finance/index")}"><i class="icon-arrow-left-3 fg-white smaller"></i></a>
-    	收款结算——选择账户
+    	付款结算——选择账户
     </h1>
 
     
@@ -66,7 +66,7 @@ function onKeyDownDo(e)
 			        <div class="frame" id="___{$i}">
 			         	<foreach name="vo['account']" item="sub">
 							    <eq name="i" value="value">value</eq><!-- 没有意义，但是刚好可以让方块中间空开，所以就加上了 -->
-							<a class="{$sub.class}"  href="{:U("Finance/ardo")}?id={$sub.name}" data-click="transform">
+							<a class="{$sub.class}"  href="{:U("Finance/apdo")}?id={$sub.name}" data-click="transform">
                             	<h2>{$sub.name}</h2>
         					</a>
 						</foreach>
