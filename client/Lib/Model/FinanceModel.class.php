@@ -3,7 +3,7 @@ class FinanceModel extends Model {
 
 	/**
 	 * 创建一条记录
-	 * @param  $id；用户表的主键
+	 * @param  $id；给哪一个账户创建这条记录。用户表的主键
 	 * @param  $money；金额
 	 * @param  $remark；备注
 	 * @param  $mode；模式，0是应收款，1是应付款，2是费用

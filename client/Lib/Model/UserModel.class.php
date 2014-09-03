@@ -165,7 +165,7 @@ class UserModel extends Model {
 		$benCiShiShou = $tmpOrderInfo["xianJinShiShou"] + $tmpOrderInfo["yinHangShiShou"];
 		$benCiQianFuKuan = round($benCiShiShou - $yingShouJinE,2);
 		
-		//更新
+		//更新余额
 		$tmpCustom = null;
 		$tmpCustom["userName"] = $tmpOrderInfo["customName"];
 		$preUserName = $this->userName;
@@ -174,6 +174,26 @@ class UserModel extends Model {
 		$tmpCustomRe = $this->save($tmpCustom);
 		if ( ($tmpCustomRe === false) || ($tmpCustomRe === null) )
 			return false;
+		
+		
+		
+		/*
+		 * 创建往来记录
+		 */
+		$tmpRemark = "本凭证由订单产生，订单编号：<a href=\"".U("Order/historyOver",array("no"=>$tmpOrderInfo["id"]))."\">".$tmpOrderInfo["id"]."</a>";
+		if ($benCiQianFuKuan >= 0)
+		{
+			$tmpMode = 1;
+			$wuFuHaoBenCiQianFuKuan = $benCiQianFuKuan;
+		}
+		else
+		{
+			$tmpMode = 0;
+			$wuFuHaoBenCiQianFuKuan = 0 - $benCiQianFuKuan;
+		}
+		if (!D("Finance")->newFinance($tmpOrderInfo["customName"],$wuFuHaoBenCiQianFuKuan,$tmpRemark,$tmpMode,session("userName"),$tmpOrderInfo["createDate"]))
+			return false;
+		
 		
 		
 		/*

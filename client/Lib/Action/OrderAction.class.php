@@ -484,11 +484,16 @@ class OrderAction extends myAction
     		$this->error("非法操作",U("Index/index"));
     	
     	$dbTmpOrder->startTrans();
+    	$dbUser->startTrans();
     	if ( $dbTmpOrder->updatePrintState(1) && $dbUser->newTmpOrderID() )
+    	{
     		$dbTmpOrder->commit();
+    		$dbUser->commit();
+    	}
     	else
     	{
     		$dbTmpOrder->rollback();
+    		$dbUser->rollback();
     		$this->error("立即发货提交失败，请重试",U("Index/goBack"));
     	}
 //     	$this->isFalse($dbTmpOrder->updatePrintState(1),"立即发货提交失败，请重试","Index/goBack");
@@ -542,11 +547,16 @@ class OrderAction extends myAction
     		$this->error("非法操作",U("Index/index"));
     	
     	$dbTmpOrder->startTrans();
+    	$dbUser->startTrans();
     	if ( $dbTmpOrder->updatePrintState(0) && $dbUser->newTmpOrderID() )
+    	{
     		$dbTmpOrder->commit();
+    		$dbUser->commit();
+    	}
     	else
     	{
     		$dbTmpOrder->rollback();
+    		$dbUser->rollback();
     		$this->error("延迟发货提交失败，请重试",U("Index/goBack"));
     	}
 //     	$this->isFalse($dbTmpOrder->updatePrintState(0),"延迟发货提交失败，请重试","Index/goBack");
