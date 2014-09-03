@@ -192,7 +192,7 @@ class UserModel extends Model {
 			$tmpMode = 0;
 			$wuFuHaoBenCiQianFuKuan = 0 - $benCiQianFuKuan;
 		}
-		if (!D("Finance")->newFinance($tmpOrderInfo["customName"],$wuFuHaoBenCiQianFuKuan,$tmpRemark,$tmpMode,session("userName"),$tmpOrderInfo["createDate"]))
+		if (!D("Finance")->newFinance($tmpOrderInfo["customName"],$wuFuHaoBenCiQianFuKuan,$tmpRemark,$tmpMode,session("userName"),$tmpOrderInfo["createDate"],$tmpAdd["id"]))
 			return false;
 		
 		

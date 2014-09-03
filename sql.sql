@@ -79,6 +79,7 @@ create table tmp_order(
 	 *	6：出货单已经下发给打印机，但是打印机还没有返回成功打印信号
 	 *	7：出货单已经打印成功，所有打印完成
 	 *	8 : 占位符，当出现新的时用这个占位一个空行
+	 *	9:被删除掉的订单
 	 *	101：重新打印存根联与发票联（只打一张，打完后不再继续打）
 	 *	102：存根和发票联已经下发给打印机，但是打印机还没有返回成功打印信号
 	 *	103：
@@ -132,5 +133,6 @@ create table finance(
 	createDate datetime NOT NULL,
 	
 	createUser LONGTEXT NOT NULL,/*经手人userName*/ 
+	byOrderID bigint NOT NULL,/*是由哪个订单产生的，如果不是由订单产生则为0，否则为订单编号*/
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
