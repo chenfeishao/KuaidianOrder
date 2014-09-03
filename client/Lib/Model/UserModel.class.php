@@ -133,7 +133,7 @@ class UserModel extends Model {
 		$dbTmpOrder = D("TmpOrder");
 		$dbTmpOrder->init($this->getTmpOrderID());
 		/*
-		 * 更新将当前订单（未新建）的信息
+		 * 更新当前订单（未新建）的信息
 		 * 	1.加上订单创建时间
 		 */
 		$tmpAdd["id"] = $this->getTmpOrderID();

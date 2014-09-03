@@ -130,5 +130,7 @@ create table finance(
 	
 	remark LONGTEXT NOT NULL,
 	createDate datetime NOT NULL,
+	
+	createUser LONGTEXT NOT NULL,/*经手人userName*/ 
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;

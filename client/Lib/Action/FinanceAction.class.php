@@ -130,7 +130,7 @@ class FinanceAction extends myAction
     	//TODO:检查金额是否是数字
     	
     	D("Finance")->startTrans();
-    	if ( D("Finance")->newFinance($id,$money,$remark,0) )
+    	if ( D("Finance")->newFinance($id,$money,$remark,0,session("userName")) )
     	{
     		if (D("User")->updateMoney(1,$id,$money))
     			D("Finance")->commit();
@@ -181,7 +181,7 @@ class FinanceAction extends myAction
     	//TODO:检查金额是否是数字
     	 
     	D("Finance")->startTrans();
-    	if ( D("Finance")->newFinance($id,$money,$remark,1) )
+    	if ( D("Finance")->newFinance($id,$money,$remark,1,session("userName")) )
     	{
     		if (D("User")->updateMoney(0,$id,$money))
     			D("Finance")->commit();
@@ -218,7 +218,7 @@ class FinanceAction extends myAction
     	//TODO:检查金额是否是数字
     	//TODO:检查日期是否合法
     	
-    	if ( D("Finance")->newFinance(-1,$money,$remark,2,$dateInfo) )
+    	if ( D("Finance")->newFinance(-1,$money,$remark,2,session("userName"),$dateInfo) )
     		$this->success("费用创建成功",U("Finance/index"));
     	else 
     		$this->error("费用创建失败，请重试",U("Index/goBack_2"));
@@ -319,6 +319,7 @@ class FinanceAction extends myAction
     	$id	=		$this->_get("id");
     	empty($id) && $this->error("非法操作",U("Finance/contacts"));
     	
+    	//往来凭证
     	$re	=		D("Finance")->where(array("userID"=>$id))->order("createDate desc")->select();
     	foreach($re as $key=>$value)
     	{
@@ -326,6 +327,7 @@ class FinanceAction extends myAction
     		$list[$key]["createDate"] = $value["createDate"];
     		$list[$key]["money"] = $value["money"];
     		$list[$key]["remark"] = $value["remark"];
+    		$list[$key]["createUser"] = $value["createUser"];
     		if ($value["mode"] == 0)
     		{
     			$list[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";
@@ -344,6 +346,7 @@ class FinanceAction extends myAction
     		}
     	}
     	
+    	//账户余额信息
     	$balanceTmp		=		D("User")->where(array("userName"=>$id))->select();
     	if ($balanceTmp[0]["money"] >= 0)
     		$balanceInfo = "<font color='#0080FF'>公司欠其".$balanceTmp[0]["money"]."</font>";
@@ -361,6 +364,7 @@ class FinanceAction extends myAction
      */
     public function costQuery()
     {
+    	//费用凭证
     	$re	=		D("Finance")->where(array("mode"=>"2"))->order("createDate desc")->select();
     	foreach($re as $key=>$value)
     	{
@@ -368,6 +372,7 @@ class FinanceAction extends myAction
     		$list[$key]["createDate"] = $value["createDate"];
     		$list[$key]["money"] = $value["money"];
     		$list[$key]["remark"] = $value["remark"];
+    		$list[$key]["createUser"] = $value["createUser"];
     		if ($value["mode"] == 0)
     		{
     			$list[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";

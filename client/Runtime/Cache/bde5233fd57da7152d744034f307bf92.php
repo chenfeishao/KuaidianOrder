@@ -86,6 +86,7 @@
 				            <th>类型</th>
 				            <th>金额</th>
 				            <th class="span4">备注</th>
+				            <th >经手人</th>
 				        </tr>
 				    </thead>
 				    <tbody>
@@ -95,6 +96,7 @@
 					            <td style="text-align:center;"><?php echo ($vo["mode"]); ?></td>
 					            <td style="text-align:center;"><?php echo ($vo["money"]); ?></td>
 					            <td style="text-align:center;"><?php echo ($vo["remark"]); ?></td>
+					            <td style="text-align:center;"><?php echo ($vo["createUser"]); ?></td>
 					    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 				    </tbody>
 				</table><?php endif; ?>
