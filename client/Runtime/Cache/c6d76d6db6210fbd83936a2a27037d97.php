@@ -49,13 +49,16 @@
                         <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/cost');?>'" data-click="transform">
                             <h2>费用</h2>
                         </button>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/costQuery');?>'" data-click="transform">
+                            <h2>费用查询</h2>
+                        </button>
                     </div>
                     <div class="row">
                     	 <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/summary');?>'" data-click="transform">
                             <h2>今日汇总</h2>
                         </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/query');?>'" data-click="transform">
-                            <h2>账务查询</h2>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/total');?>'" data-click="transform">
+                            <h2>所有汇总</h2>
                         </button>
                     </div>
                 </div>

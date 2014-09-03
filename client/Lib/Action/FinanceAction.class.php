@@ -225,10 +225,11 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 财务查询页面
+     * 汇总查询页面
      */
-    public function query()
+    public function total()
     {
+    	
     	$this->display();
     }
     
@@ -303,7 +304,90 @@ class FinanceAction extends myAction
      */
     public function contacts()
     {
+    	$re = $this->getUserInfoForDisplay();
+    	$this->assign("list",$re[0]);
+    	$this->assign("accountList",$re[1]);
+    	$this->display();
+    }
+    
+    /**
+     * 查看某个账号的往来账目
+     */
+    public function watchUser()
+    {
+    	//TODO:检查用户名是否合法
+    	$id	=		$this->_get("id");
+    	empty($id) && $this->error("非法操作",U("Finance/contacts"));
     	
+    	$re	=		D("Finance")->where(array("userID"=>$id))->order("createDate desc")->select();
+    	foreach($re as $key=>$value)
+    	{
+    		$list[$key]["id"] = $value["id"];
+    		$list[$key]["createDate"] = $value["createDate"];
+    		$list[$key]["money"] = $value["money"];
+    		$list[$key]["remark"] = $value["remark"];
+    		if ($value["mode"] == 0)
+    		{
+    			$list[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";
+    		}
+    		elseif ($value["mode"] == 1)
+    		{
+    			$list[$key]["mode"] = "应<font color='#0080FF'><b>付</b></font>款";
+    		}
+    		elseif ($value["mode"] == 2)
+    		{
+    			$list[$key]["mode"] = "费用";
+    		}
+    		else
+    		{
+    			$list[$key]["mode"] = "未知，如果看到这个请联系开发人员";
+    		}
+    	}
+    	
+    	$balanceTmp		=		D("User")->where(array("userName"=>$id))->select();
+    	if ($balanceTmp[0]["money"] >= 0)
+    		$balanceInfo = "<font color='#0080FF'>公司欠其".$balanceTmp[0]["money"]."</font>";
+    	else
+    		$balanceInfo = "<font color='#FF0000'>其欠公司".(0 - $balanceTmp[0]["money"])."</font>";
+    	
+    	$this->assign("id",$id);
+    	$this->assign("balance",$balanceInfo);
+    	$this->assign("list",$list);
+    	$this->display();
+    }
+    
+    /**
+     * 费用查询页面
+     */
+    public function costQuery()
+    {
+    	$re	=		D("Finance")->where(array("mode"=>"2"))->order("createDate desc")->select();
+    	foreach($re as $key=>$value)
+    	{
+    		$list[$key]["id"] = $value["id"];
+    		$list[$key]["createDate"] = $value["createDate"];
+    		$list[$key]["money"] = $value["money"];
+    		$list[$key]["remark"] = $value["remark"];
+    		if ($value["mode"] == 0)
+    		{
+    			$list[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";
+    		}
+    		elseif ($value["mode"] == 1)
+    		{
+    			$list[$key]["mode"] = "应<font color='#0080FF'><b>付</b></font>款";
+    		}
+    		elseif ($value["mode"] == 2)
+    		{
+    			$list[$key]["mode"] = "费用";
+    		}
+    		else
+    		{
+    			$list[$key]["mode"] = "未知，如果看到这个请联系开发人员";
+    		}
+    	}
+    	 
+    	$this->assign("list",$list);
+    	$this->display();
     }
 }
 

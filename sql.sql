@@ -32,6 +32,7 @@ create table user(
 	
 	/*
 	 * 账户余额，即应收应付款
+	 * 正的为余额，即公司欠人家的
 	 */
 	money double NOT NULL,
 	

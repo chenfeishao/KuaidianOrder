@@ -40,7 +40,7 @@
 						汇总
 					</div>
 				<div class="panel-content grid fluid">
-					<?php if($list == NULL ): ?><b>没有完成的订单</b>
+					<?php if($list == NULL ): ?><b>今日没有完成任何订单</b>
    					<?php else: ?>
                 		<table class="table hovered">
 			                <thead>
