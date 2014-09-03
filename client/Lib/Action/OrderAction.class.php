@@ -934,7 +934,7 @@ class OrderAction extends myAction
     	);
     	$this->assign("tkey",$tmpMD5);
     	
-    	
+    	$this->assign("id",$id);
     	$this->display();
     }
     

@@ -50,6 +50,7 @@ function goDelete(url)
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
+				                	<th class="text-center">订单编号</th>
 				                    <th class="text-center">顾客名称</th>
 				                    <th class="text-center">商品</th>
 				                    <th class="text-center">创建时间</th>
@@ -63,6 +64,7 @@ function goDelete(url)
 			                	<?php if(is_array($undoneList)): $i = 0; $__LIST__ = $undoneList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
 							    		<td style="width: 50px;"><?php echo ($i); ?>
 							    		</td>
+							    		<td class="span2"><?php echo ($vo["id"]); ?></td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
 							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
@@ -74,16 +76,6 @@ function goDelete(url)
 										</td>
 							    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 			                </tbody>
-			
-			                <tfoot>
-			                	<th class="text-center">序号</th>
-			                    <th class="text-center">顾客名称</th>
-			                    <th class="text-center">商品</th>
-			                    <th class="text-center">创建时间</th>
-			                    <th class="text-center">打印时间</th>
-			                    <th class="text-center">状态</th>
-			                    <th class="text-center">操作</th>
-			                </tfoot>
 			            </table><?php endif; ?>
 				</div>
 			</div>
@@ -98,6 +90,7 @@ function goDelete(url)
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
+				                	<th class="text-center">订单编号</th>
 				                    <th class="text-center">顾客名称</th>
 				                    <th class="text-center">商品</th>
 				                    <th class="text-center">创建时间</th>
@@ -109,6 +102,7 @@ function goDelete(url)
 			                <tbody class="grid fluid text-center">
 			                	<?php if(is_array($doneList)): $i = 0; $__LIST__ = $doneList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
 							    		<td style="width: 50px;"><?php echo ($i+$offset); ?></td>
+							    		<td class="span2"><?php echo ($vo["id"]); ?></td>
 							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
 							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
@@ -121,6 +115,7 @@ function goDelete(url)
 			
 			                <tfoot>
 			                	<th class="text-center">序号</th>
+			                	<th class="text-center">订单编号</th>
 			                    <th class="text-center">顾客名称</th>
 			                    <th class="text-center">商品</th>
 			                    <th class="text-center">创建时间</th>

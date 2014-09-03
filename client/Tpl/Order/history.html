@@ -33,6 +33,7 @@ function goDelete(url)
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
+				                	<th class="text-center">订单编号</th>
 				                    <th class="text-center">顾客名称</th>
 				                    <th class="text-center">商品</th>
 				                    <th class="text-center">创建时间</th>
@@ -47,6 +48,7 @@ function goDelete(url)
 							    	<tr>
 							    		<td style="width: 50px;">{$i}
 							    		</td>
+							    		<td class="span2">{$vo.id}</td>
 							    		<td class="span2">{$vo.customName}</td>
 							    		<td class="right span5">{$vo.goodsName}</td>
 							    		<td class="right span1">{$vo.createDate}</td>
@@ -59,16 +61,6 @@ function goDelete(url)
 							    	</tr>
 						    	</volist>
 			                </tbody>
-			
-			                <tfoot>
-			                	<th class="text-center">序号</th>
-			                    <th class="text-center">顾客名称</th>
-			                    <th class="text-center">商品</th>
-			                    <th class="text-center">创建时间</th>
-			                    <th class="text-center">打印时间</th>
-			                    <th class="text-center">状态</th>
-			                    <th class="text-center">操作</th>
-			                </tfoot>
 			            </table>
 					</if>
 				</div>
@@ -87,6 +79,7 @@ function goDelete(url)
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
+				                	<th class="text-center">订单编号</th>
 				                    <th class="text-center">顾客名称</th>
 				                    <th class="text-center">商品</th>
 				                    <th class="text-center">创建时间</th>
@@ -99,6 +92,7 @@ function goDelete(url)
 			                	<volist name="doneList" id="vo">
 							    	<tr>
 							    		<td style="width: 50px;">{$i+$offset}</td>
+							    		<td class="span2">{$vo.id}</td>
 							    		<td class="span2">{$vo.customName}</td>
 							    		<td class="right span5">{$vo.goodsName}</td>
 							    		<td class="right span1">{$vo.createDate}</td>
@@ -112,6 +106,7 @@ function goDelete(url)
 			
 			                <tfoot>
 			                	<th class="text-center">序号</th>
+			                	<th class="text-center">订单编号</th>
 			                    <th class="text-center">顾客名称</th>
 			                    <th class="text-center">商品</th>
 			                    <th class="text-center">创建时间</th>

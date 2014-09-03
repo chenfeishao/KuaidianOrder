@@ -179,6 +179,7 @@ class UserModel extends Model {
 		
 		/*
 		 * 创建往来记录
+		 * TODO:以后如果扩展这个函数了，需要考虑这里是否需要加数据库事务
 		 */
 		$tmpRemark = "本凭证由订单产生，订单编号：<a href=\"".U("Order/historyOver",array("no"=>$tmpOrderInfo["id"]))."\">".$tmpOrderInfo["id"]."</a>";
 		if ($benCiQianFuKuan >= 0)
