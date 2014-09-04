@@ -313,5 +313,20 @@ class TmpOrderModel extends OrderOP {
 		else
 			return true;
 	}
+	
+	/**
+	 * 更新订单的物流信息
+	 * @param	$data;从表单得到的物流数据（没有验证）。另，会多于一个userName记录
+	 * @return	bool;是否成功
+	 */
+	public function updateWuLiu($inputData)
+	{
+		$data["id"] = $this->id;
+		$data["tel"] = $inputData["tel"];
+		$data["address"] = $inputData["address"];
+		$data["carAddress"] = $inputData["carAddress"];
+		$data["carNo"] = $inputData["carNo"];
+		return falseOrNULL($this->save($data));
+	}
 }
 ?>

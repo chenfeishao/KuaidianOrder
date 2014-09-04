@@ -88,11 +88,17 @@ create table tmp_order(
 	 *
 	 */
 	printState int NOT NULL,
+	
+	/*物流信息*/
+	tel varchar(100) NOT NULL,
+	address varchar(200) NOT NULL,
+	carAddress varchar(200) NOT NULL,
+	carNo varchar(100) NOT NULL,
 	primary key(id)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8');
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8');
-INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8','12345678901','西华门','北大门','陕AA4071');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8','12345678901','西华门','北大门','陕AA4071');
+INSERT tmp_order VALUES (NULL, '', '', '', '', '', '0', '0', '0', '2014-02-16 02:12:00','2014-02-16 02:12:00', '8','12345678901','西华门','北大门','陕AA4071');
 
 create table goods(
 	id bigint NOT NULL AUTO_INCREMENT,

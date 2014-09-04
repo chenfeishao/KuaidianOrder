@@ -31,13 +31,34 @@
     <div class="container">
         <h1>
        		<a href="<?php echo U("Finance/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	今日销售汇总<small class="on-right"><?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
+           	今日销售汇总<small class="on-right"><?php echo date("Y-m-d");;?>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
             	<div class="panel">
+					<div class="panel-header bg-green fg-white">
+						营业额
+					</div>
+					<div class="panel-content grid fluid">
+						<div class="row">
+							<div class="span3">
+			                    <label><font color=black>出货总价：<?php echo ($totalMoney); ?></font></h5>
+			                </div>
+			                <div class="span3">
+			                    <h4><font color=black>现金实收：<?php echo ($xianJinShiShou); ?></font></h4>
+			                </div>
+			                <div class="span3">
+			                    <h4><font color=black>银行实收：<?php echo ($yinHangShiShou); ?></font></h4>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>总实收：<?php echo ($xianJinShiShou+$yinHangShiShou); ?></font></h5>
+			                </div>
+			            </div>
+					</div>
+				</div>
+            	<div class="panel">
 					<div class="panel-header bg-indigo fg-white">
-						汇总
+						汇总表<small>&nbsp;出货总数：<?php echo ($totalNum); ?></small>
 					</div>
 				<div class="panel-content grid fluid">
 					<?php if($list == NULL ): ?><b>今日没有完成任何订单</b>
@@ -46,7 +67,7 @@
 			                <thead>
 				                <tr>
 				                	<th class="text-center">序号</th>
-				                	<th class="text-center">商品序号</th>
+				                	<th class="text-center">商品编号</th>
 				                    <th class="text-center">商品名称</th>
 				                    <th class="text-center">规格</th>
 				                    <th class="text-center">销售总数量</th>
@@ -71,7 +92,7 @@
 			                <tfoot>
 			                	 <tr>
 				                	<th class="text-center">序号</th>
-				                	<th class="text-center">商品序号</th>
+				                	<th class="text-center">商品编号</th>
 				                    <th class="text-center">商品名称</th>
 				                    <th class="text-center">规格</th>
 				                    <th class="text-center">销售总数量</th>
@@ -79,19 +100,28 @@
 				                    <th class="text-center">销售总金额</th>
 				                </tr>
 			                </tfoot>
-			            </table>
-			            <div class="row">
-			           		<div class="span1"></div>
-				       			<div class="notice span5 marker-on-top fg-white text-center">
-				                    <h2 id="totalNum">总数量：<strong><?php echo ($totalNum); ?></strong></h2>
-				                </div>
-			                <div class="span1"></div>
-				                <div class="notice span5 marker-on-top bg-red fg-white text-center">
-				                    <h2 id="totalJine">总金额：<strong><?php echo ($totalMoney); ?></strong></h2>
-				                </div>
-			       		</div><?php endif; ?>
+			            </table><?php endif; ?>
 			       </div>
             </div>
+            <div class="panel">
+				<div class="panel-header bg-lightBlue fg-white">
+					更多
+				</div>
+				<div class="panel-content grid fluid">
+					<div class="row">
+                        <button class="span6 command-button warning" onclick="window.location = '<?php echo U('Order/history');?>'">
+                        	 <h2 >
+                        	 <i class="icon-comments-5 on-left"></i>
+							查看今日订单</h2>
+						</button>
+                        <button class="span6 command-button inverse" onclick="window.location = '<?php echo U('Finance/downloadReport');?>'">
+                        	 <h2>
+                        	 <i class="icon-download-2 on-left"></i>
+							下载今日汇总报表</h2>
+						</button>
+		            </div>
+				</div>
+			</div>
         </div>
     </div>
 

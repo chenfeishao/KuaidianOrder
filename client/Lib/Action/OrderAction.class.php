@@ -332,7 +332,13 @@ class OrderAction extends myAction
     	{
     		$this->isFalsePlus($dbUser->updateInfo($userData),$dbUser->getErrorMsg(),"Index/goBack");
     	}
-
+    	
+    	//更新TmpOrder中的物流信息
+    	$dbUser->init(session("userName"));
+    	$dbTmpOrder = D("TmpOrder");
+    	$dbTmpOrder->init($dbUser->getTmpOrderID());
+    	$this->isFalsePlus($dbTmpOrder->updateWuLiu($userData),$dbTmpOrder->updateTmpOrderGetError(),"Index/goBack");
+    	
     	/*
     	 * 处理付款信息
     	*/
@@ -427,10 +433,10 @@ class OrderAction extends myAction
     	if ( ($tmpRe === false) || ($tmpRe === null) )
     		$this->error("查询用户失败，请重试",U("Index/goBack"));
     	$this->assign("customName",$customName);
-    	$this->assign("tel",$tmpRe["tel"]);
-    	$this->assign("address",$tmpRe["address"]);
-    	$this->assign("carAddress",$tmpRe["carAddress"]);
-    	$this->assign("carNo",$tmpRe["carNo"]);
+    	$this->assign("tel",$tmpOrderInfo["tel"]);
+    	$this->assign("address",$tmpOrderInfo["address"]);
+    	$this->assign("carAddress",$tmpOrderInfo["carAddress"]);
+    	$this->assign("carNo",$tmpOrderInfo["carNo"]);
 
     	//防止非法提交
     	$dbUser->init(session("userName"));//上面的$dbCustomUser更改了目标
@@ -911,10 +917,10 @@ class OrderAction extends myAction
     	if ( ($tmpRe === false) || ($tmpRe === null) )
     		$this->error("查询用户失败，请重试",U("Index/goBack"));
     	$this->assign("customName",$customName);
-    	$this->assign("tel",$tmpRe["tel"]);
-    	$this->assign("address",$tmpRe["address"]);
-    	$this->assign("carAddress",$tmpRe["carAddress"]);
-    	$this->assign("carNo",$tmpRe["carNo"]);
+    	$this->assign("tel",$tmpOrderInfo["tel"]);
+    	$this->assign("address",$tmpOrderInfo["address"]);
+    	$this->assign("carAddress",$tmpOrderInfo["carAddress"]);
+    	$this->assign("carNo",$tmpOrderInfo["carNo"]);
     	
     	$this->assign("id",$id);
     	
