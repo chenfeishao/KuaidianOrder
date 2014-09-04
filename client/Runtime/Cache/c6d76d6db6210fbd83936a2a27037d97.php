@@ -57,8 +57,8 @@
                     	 <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/summary');?>'" data-click="transform">
                             <h2>今日汇总</h2>
                         </button>
-                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/total');?>'" data-click="transform">
-                            <h2>所有汇总</h2>
+                        <button class="shortcut primary" onclick="window.location = '<?php echo U('Finance/allSummary');?>'" data-click="transform">
+                            <h2>历次汇总</h2>
                         </button>
                     </div>
                 </div>

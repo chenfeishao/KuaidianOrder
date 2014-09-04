@@ -54,6 +54,25 @@
 			                    <label><font color=black>总实收：<?php echo ($xianJinShiShou+$yinHangShiShou); ?></font></h5>
 			                </div>
 			            </div>
+			            <div class="row">
+							<div class="span3">
+			                    <label><font color=black>应收款：<?php echo ($yingShou); ?></font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>实收款：<?php echo ($shiShou); ?></font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>应付款：<?php echo ($yingFu); ?></font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>实付款：<?php echo ($shiFu); ?></font></h5>
+			                </div>
+			            </div>
+			            <div class="row">
+							<div class="span3">
+			                    <label><font color=black>费用：<?php echo ($feiYong); ?></font></h5>
+			                </div>
+			            </div>
 					</div>
 				</div>
             	<div class="panel">
@@ -134,9 +153,38 @@
 					</table>
 				</div>
 			</div>
+			<div class="panel">
+				<div class="panel-header bg-lightGreen fg-white">
+					费用
+				</div>
+				<div class="panel-content grid fluid">
+					<table id="table_id"  class="table hovered">
+					    <thead>
+					        <tr>
+					            <th class="span2">凭证编号</th>
+					            <th class="span3">日期</th>
+					            <th>类型</th>
+					            <th>金额</th>
+					            <th class="span4">备注</th>
+					            <th >经手人</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+				        	<?php if(is_array($costList)): $i = 0; $__LIST__ = $costList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
+						    		<td style="text-align:center;"><?php echo ($vo["id"]); ?></td>
+						            <td style="text-align:center;"><?php echo ($vo["createDate"]); ?></td>
+						            <td style="text-align:center;"><?php echo ($vo["mode"]); ?></td>
+						            <td style="text-align:center;"><?php echo ($vo["money"]); ?></td>
+						            <td style="text-align:center;"><?php echo ($vo["remark"]); ?></td>
+						            <td style="text-align:center;"><?php echo ($vo["createUser"]); ?></td>
+						    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
+					    </tbody>
+					</table>
+				</div>
+			</div>
             <div class="panel">
 				<div class="panel-header bg-lightBlue fg-white">
-					更多
+					操作
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">

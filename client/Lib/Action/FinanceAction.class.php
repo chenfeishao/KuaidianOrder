@@ -305,6 +305,8 @@ class FinanceAction extends myAction
 	    /*
 	     * 统计营业额
 	     */
+    	$xianJinShiShou = 0;
+    	$yinHangShiShou = 0;
     	foreach($done as $key=>$value)
     	{
     		 $xianJinShiShou += $value["xianJinShiShou"];
@@ -316,7 +318,11 @@ class FinanceAction extends myAction
     	
 		/*
 		 * 往来
-		 */    	
+		 */
+    	$yingShou = 0;
+    	$yingFu = 0;
+    	$shiFu = 0;
+    	$shiShou = 0;
     	$re = null;
     	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")
     				->order('createDate')->select();
@@ -332,10 +338,12 @@ class FinanceAction extends myAction
     		if ($value["mode"] == 0)
     		{
     			$contactsList[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";
+    			$yingShou += $contactsList[$key]["money"];
     		}
     		elseif ($value["mode"] == 1)
     		{
     			$contactsList[$key]["mode"] = "应<font color='#0080FF'><b>付</b></font>款";
+    			$yingFu += $contactsList[$key]["money"];
     		}
     		elseif ($value["mode"] == 2)
     		{
@@ -344,10 +352,12 @@ class FinanceAction extends myAction
     		elseif ($value["mode"] == 3)
     		{
     			$contactsList[$key]["mode"] = "实<font color='#FF0000'><b>收</b></font>款";
+    			$shiShou += $contactsList[$key]["money"];
     		}
     		elseif ($value["mode"] == 4)
     		{
     			$contactsList[$key]["mode"] = "实<font color='#0080FF'><b>付</b></font>款";
+    			$shiFu += $contactsList[$key]["money"];
     		}
     		else
     		{
@@ -355,10 +365,61 @@ class FinanceAction extends myAction
     		}
     	}
     	
+    	
+    	
+    	/*
+    	 * 费用
+    	 */
+    	//费用凭证
+    	$feiYong = 0;
+    	$re = null;
+    	$re	=		D("Finance")->where("mode=2 and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")->order("createDate")->select();
+    	foreach($re as $key=>$value)
+    	{
+    		$costList[$key]["id"] = $value["id"];
+    		$costList[$key]["createDate"] = $value["createDate"];
+    		$costList[$key]["money"] = $value["money"];
+    		$costList[$key]["remark"] = $value["remark"];
+    		$costList[$key]["createUser"] = $value["createUser"];
+    		if ($value["mode"] == 0)
+    		{
+    			$costList[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";
+    		}
+    		elseif ($value["mode"] == 1)
+    		{
+    			$costList[$key]["mode"] = "应<font color='#0080FF'><b>付</b></font>款";
+    		}
+    		elseif ($value["mode"] == 2)
+    		{
+    			$costList[$key]["mode"] = "费用";
+    			$feiYong += $costList[$key]["money"];
+    		}
+    		elseif ($value["mode"] == 3)
+    		{
+    			$costList[$key]["mode"] = "实<font color='#FF0000'><b>收</b></font>款";
+    		}
+    		elseif ($value["mode"] == 4)
+    		{
+    			$costList[$key]["mode"] = "实<font color='#0080FF'><b>付</b></font>款";
+    		}
+    		else
+    		{
+    			$costList[$key]["mode"] = "未知，如果看到这个请联系开发人员";
+    		}
+    	}
+    	
+    	
+    	
     	$this->assign("contactsList",$contactsList);
 	   	$this->assign("totalMoney",$totalMoney);
 	   	$this->assign("totalNum",$totalNum);
+	   	$this->assign("shiShou",$shiShou);
+	   	$this->assign("shiFu",$shiFu);
+	   	$this->assign("yingShou",$yingShou);
+	   	$this->assign("yingFu",$yingFu);
 	   	$this->assign("list",$outputList);
+	   	$this->assign("costList",$costList);
+	   	$this->assign("feiYong",$feiYong);
 	   	$this->display();
     }
     
@@ -505,7 +566,7 @@ class FinanceAction extends myAction
     	->setKeywords("汇总报表")
     	->setCategory("汇总报表");
     	
-    	$objPHPExcel->getActiveSheet()->setTitle(date("Y-m-d")."汇总报表");
+    	$objPHPExcel->getActiveSheet()->setTitle(date("Y-m-d")."订单报表");
     	$objPHPExcel->setActiveSheetIndex(0);
     	
     	
@@ -683,6 +744,310 @@ class FinanceAction extends myAction
 	    	  ->setCellValue('U'.$nowRow, $done[$i]["carAddress"])
 	    	  ->setCellValue('V'.$nowRow, $done[$i]["carNo"]);
     	 }
+    	 
+    	 
+    	 
+    	  
+    	 /*
+    	  * 统计营业额
+    	 */
+    	 $dbTmpOrder = D("TmpOrder");
+    	 $dbGoods = D("Goods");
+    	 //取出今日销售订单；NOTE：只按printDate时间，不按createDate时间
+    	 $done = $dbTmpOrder->where("printState='7' and (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59')")
+    	 ->order('createDate')->select();
+    	  
+    	 $total = null;
+    	 $maxID = -1;
+    	 $maxSize = -1;
+    	 for ($i = 0; $i < count($done); $i++)
+    	 {
+	    	 //得到商品ID进行统计
+	    	 	$IDArray = null;
+	    	 	$numArray = null;
+	    	 	$moneyArray = null;
+	    	 	$sizeArray = null;
+	    	 	$IDArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsIDArray"]);
+	    	 	$numArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsNumArray"]);
+	    	 	$moneyArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsMoneyArray"]);
+	    	 	$sizeArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsSizeArray"]);
+	    	 	for ($j = 0; $j < count($IDArray); $j++)
+	    	 	{
+	    	 		$total[$IDArray[$j]][$sizeArray[$j]]["num"] += $numArray[$j];
+	    	 		$total[$IDArray[$j]][$sizeArray[$j]]["money"] += ($numArray[$j] * $moneyArray[$j]);
+	    	 		if ($IDArray[$j] > $maxID)
+	    	 			$maxID = $IDArray[$j];
+	    	 			if ($sizeArray[$j] > $maxSize)
+	    	 			$maxSize = $sizeArray[$j];
+	    	 	}
+    	 	}
+    	 	 
+    	 	$outputList = null;
+    	 	$totalMoney = 0;
+    	 	$totalNum = 0;
+    	 	$k = 0;
+    	 	for ($i = 0; $i <= $maxID; $i++)
+    	 	{
+	    	 	for ($j = 0; $j <= $maxSize; $j++)
+	    	 	{
+	    	 	if ( !( ($total[$i][$j]["num"] == 0) || ($total[$i][$j]["num"] == null) ) )
+	    	 		{
+	    	 			$dbGoods->init($i);
+	    	 			$outputList[$k]["name"] = $dbGoods->getGoodsName();
+	    	 			$tmp = null;
+	    	 			$tmp =  $dbGoods->getGoodsSize();
+	    	 			$outputList[$k]["size"] = $tmp[$j];
+	    	 			$outputList[$k]["id"] = $i;
+	    	 			$outputList[$k]["num"] = $total[$i][$j]["num"];
+	    	 			$outputList[$k]["totalPrice"] = $total[$i][$j]["money"];
+	    	 					$outputList[$k]["price"] = round($outputList[$k]["totalPrice"] / $outputList[$k]["num"],2);
+	    	 
+	    	 					$totalMoney += $outputList[$k]["totalPrice"];
+	    	 					$totalNum += $outputList[$k]["num"];
+	    	 					$k++;
+	    	 			}
+	    	 		}
+    	 		}
+    	 
+    	$xianJinShiShou = 0;
+    	$yinHangShiShou = 0;
+    	foreach($done as $key=>$value)
+    	{
+    	 		$xianJinShiShou += $value["xianJinShiShou"];
+    	 		$yinHangShiShou += $value["yinHangShiShou"];
+    	 }
+    	   
+    	  
+    	  /*
+    	  * 往来
+    	  */
+    	$yingShou = 0;
+    	$yingFu = 0;
+    	$shiFu = 0;
+    	$shiShou = 0;
+    	$re = null;
+    	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")
+    	     	->order('createDate')->select();
+    	$contactsList = null;
+    	foreach($re as $key=>$value)
+    	{
+    	     $contactsList[$key]["id"] = $value["id"];
+    		 $contactsList[$key]["userName"] = $value["userID"];
+    		 $contactsList[$key]["createDate"] = $value["createDate"];
+    	     $contactsList[$key]["money"] = $value["money"];
+    	     $contactsList[$key]["remark"] = $value["remark"];
+    	     $contactsList[$key]["createUser"] = $value["createUser"];
+    		if ($value["mode"] == 0)
+    	     {
+    	     		$contactsList[$key]["mode"] = "应收款";
+    	     		$yingShou += $contactsList[$key]["money"];
+    	     }
+    	     elseif ($value["mode"] == 1)
+    	     {
+    	     		$contactsList[$key]["mode"] = "应付款";
+    	     		$yingFu += $contactsList[$key]["money"];
+    		}
+    		elseif ($value["mode"] == 2)
+    	     {
+    	     	$contactsList[$key]["mode"] = "费用";
+    	     }
+    	    elseif ($value["mode"] == 3)
+    	     {
+    	     		$contactsList[$key]["mode"] = "实收款";
+    	     		$shiShou += $contactsList[$key]["money"];
+    	     }
+    	     elseif ($value["mode"] == 4)
+    	     {
+    	     		$contactsList[$key]["mode"] = "实付款";
+    	     		$shiFu += $contactsList[$key]["money"];
+    	     }
+    		else
+    		{
+    			$contactsList[$key]["mode"] = "未知，如果看到这个请联系开发人员";
+    	     }
+    	}
+    	     		 
+    	     		 
+    	     		 
+    	/*
+    	 * 费用
+    	 */
+    	//费用凭证
+    	$feiYong = 0;
+    	$re = null;
+    	$re	=  D("Finance")->where("mode=2 and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")->order("createDate")->select();
+    	foreach($re as $key=>$value)
+    	{
+    		$costList[$key]["id"] = $value["id"];
+    		$costList[$key]["createDate"] = $value["createDate"];
+    		$costList[$key]["money"] = $value["money"];
+    		$costList[$key]["remark"] = $value["remark"];
+    		$costList[$key]["createUser"] = $value["createUser"];
+    		if ($value["mode"] == 2)
+    		{
+    			$costList[$key]["mode"] = "费用";
+    			$feiYong += $costList[$key]["money"];
+    		}
+    		else
+    		{
+    			$costList[$key]["mode"] = "未知，如果看到这个请联系开发人员";
+    		}
+    	}
+    	
+    	
+    	
+    	
+    	//=================================制作表start====================================
+    	/*
+    	 * 往来表
+    	 */
+    	$objPHPExcel->createSheet();
+    	$objPHPExcel->getSheet(1)->setTitle(date("Y-m-d")."往来报表");
+    	$objActSheet = $objPHPExcel->setActiveSheetIndex(1);
+    	 
+    	
+    	//制作表头
+    	foreach(range('A', 'Z') as $value)
+    	{
+    		$objActSheet->getColumnDimension($value)->setWidth(10);
+    		 
+    		$objActSheet->getStyle($value)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    		$objActSheet->getStyle($value)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    	}
+    	
+    	$objActSheet->getColumnDimension("D")->setWidth(18);
+    	$objActSheet->getColumnDimension("G")->setWidth(120);
+    	 
+    	$objActSheet
+    	->setCellValue('A1', '序号')
+    	->setCellValue('B1', '凭证编号')
+    	->setCellValue('C1', '往来账户')
+    	->setCellValue('D1', '日期')
+    	->setCellValue('E1', '类型')
+    	->setCellValue('F1', '金额')
+    	->setCellValue('G1', '备注')
+    	->setCellValue('H1', '经手人');
+    	 
+    	$objActSheet->getStyle('A1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('B1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('C1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('D1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('E1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('F1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('G1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('H1')->getFont()->setSize(12)->setBold(true);
+    	
+    	$offset = 2;
+    	foreach($contactsList as $key=>$value)
+    	{
+    		$objActSheet
+    		->setCellValue('A'.($offset+$key), $key+1)
+    		->setCellValue('B'.($offset+$key), $contactsList[$key]["id"])
+    		->setCellValue('C'.($offset+$key), $contactsList[$key]["userName"])
+    		->setCellValue('D'.($offset+$key), $contactsList[$key]["createDate"])
+    		->setCellValue('E'.($offset+$key), $contactsList[$key]["mode"])
+    		->setCellValue('F'.($offset+$key), $contactsList[$key]["money"])
+    		->setCellValue('G'.($offset+$key), $contactsList[$key]["remark"])
+    		->setCellValue('H'.($offset+$key), $contactsList[$key]["createUser"]);
+    	}
+    	
+    	
+    	
+    	/*
+    	 * 费用及营业额表
+    	*/
+    	$objPHPExcel->createSheet();
+    	$objPHPExcel->getSheet(2)->setTitle(date("Y-m-d")."费用及营业额报表");
+    	$objActSheet = $objPHPExcel->setActiveSheetIndex(2);
+    	$baseOffset = 9;//费用表的表头所在的行号
+    	 
+    	//制作表头
+    	foreach(range('A', 'Z') as $value)
+    	{
+    		$objActSheet->getColumnDimension($value)->setWidth(10);
+    		 
+    		$objActSheet->getStyle($value)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    		$objActSheet->getStyle($value)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    	}
+    	 
+    	$objActSheet->getColumnDimension("C")->setWidth(18);
+    	$objActSheet->getColumnDimension("F")->setWidth(100);
+    	
+    	$objActSheet
+    	->setCellValue('A'.($baseOffset - 1), '费用表')
+    	->setCellValue('A'.$baseOffset, '序号')
+    	->setCellValue('B'.$baseOffset, '凭证编号')
+    	->setCellValue('C'.$baseOffset, '日期')
+    	->setCellValue('D'.$baseOffset, '类型')
+    	->setCellValue('E'.$baseOffset, '金额')
+    	->setCellValue('F'.$baseOffset, '备注')
+    	->setCellValue('G'.$baseOffset, '经手人');
+    	
+    	$objActSheet
+    	->mergeCells('A'.($baseOffset - 1).':J'.($baseOffset - 1));
+    	
+    	$objActSheet->getStyle('A'.($baseOffset - 1))->getFont()->setSize(16)->setBold(true);
+    	$objActSheet->getStyle('A'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('B'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('C'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('D'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('E'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('F'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('G'.$baseOffset)->getFont()->setSize(12)->setBold(true);
+    	 
+    	//费用表
+    	$offset = $baseOffset + 1;
+    	foreach($costList as $key=>$value)
+    	{
+    		$objActSheet
+    		->setCellValue('A'.($offset+$key), $key+1)
+    		->setCellValue('B'.($offset+$key), $costList[$key]["id"])
+    		->setCellValue('C'.($offset+$key), $costList[$key]["createDate"])
+    		->setCellValue('D'.($offset+$key), $costList[$key]["mode"])
+    		->setCellValue('E'.($offset+$key), $costList[$key]["money"])
+    		->setCellValue('F'.($offset+$key), $costList[$key]["remark"])
+    		->setCellValue('G'.($offset+$key), $costList[$key]["createUser"]);
+    	}
+    	
+    	//营业额
+    	$objActSheet
+    	->setCellValue('A1', '出货总数')
+    	->setCellValue('B1', '出货总价')
+    	->setCellValue('C1', '现金实收')
+    	->setCellValue('D1', '银行实收')
+    	->setCellValue('E1', '总实收')
+    	->setCellValue('F1', '应收款')
+    	->setCellValue('G1', '实收款')
+    	->setCellValue('H1', '应付款')
+    	->setCellValue('I1', '实付款')
+    	->setCellValue('J1', '费用')
+    	->setCellValue('A2', $totalNum)
+    	->setCellValue('B2', $totalMoney)
+    	->setCellValue('C2', $xianJinShiShou)
+    	->setCellValue('D2', $yinHangShiShou)
+    	->setCellValue('E2', $xianJinShiShou + $yinHangShiShou)
+    	->setCellValue('F2', $yingShou)
+    	->setCellValue('G2', $shiShou)
+    	->setCellValue('H2', $yingFu)
+    	->setCellValue('I2', $shiFu)
+    	->setCellValue('J2', $feiYong);
+    	
+    	$objActSheet->getStyle('A1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('B1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('C1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('D1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('E1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('F1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('G1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('H1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('I1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('J1')->getFont()->setSize(12)->setBold(true);
+    	//=================================制作表over====================================
+    	
+    	
+    	
+    	
+    	
     	
     	
     	

@@ -31,6 +31,25 @@
 			                    <label><font color=black>总实收：{$xianJinShiShou+$yinHangShiShou}</font></h5>
 			                </div>
 			            </div>
+			            <div class="row">
+							<div class="span3">
+			                    <label><font color=black>应收款：{$yingShou}</font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>实收款：{$shiShou}</font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>应付款：{$yingFu}</font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>实付款：{$shiFu}</font></h5>
+			                </div>
+			            </div>
+			            <div class="row">
+							<div class="span3">
+			                    <label><font color=black>费用：{$feiYong}</font></h5>
+			                </div>
+			            </div>
 					</div>
 				</div>
             	<div class="panel">
@@ -116,9 +135,40 @@
 					</table>
 				</div>
 			</div>
+			<div class="panel">
+				<div class="panel-header bg-lightGreen fg-white">
+					费用
+				</div>
+				<div class="panel-content grid fluid">
+					<table id="table_id"  class="table hovered">
+					    <thead>
+					        <tr>
+					            <th class="span2">凭证编号</th>
+					            <th class="span3">日期</th>
+					            <th>类型</th>
+					            <th>金额</th>
+					            <th class="span4">备注</th>
+					            <th >经手人</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+				        	<volist name="costList" id="vo">
+						    	<tr>
+						    		<td style="text-align:center;">{$vo.id}</td>
+						            <td style="text-align:center;">{$vo.createDate}</td>
+						            <td style="text-align:center;">{$vo.mode}</td>
+						            <td style="text-align:center;">{$vo.money}</td>
+						            <td style="text-align:center;">{$vo.remark}</td>
+						            <td style="text-align:center;">{$vo.createUser}</td>
+						    	</tr>
+					    	</volist>
+					    </tbody>
+					</table>
+				</div>
+			</div>
             <div class="panel">
 				<div class="panel-header bg-lightBlue fg-white">
-					更多
+					操作
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
