@@ -30,13 +30,13 @@
     <div class="container">
         <h1>
        		<a href="<?php echo U("Finance/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	历次汇总<small>当前账户：<?php echo (session('userName')); ?></small>
+           	汇总查询<small>当前账户：<?php echo (session('userName')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
 	        	<div class="row">
-                      <form id="form" method="post" action="<?php echo U("Finance/summary");?>">
+                      <form id="form" method="get" action="<?php echo U("Finance/summary");?>">
                           <fieldset>
-                          	<label><font color=black>选择要查看汇总表的日期</font></label>
+                          	<label><font color=black>请选择要查看汇总表的日期</font></label>
                               <div id="date" class="input-control text" data-role="datepicker" data-week-start="1" 
 			                  		data-locale="zhCN"  data-format="yyyy-m-d"  data-effect="slide">
 		                           <input id="date" type="text" name="date" value="<?php echo ($dateDisplay); ?>">

@@ -30,8 +30,8 @@
 
     <div class="container">
         <h1>
-       		<a href="<?php echo U("Finance/index");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	今日销售汇总<small class="on-right"><?php echo date("Y-m-d");;?>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
+       		<a href="<?php echo U("Index/goBack");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+           	销售汇总<small class="on-right"><?php echo ($theDate); ?>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">
@@ -188,16 +188,22 @@
 				</div>
 				<div class="panel-content grid fluid">
 					<div class="row">
-                        <button class="span6 command-button warning" onclick="window.location = '<?php echo U('Order/history');?>'">
-                        	 <h2 >
-                        	 <i class="icon-comments-5 on-left"></i>
-							查看今日订单</h2>
-						</button>
-                        <button class="span6 command-button inverse" onclick="window.location = '<?php echo U('Finance/downloadReport');?>'">
-                        	 <h2>
-                        	 <i class="icon-download-2 on-left"></i>
-							下载今日汇总报表</h2>
-						</button>
+						<?php if($mode == 0): ?><button class="span6 command-button warning" onclick="window.location = '<?php echo U('Order/history');?>'">
+	                        	 <h2 >
+	                        	 <i class="icon-comments-5 on-left"></i>
+								查看今日订单</h2>
+							</button>
+	                        <button class="span6 command-button inverse" onclick="window.location = '<?php echo U('Finance/downloadReport');?>?date=<?php echo ($theDate); ?>'">
+	                        	 <h2>
+	                        	 <i class="icon-download-2 on-left"></i>
+								下载今日汇总报表</h2>
+							</button>
+						<?php else: ?>
+							<button class="span3 command-button inverse" onclick="window.location = '<?php echo U('Finance/downloadReport');?>?date=<?php echo ($theDate); ?>'">
+	                        	 <h2>
+	                        	 <i class="icon-download-2 on-left"></i>
+								下载汇总报表</h2>
+							</button><?php endif; ?>
 		            </div>
 				</div>
 			</div>

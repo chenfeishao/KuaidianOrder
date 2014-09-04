@@ -199,7 +199,7 @@ class FinanceAction extends myAction
      */
     public function cost()
     {
-    	$this->assign("dateDisplay",date("Y-m-d"));
+    	$this->assign("dateDisplay",$theDate);
     	$this->display();
     }
     
@@ -238,6 +238,17 @@ class FinanceAction extends myAction
      */
     public function summary()
     {
+    	if ( ($this->_get("date") == null) || ($this->_get("date") == "" ) )
+    	{
+    		$theDate = date("Y-m-d");
+    		$this->assign("mode",0);//模式0，即是正常浏览
+    	}
+    	else
+    	{
+    		$theDate = $this->_get("date");
+    		$this->assign("mode",1);//模式1，即是历次汇总跳转过来的，不显示查看今日订单
+    	}
+    	
     	$dbTmpOrder = D("TmpOrder");
     	$dbGoods = D("Goods");
     	
@@ -245,7 +256,7 @@ class FinanceAction extends myAction
     	 * 统计货物
     	 */
     	//取出今日销售订单；NOTE：只按printDate时间，不按createDate时间
-    	$done = $dbTmpOrder->where("printState='7' and (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59')")
+    	$done = $dbTmpOrder->where("printState='7' and (printDate>='".$theDate." 00:00:00' and printDate<='".$theDate." 23:59:59')")
     				->order('createDate')->select();
     	
     	$total = null;
@@ -324,7 +335,7 @@ class FinanceAction extends myAction
     	$shiFu = 0;
     	$shiShou = 0;
     	$re = null;
-    	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")
+    	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".$theDate." 00:00:00' and createDate<='".$theDate." 23:59:59')")
     				->order('createDate')->select();
     	$contactsList = null;
     	foreach($re as $key=>$value)
@@ -373,7 +384,7 @@ class FinanceAction extends myAction
     	//费用凭证
     	$feiYong = 0;
     	$re = null;
-    	$re	=		D("Finance")->where("mode=2 and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")->order("createDate")->select();
+    	$re	=		D("Finance")->where("mode=2 and (createDate>='".$theDate." 00:00:00' and createDate<='".$theDate." 23:59:59')")->order("createDate")->select();
     	foreach($re as $key=>$value)
     	{
     		$costList[$key]["id"] = $value["id"];
@@ -420,6 +431,7 @@ class FinanceAction extends myAction
 	   	$this->assign("list",$outputList);
 	   	$this->assign("costList",$costList);
 	   	$this->assign("feiYong",$feiYong);
+	   	$this->assign("theDate",$theDate);
 	   	$this->display();
     }
     
@@ -541,6 +553,16 @@ class FinanceAction extends myAction
      */
     public function downloadReport()
     {
+    	if ( ($this->_get("date") == null) || ($this->_get("date") == "" ) )
+    	{
+    		$theDate = date("Y-m-d");
+    	}
+    	else
+    	{
+    		$theDate = $this->_get("date");
+    	}
+    	
+    	
     	/** Error reporting */
     	error_reporting(E_ALL);
     	ini_set('display_errors', TRUE);
@@ -560,13 +582,13 @@ class FinanceAction extends myAction
     	// Set document properties
     	$objPHPExcel->getProperties()->setCreator(COMPANYNAME)
     	->setLastModifiedBy(COMPANYNAME)
-    	->setTitle(date("Y-m-d")."汇总报表")
-    	->setSubject(date("Y-m-d")."汇总报表")
-    	->setDescription(COMPANYNAME.date("Y-m-d")."汇总报表")
+    	->setTitle($theDate."汇总报表")
+    	->setSubject($theDate."汇总报表")
+    	->setDescription(COMPANYNAME.$theDate."汇总报表")
     	->setKeywords("汇总报表")
     	->setCategory("汇总报表");
     	
-    	$objPHPExcel->getActiveSheet()->setTitle(date("Y-m-d")."订单报表");
+    	$objPHPExcel->getActiveSheet()->setTitle($theDate."订单报表");
     	$objPHPExcel->setActiveSheetIndex(0);
     	
     	
@@ -665,7 +687,7 @@ class FinanceAction extends myAction
     	$dbGoods = D("Goods");
     	
     	$done = $dbTmpOrder->where("printState='7'
-    				and (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59')")
+    				and (printDate>='".$theDate." 00:00:00' and printDate<='".$theDate." 23:59:59')")
     				->order('createDate')->select();
     	 /*
     	 * 已完成的订单信息
@@ -754,7 +776,7 @@ class FinanceAction extends myAction
     	 $dbTmpOrder = D("TmpOrder");
     	 $dbGoods = D("Goods");
     	 //取出今日销售订单；NOTE：只按printDate时间，不按createDate时间
-    	 $done = $dbTmpOrder->where("printState='7' and (printDate>='".date("Y-m-d")." 00:00:00' and printDate<='".date("Y-m-d")." 23:59:59')")
+    	 $done = $dbTmpOrder->where("printState='7' and (printDate>='".$theDate." 00:00:00' and printDate<='".$theDate." 23:59:59')")
     	 ->order('createDate')->select();
     	  
     	 $total = null;
@@ -826,7 +848,7 @@ class FinanceAction extends myAction
     	$shiFu = 0;
     	$shiShou = 0;
     	$re = null;
-    	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")
+    	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".$theDate." 00:00:00' and createDate<='".$theDate." 23:59:59')")
     	     	->order('createDate')->select();
     	$contactsList = null;
     	foreach($re as $key=>$value)
@@ -875,7 +897,7 @@ class FinanceAction extends myAction
     	//费用凭证
     	$feiYong = 0;
     	$re = null;
-    	$re	=  D("Finance")->where("mode=2 and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")->order("createDate")->select();
+    	$re	=  D("Finance")->where("mode=2 and (createDate>='".$theDate." 00:00:00' and createDate<='".$theDate." 23:59:59')")->order("createDate")->select();
     	foreach($re as $key=>$value)
     	{
     		$costList[$key]["id"] = $value["id"];
@@ -902,7 +924,7 @@ class FinanceAction extends myAction
     	 * 往来表
     	 */
     	$objPHPExcel->createSheet();
-    	$objPHPExcel->getSheet(1)->setTitle(date("Y-m-d")."往来报表");
+    	$objPHPExcel->getSheet(1)->setTitle($theDate."往来报表");
     	$objActSheet = $objPHPExcel->setActiveSheetIndex(1);
     	 
     	
@@ -957,7 +979,7 @@ class FinanceAction extends myAction
     	 * 费用及营业额表
     	*/
     	$objPHPExcel->createSheet();
-    	$objPHPExcel->getSheet(2)->setTitle(date("Y-m-d")."费用及营业额报表");
+    	$objPHPExcel->getSheet(2)->setTitle($theDate."费用及营业额报表");
     	$objActSheet = $objPHPExcel->setActiveSheetIndex(2);
     	$baseOffset = 9;//费用表的表头所在的行号
     	 
@@ -1056,7 +1078,7 @@ class FinanceAction extends myAction
     	 */
     	// Redirect output to a client’s web browser (Excel2007)
     	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    	header('Content-Disposition: attachment;filename="'.date("Y-m-d").'汇总报表.xlsx"');
+    	header('Content-Disposition: attachment;filename="'.$theDate.'汇总报表.xlsx"');
     	header('Cache-Control: max-age=0');
     	// If you're serving to IE 9, then the following may be needed
     	header('Cache-Control: max-age=1');
