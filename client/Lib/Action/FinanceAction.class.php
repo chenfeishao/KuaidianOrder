@@ -299,11 +299,9 @@ class FinanceAction extends myAction
 	    		}
 	    	}
     	}
-	    
 	    	
 	    	
 	   
-	    	
 	    /*
 	     * 统计营业额
 	     */
@@ -315,6 +313,49 @@ class FinanceAction extends myAction
     	$this->assign("xianJinShiShou",$xianJinShiShou);
     	$this->assign("yinHangShiShou",$yinHangShiShou);
     	
+    	
+		/*
+		 * 往来
+		 */    	
+    	$re = null;
+    	$re = D("Finance")->where("(mode=0 or mode=1 or mode=3 or mode=4) and (createDate>='".date("Y-m-d")." 00:00:00' and createDate<='".date("Y-m-d")." 23:59:59')")
+    				->order('createDate')->select();
+    	$contactsList = null;
+    	foreach($re as $key=>$value)
+    	{
+    		$contactsList[$key]["id"] = $value["id"];
+    		$contactsList[$key]["userName"] = $value["userID"];
+    		$contactsList[$key]["createDate"] = $value["createDate"];
+    		$contactsList[$key]["money"] = $value["money"];
+    		$contactsList[$key]["remark"] = $value["remark"];
+    		$contactsList[$key]["createUser"] = $value["createUser"];
+    		if ($value["mode"] == 0)
+    		{
+    			$contactsList[$key]["mode"] = "应<font color='#FF0000'><b>收</b></font>款";
+    		}
+    		elseif ($value["mode"] == 1)
+    		{
+    			$contactsList[$key]["mode"] = "应<font color='#0080FF'><b>付</b></font>款";
+    		}
+    		elseif ($value["mode"] == 2)
+    		{
+    			$contactsList[$key]["mode"] = "费用";
+    		}
+    		elseif ($value["mode"] == 3)
+    		{
+    			$contactsList[$key]["mode"] = "实<font color='#FF0000'><b>收</b></font>款";
+    		}
+    		elseif ($value["mode"] == 4)
+    		{
+    			$contactsList[$key]["mode"] = "实<font color='#0080FF'><b>付</b></font>款";
+    		}
+    		else
+    		{
+    			$contactsList[$key]["mode"] = "未知，如果看到这个请联系开发人员";
+    		}
+    	}
+    	
+    	$this->assign("contactsList",$contactsList);
 	   	$this->assign("totalMoney",$totalMoney);
 	   	$this->assign("totalNum",$totalNum);
 	   	$this->assign("list",$outputList);
@@ -364,11 +405,11 @@ class FinanceAction extends myAction
     		}
     		elseif ($value["mode"] == 3)
     		{
-    			$list[$key]["mode"] = "实收";
+    			$list[$key]["mode"] = "实<font color='#FF0000'><b>收</b></font>款";
     		}
     		elseif ($value["mode"] == 4)
     		{
-    			$list[$key]["mode"] = "实付";
+    			$list[$key]["mode"] = "实<font color='#0080FF'><b>付</b></font>款";
     		}
     		else
     		{
@@ -417,11 +458,11 @@ class FinanceAction extends myAction
     		}
     		elseif ($value["mode"] == 3)
     		{
-    			$list[$key]["mode"] = "实收";
+    			$list[$key]["mode"] = "实<font color='#FF0000'><b>收</b></font>款";
     		}
     		elseif ($value["mode"] == 4)
     		{
-    			$list[$key]["mode"] = "实付";
+    			$list[$key]["mode"] = "实<font color='#0080FF'><b>付</b></font>款";
     		}
     		else
     		{

@@ -181,20 +181,22 @@ class UserModel extends Model {
 		 * 创建往来记录
 		 * TODO:以后如果扩展这个函数了，需要考虑这里是否需要加数据库事务
 		 */
-		$tmpRemark = "本凭证由订单产生，订单编号：<a href=\"".U("Order/historyOver",array("no"=>$tmpOrderInfo["id"]))."\">".$tmpOrderInfo["id"]."</a>";
-		if ($benCiQianFuKuan >= 0)
+		if ($benCiQianFuKuan != 0)
 		{
-			$tmpMode = 1;
-			$wuFuHaoBenCiQianFuKuan = $benCiQianFuKuan;
+			$tmpRemark = "本凭证由订单产生，订单编号：<a href=\"".U("Order/historyOver",array("no"=>$tmpOrderInfo["id"]))."\">".$tmpOrderInfo["id"]."</a>";
+			if ($benCiQianFuKuan > 0)
+			{
+				$tmpMode = 1;
+				$wuFuHaoBenCiQianFuKuan = $benCiQianFuKuan;
+			}
+			else
+			{
+				$tmpMode = 0;
+				$wuFuHaoBenCiQianFuKuan = 0 - $benCiQianFuKuan;
+			}
+			if (!D("Finance")->newFinance($tmpOrderInfo["customName"],$wuFuHaoBenCiQianFuKuan,$tmpRemark,$tmpMode,session("userName"),$tmpOrderInfo["createDate"],$tmpAdd["id"]))
+				return false;
 		}
-		else
-		{
-			$tmpMode = 0;
-			$wuFuHaoBenCiQianFuKuan = 0 - $benCiQianFuKuan;
-		}
-		if (!D("Finance")->newFinance($tmpOrderInfo["customName"],$wuFuHaoBenCiQianFuKuan,$tmpRemark,$tmpMode,session("userName"),$tmpOrderInfo["createDate"],$tmpAdd["id"]))
-			return false;
-		
 		
 		
 		/*
