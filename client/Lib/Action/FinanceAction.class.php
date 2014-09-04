@@ -93,7 +93,7 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 应收款选账户页面
+     * 收款结算选账户页面
      */
     public function ar()
     {
@@ -104,7 +104,7 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 应收款填表页面
+     * 收款计算填表页面
      */
     public function ardo()
     {
@@ -116,7 +116,7 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 处理应收款
+     * 处理实收款
      */
     public function toar()
     {
@@ -130,9 +130,9 @@ class FinanceAction extends myAction
     	//TODO:检查金额是否是数字
     	
     	D("Finance")->startTrans();
-    	if ( D("Finance")->newFinance($id,$money,$remark,0,session("userName")) )
+    	if ( D("Finance")->newFinance($id,$money,$remark,3,session("userName")) )
     	{
-    		if (D("User")->updateMoney(1,$id,$money))
+    		if (D("User")->updateMoney(0,$id,$money))
     			D("Finance")->commit();
 	    	else
 	    	{
@@ -144,7 +144,7 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 应付款页面
+     * 付款结算页面
      */
     public function ap()
     {
@@ -155,7 +155,7 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 应付款填表页面
+     * 付款计算填表页面
      */
     public function apdo()
     {
@@ -167,7 +167,7 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 处理应付款
+     * 处理实付款
      */
     public function toap()
     {
@@ -181,9 +181,9 @@ class FinanceAction extends myAction
     	//TODO:检查金额是否是数字
     	 
     	D("Finance")->startTrans();
-    	if ( D("Finance")->newFinance($id,$money,$remark,1,session("userName")) )
+    	if ( D("Finance")->newFinance($id,$money,$remark,4,session("userName")) )
     	{
-    		if (D("User")->updateMoney(0,$id,$money))
+    		if (D("User")->updateMoney(1,$id,$money))
     			D("Finance")->commit();
 	    	else
 	    	{
@@ -362,6 +362,14 @@ class FinanceAction extends myAction
     		{
     			$list[$key]["mode"] = "费用";
     		}
+    		elseif ($value["mode"] == 3)
+    		{
+    			$list[$key]["mode"] = "实收";
+    		}
+    		elseif ($value["mode"] == 4)
+    		{
+    			$list[$key]["mode"] = "实付";
+    		}
     		else
     		{
     			$list[$key]["mode"] = "未知，如果看到这个请联系开发人员";
@@ -406,6 +414,14 @@ class FinanceAction extends myAction
     		elseif ($value["mode"] == 2)
     		{
     			$list[$key]["mode"] = "费用";
+    		}
+    		elseif ($value["mode"] == 3)
+    		{
+    			$list[$key]["mode"] = "实收";
+    		}
+    		elseif ($value["mode"] == 4)
+    		{
+    			$list[$key]["mode"] = "实付";
     		}
     		else
     		{

@@ -36,7 +36,7 @@ function check()
     <div class="container">
         <h1>
             <a href="<?php echo U("Finance/ar");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-            应收款<small class="on-right">经手人：<?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
+            实收款<small class="on-right">经手人：<?php echo (session('userName')); ?>&nbsp<?php echo (session('userPower')); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
             <div class="grid">

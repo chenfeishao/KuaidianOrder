@@ -132,6 +132,8 @@ create table finance(
 	 *		0：应收款
 	 *		1：应付款
 	 *		2：费用
+	 *		3：实收
+	 *		4：实付
 	 */
 	mode int NOT NULL,
 	
