@@ -22,6 +22,14 @@
 			                    <label><font color=black>出货总价：{$totalMoney}</font></h5>
 			                </div>
 			                <div class="span3">
+			                    <label><font color=black>总优惠数：{$totalSave}</font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>实际卖货应收：{$totalShiJiYingShou}</font></h5>
+			                </div>
+			          </div>
+			          <div class="row">
+			                <div class="span3">
 			                    <h4><font color=black>现金实收：{$xianJinShiShou}</font></h4>
 			                </div>
 			                <div class="span3">
@@ -57,7 +65,7 @@
 						汇总表<small>&nbsp;出货总数：{$totalNum}</small>
 					</div>
 				<div class="panel-content grid fluid">
-					<if condition="$list eq NULL "><b>今日没有完成任何订单</b>
+					<if condition="$list eq NULL "><b>今日没有完成有效订单</b>
    					<else/>
                 		<table class="table hovered">
 			                <thead>

@@ -259,6 +259,7 @@ class FinanceAction extends myAction
     	$done = $dbTmpOrder->where("printState='7' and (printDate>='".$theDate." 00:00:00' and printDate<='".$theDate." 23:59:59')")
     				->order('createDate')->select();
     	
+    	$totalSave = 0;
     	$total = null;
     	$maxID = -1;
     	$maxSize = -1;
@@ -273,9 +274,13 @@ class FinanceAction extends myAction
     		$numArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsNumArray"]);
     		$moneyArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsMoneyArray"]);
     		$sizeArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsSizeArray"]);
+			$totalSave += $done[$i]["save"];
     		for ($j = 0; $j < count($IDArray); $j++)
     		{
-    			$total[$IDArray[$j]][$sizeArray[$j]]["num"] += $numArray[$j];
+    			if ($moneyArray[$j] < 0)
+    				$total[$IDArray[$j]][$sizeArray[$j]]["num"] += 0 - $numArray[$j];
+    			else
+    				$total[$IDArray[$j]][$sizeArray[$j]]["num"] += $numArray[$j];
     			$total[$IDArray[$j]][$sizeArray[$j]]["money"] += ($numArray[$j] * $moneyArray[$j]);
     			if ($IDArray[$j] > $maxID)
     				$maxID = $IDArray[$j];
@@ -325,7 +330,8 @@ class FinanceAction extends myAction
     	}
     	$this->assign("xianJinShiShou",$xianJinShiShou);
     	$this->assign("yinHangShiShou",$yinHangShiShou);
-    	
+    	$this->assign("totalSave",$totalSave);
+    	$this->assign("totalShiJiYingShou",$totalMoney - $totalSave);
     	
 		/*
 		 * 往来
@@ -611,6 +617,7 @@ class FinanceAction extends myAction
     	$objActSheet->getColumnDimension("Q")->setWidth(16);
     	$objActSheet->getColumnDimension("R")->setWidth(16);
     	 
+    	$objActSheet->getColumnDimension("C")->setWidth(30);
     	$objActSheet->getColumnDimension("D")->setWidth(18);
     	$objActSheet->getColumnDimension("E")->setWidth(18);
     	$objActSheet->getColumnDimension("G")->setWidth(20);
@@ -704,7 +711,7 @@ class FinanceAction extends myAction
 	    	 $objActSheet
 	    	 ->setCellValue('A'.$nowRow, $i + 1)
 	    	 ->setCellValue('B'.$nowRow,$done[$i]["id"])
-	    	 ->setCellValue('C'.$nowRow,$done[$i]["customName"])
+	    	 ->setCellValue('C'.$nowRow,$done[$i]["remark"].$done[$i]["customName"])
 	    	 ->setCellValue('D'.$nowRow,$done[$i]["createDate"])
 	    	 ->setCellValue('E'.$nowRow,$done[$i]["printDate"]);
     	
@@ -773,6 +780,7 @@ class FinanceAction extends myAction
     	 /*
     	  * 统计营业额
     	 */
+    	 $totalSave = 0;
     	 $dbTmpOrder = D("TmpOrder");
     	 $dbGoods = D("Goods");
     	 //取出今日销售订单；NOTE：只按printDate时间，不按createDate时间
@@ -793,9 +801,13 @@ class FinanceAction extends myAction
 	    	 	$numArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsNumArray"]);
 	    	 	$moneyArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsMoneyArray"]);
 	    	 	$sizeArray = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsSizeArray"]);
+	    	 	$totalSave += $done[$i]["save"];
 	    	 	for ($j = 0; $j < count($IDArray); $j++)
 	    	 	{
-	    	 		$total[$IDArray[$j]][$sizeArray[$j]]["num"] += $numArray[$j];
+	    	 		if ($moneyArray[$j] < 0)
+	    				$total[$IDArray[$j]][$sizeArray[$j]]["num"] += 0 - $numArray[$j];
+	    			else
+	    				$total[$IDArray[$j]][$sizeArray[$j]]["num"] += $numArray[$j];
 	    	 		$total[$IDArray[$j]][$sizeArray[$j]]["money"] += ($numArray[$j] * $moneyArray[$j]);
 	    	 		if ($IDArray[$j] > $maxID)
 	    	 			$maxID = $IDArray[$j];
@@ -993,6 +1005,7 @@ class FinanceAction extends myAction
     	}
     	 
     	$objActSheet->getColumnDimension("C")->setWidth(18);
+    	$objActSheet->getColumnDimension("D")->setWidth(14);
     	$objActSheet->getColumnDimension("F")->setWidth(100);
     	
     	$objActSheet
@@ -1035,24 +1048,28 @@ class FinanceAction extends myAction
     	$objActSheet
     	->setCellValue('A1', '出货总数')
     	->setCellValue('B1', '出货总价')
-    	->setCellValue('C1', '现金实收')
-    	->setCellValue('D1', '银行实收')
-    	->setCellValue('E1', '总实收')
-    	->setCellValue('F1', '应收款')
-    	->setCellValue('G1', '实收款')
-    	->setCellValue('H1', '应付款')
-    	->setCellValue('I1', '实付款')
-    	->setCellValue('J1', '费用')
+    	->setCellValue('C1','总优惠数')
+    	->setCellValue('D1','实际卖货应收')
+    	->setCellValue('E1', '现金实收')
+    	->setCellValue('F1', '银行实收')
+    	->setCellValue('G1', '总实收')
+    	->setCellValue('H1', '应收款')
+    	->setCellValue('I1', '实收款')
+    	->setCellValue('J1', '应付款')
+    	->setCellValue('K1', '实付款')
+    	->setCellValue('L1', '费用')
     	->setCellValue('A2', $totalNum)
     	->setCellValue('B2', $totalMoney)
-    	->setCellValue('C2', $xianJinShiShou)
-    	->setCellValue('D2', $yinHangShiShou)
-    	->setCellValue('E2', $xianJinShiShou + $yinHangShiShou)
-    	->setCellValue('F2', $yingShou)
-    	->setCellValue('G2', $shiShou)
-    	->setCellValue('H2', $yingFu)
-    	->setCellValue('I2', $shiFu)
-    	->setCellValue('J2', $feiYong);
+    	->setCellValue('C2',$totalSave)
+    	->setCellValue('D2',$totalMoney - $totalSave)
+    	->setCellValue('E2', $xianJinShiShou)
+    	->setCellValue('F2', $yinHangShiShou)
+    	->setCellValue('G2', $xianJinShiShou + $yinHangShiShou)
+    	->setCellValue('H2', $yingShou)
+    	->setCellValue('I2', $shiShou)
+    	->setCellValue('J2', $yingFu)
+    	->setCellValue('K2', $shiFu)
+    	->setCellValue('L2', $feiYong);
     	
     	$objActSheet->getStyle('A1')->getFont()->setSize(12)->setBold(true);
     	$objActSheet->getStyle('B1')->getFont()->setSize(12)->setBold(true);

@@ -45,6 +45,14 @@
 			                    <label><font color=black>出货总价：<?php echo ($totalMoney); ?></font></h5>
 			                </div>
 			                <div class="span3">
+			                    <label><font color=black>总优惠数：<?php echo ($totalSave); ?></font></h5>
+			                </div>
+			                <div class="span3">
+			                    <label><font color=black>实际卖货应收：<?php echo ($totalShiJiYingShou); ?></font></h5>
+			                </div>
+			          </div>
+			          <div class="row">
+			                <div class="span3">
 			                    <h4><font color=black>现金实收：<?php echo ($xianJinShiShou); ?></font></h4>
 			                </div>
 			                <div class="span3">
@@ -80,7 +88,7 @@
 						汇总表<small>&nbsp;出货总数：<?php echo ($totalNum); ?></small>
 					</div>
 				<div class="panel-content grid fluid">
-					<?php if($list == NULL ): ?><b>今日没有完成任何订单</b>
+					<?php if($list == NULL ): ?><b>今日没有完成有效订单</b>
    					<?php else: ?>
                 		<table class="table hovered">
 			                <thead>
