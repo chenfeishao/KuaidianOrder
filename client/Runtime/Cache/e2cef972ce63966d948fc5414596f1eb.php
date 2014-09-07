@@ -73,7 +73,7 @@
     <div class="container">
         <h1>
        		<a href="<?php echo U("Finance/contacts");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	往来管理<small class="on-right">与<?php echo ($id); ?>。账户余额总计：<?php echo ($balance); ?></small>
+           	往来管理<small class="on-right">与[<?php echo ($id); ?>]。账户余额总计：<?php echo ($balance); ?></small>
         </h1>
         <div class="tile-area no-padding clearfix">
         	<?php if($list == NULL ): ?><b>该账户没有往来账</b>

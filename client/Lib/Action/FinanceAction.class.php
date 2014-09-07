@@ -225,9 +225,9 @@ class FinanceAction extends myAction
     }
     
     /**
-     * 汇总查询页面
+     * 查询汇总页面
      */
-    public function total()
+    public function allSummary()
     {
     	
     	$this->display();
@@ -1093,6 +1093,7 @@ class FinanceAction extends myAction
     	$objWriter->save('php://output');
     	exit;
     }
+    
 }
 
 ?>

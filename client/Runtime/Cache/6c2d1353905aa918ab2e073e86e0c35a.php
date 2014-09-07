@@ -28,8 +28,9 @@
 
     <div class="container">
         <h1>
+        	<!-- <a href="<?php echo U("Index/index");?>"><i class="icon-grid-view fg-blue smaller"></i></a> -->
             <a href="<?php echo U("Index/goBack");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-           	订单详情<small class="on-right">订单编号：<?php echo ($id); ?></small>
+           	订单详情<small class="on-right">订单编号：<?php echo ($id); ?>。备注：<?php if($remark == NULL ): ?>无<?php else: echo ($remark); endif; ?></small>
         </h1>
         
       		<div class="panel">

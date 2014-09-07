@@ -183,7 +183,7 @@ class UserModel extends Model {
 		 */
 		if ($benCiQianFuKuan != 0)
 		{
-			$tmpRemark = "本凭证由订单产生，订单编号：<a href=\"".U("Order/historyOver",array("no"=>$tmpOrderInfo["id"]))."\">".$tmpOrderInfo["id"]."</a>";
+			$tmpRemark = "本凭证由订单产生，订单编号：<a href=\"".U("Order/historyOver",array("no"=>$tmpOrderInfo["id"]))."\">[".$tmpOrderInfo["id"]."]</a>";
 			if ($benCiQianFuKuan > 0)
 			{
 				$tmpMode = 1;

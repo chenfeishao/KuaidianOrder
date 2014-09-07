@@ -275,38 +275,86 @@ class TmpOrderModel extends OrderOP {
 	 */
 	public function deleteOrder($id)
 	{
-		//删除order中的记录(不是真的删除，而是标记删除 )
-		$condition["id"] = $id;
-		$condition["printState"]	=		9;
-		$tmpRe = $this->save($condition);
+// 		//删除order中的记录(不是真的删除，而是标记删除 )
+// 		$condition["id"] = $id;
+// 		$condition["printState"]	=		9;
+// 		$tmpRe = $this->save($condition);
+// 		if ( ($tmpRe === false) || ($tmpRe === NULL) )
+// 			return false;
+
+		//添加冲单
+		$chongDan = null;
+		$chongDan = D("TmpOrder")->where(array("id"=>$id))->find();
+		if ( ($chongDan === false) || ($chongDan === NULL) )
+			return false;
+		array_shift($chongDan);//删除id项
+		
+		$tmpMoney = null;
+		$tmpMoney = $this->getArrayWithSelf($chongDan["goodsMoneyArray"]);
+		foreach ($tmpMoney as $key=>$value)
+		{
+			$tmpMoney[$key] = 0 - $value;
+		}
+		$chongDan["goodsMoneyArray"] = $this->transformSpecalBreakTag($tmpMoney);
+		
+		$chongDan["remark"] = "[冲账]对应订单[".$id."]";
+		$chongDan["save"] =  0 - $chongDan["save"];
+		$chongDan["xianJinShiShou"] =  0 - $chongDan["xianJinShiShou"];
+		$chongDan["yinHangShiShou"] =  0 - $chongDan["yinHangShiShou"];
+		$chongDan["createDate"] =  date("Y-m-d H:i:s");
+		$chongDan["printDate"] = $chongDan["createDate"];
+		$chongDan["printState"] = 7;
+		$tmpRe = $this->add($chongDan);
 		if ( ($tmpRe === false) || ($tmpRe === NULL) )
 			return false;
 		
-		
+		//修改“本单”
+		$benDan = null;
+		$benDan = D("TmpOrder")->where(array("id"=>$id))->find();
+		if ($benDan["printState"] != 7)//如果是未打印订单，则要修改“本单”
+		{
+			$benDan["printState"] = 7;
+			$benDan["printDate"] = date("Y-m-d")." 23:59:59";
+			$benDan["remark"] = "[已取消][未打印]";
+		}
+		else 
+			$benDan["remark"] = "[已取消]";
+		$tmpRe = $this->save($benDan);
+		if ( ($tmpRe === false) || ($tmpRe === NULL) )
+			return false;
 		
 		//删除往来账（即向往来账中添加一笔逆记录）
 		$financeRe = D("Finance")->where(array("byOrderID"=>$id))->find();
-		$tmpRemark = "本凭证因取消订单<a href=\"".U("Order/historyOver",array("no"=>$id))."\">".$id."</a>产生，用来抵消往来凭证".$financeRe["id"];
+		if ($financeRe === null)
+			return true;
+		elseif ($financeRe === false)
+			return false;
+		$tmpRemark = "本凭证因取消订单<a href=\"".U("Order/historyOver",array("no"=>$id))."\">[".$id."]</a>产生，用来抵消往来凭证[".$financeRe["id"]."]";
 		if ($financeRe["mode"] == 0)//原订单是应收款
-		{
-			$tmpMode = 1;
-			$money =  $financeRe["money"];//为下面改动账户余额做准备
-		}
-		elseif ($financeRe["mode"] == 1)//原订单是应付款
 		{
 			$tmpMode = 0;
 			$money =  0 - $financeRe["money"];//为下面改动账户余额做准备
 		}
-		if (!D("Finance")->newFinance($financeRe["userID"],$financeRe["money"],$tmpRemark,$tmpMode,session("userName"),date("Y-m-d H:i:s"),$id))
+		elseif ($financeRe["mode"] == 1)//原订单是应付款
+		{
+			$tmpMode = 1;
+			$money =  0 - $financeRe["money"];//为下面改动账户余额做准备
+		}
+		if (!D("Finance")->newFinance($financeRe["userID"],$money,$tmpRemark,$tmpMode,session("userName"),date("Y-m-d H:i:s"),$id))
 			return false;
-		
-		
 		
 		//删除账户余额的改动
 		D("User")->init($financeRe["userID"]);
 		$tmpCustom = null;
 		$tmpCustom["userName"] = $financeRe["userID"];
-		$tmpCustom["money"] = round(D("User")->getUserMoney() +$money,2);
+		if ($financeRe["mode"] == 0)//原订单是应收款
+		{
+			$tmpCustom["money"] = round(D("User")->getUserMoney() - $money,2);
+		}
+		elseif ($financeRe["mode"] == 1)//原订单是应付款
+		{
+			$tmpCustom["money"] = round(D("User")->getUserMoney() + $money,2);
+		}
 		$tmpCustomRe = D("User")->save($tmpCustom);
 		if ( ($tmpCustomRe === false) || ($tmpCustomRe === null) )
 			return false;

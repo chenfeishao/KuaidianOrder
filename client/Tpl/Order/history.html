@@ -15,6 +15,7 @@ function goDelete(url)
 
     <div class="container">
         <h1>
+        	<!-- <a href="{:U("Index/index")}"><i class="icon-grid-view fg-blue smaller"></i></a> -->
             <a href="{:U("Index/goBack")}"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	历史记录
            	<a class="place-right" href="{:U("Order/advancedQuery")}"><i class="icon-search fg-darker smaller"></i></a>
@@ -56,7 +57,7 @@ function goDelete(url)
 							    		<td class="right span1">{$vo.printState}</td>
 										<td style="width: 100px;">
 											<a href="{:U("Order/historyOver")}?no={$vo.id}" class="button success">查看</a>
-											<div onclick="goDelete('{:U("Order/deleteTmpOrder")}?no={$vo.id}&t={$vo.tkey}');" class="button warning">删除</div>
+											<div onclick="goDelete('{:U("Order/deleteTmpOrder")}?no={$vo.id}&t={$vo.tkey}');" class="button warning">取消</div>
 										</td>
 							    	</tr>
 						    	</volist>
@@ -93,12 +94,13 @@ function goDelete(url)
 							    	<tr>
 							    		<td style="width: 50px;">{$i+$offset}</td>
 							    		<td class="span2">{$vo.id}</td>
-							    		<td class="span2">{$vo.customName}</td>
+							    		<td class="span2">{$vo.remark}{$vo.customName}</td>
 							    		<td class="right span5">{$vo.goodsName}</td>
 							    		<td class="right span1">{$vo.createDate}</td>
 							    		<td class="right span1">{$vo.printDate}</td>
 										<td style="width: 70px;">
-											<a href="{:U("Order/historyOver")}?no={$vo.id}" class="button warning">查看</a>
+											<a href="{:U("Order/historyOver")}?no={$vo.id}" class="button success">查看</a>
+											<div onclick="goDelete('{:U("Order/deleteTmpOrder")}?no={$vo.id}&t={$vo.tkey}');" class="button warning">取消</div>
 										</td>
 							    	</tr>
 						    	</volist>

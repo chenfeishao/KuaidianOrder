@@ -34,6 +34,7 @@ function goDelete(url)
 
     <div class="container">
         <h1>
+        	<!-- <a href="<?php echo U("Index/index");?>"><i class="icon-grid-view fg-blue smaller"></i></a> -->
             <a href="<?php echo U("Index/goBack");?>"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
            	历史记录
            	<a class="place-right" href="<?php echo U("Order/advancedQuery");?>"><i class="icon-search fg-darker smaller"></i></a>
@@ -72,7 +73,7 @@ function goDelete(url)
 							    		<td class="right span1"><?php echo ($vo["printState"]); ?></td>
 										<td style="width: 100px;">
 											<a href="<?php echo U("Order/historyOver");?>?no=<?php echo ($vo["id"]); ?>" class="button success">查看</a>
-											<div onclick="goDelete('<?php echo U("Order/deleteTmpOrder");?>?no=<?php echo ($vo["id"]); ?>&t=<?php echo ($vo["tkey"]); ?>');" class="button warning">删除</div>
+											<div onclick="goDelete('<?php echo U("Order/deleteTmpOrder");?>?no=<?php echo ($vo["id"]); ?>&t=<?php echo ($vo["tkey"]); ?>');" class="button warning">取消</div>
 										</td>
 							    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 			                </tbody>
@@ -103,12 +104,13 @@ function goDelete(url)
 			                	<?php if(is_array($doneList)): $i = 0; $__LIST__ = $doneList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><tr>
 							    		<td style="width: 50px;"><?php echo ($i+$offset); ?></td>
 							    		<td class="span2"><?php echo ($vo["id"]); ?></td>
-							    		<td class="span2"><?php echo ($vo["customName"]); ?></td>
+							    		<td class="span2"><?php echo ($vo["remark"]); echo ($vo["customName"]); ?></td>
 							    		<td class="right span5"><?php echo ($vo["goodsName"]); ?></td>
 							    		<td class="right span1"><?php echo ($vo["createDate"]); ?></td>
 							    		<td class="right span1"><?php echo ($vo["printDate"]); ?></td>
 										<td style="width: 70px;">
-											<a href="<?php echo U("Order/historyOver");?>?no=<?php echo ($vo["id"]); ?>" class="button warning">查看</a>
+											<a href="<?php echo U("Order/historyOver");?>?no=<?php echo ($vo["id"]); ?>" class="button success">查看</a>
+											<div onclick="goDelete('<?php echo U("Order/deleteTmpOrder");?>?no=<?php echo ($vo["id"]); ?>&t=<?php echo ($vo["tkey"]); ?>');" class="button warning">取消</div>
 										</td>
 							    	</tr><?php endforeach; endif; else: echo "" ;endif; ?>
 			                </tbody>

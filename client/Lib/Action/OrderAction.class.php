@@ -821,6 +821,22 @@ class OrderAction extends myAction
     		$doneList[$i]["customName"] = $done[$i]["customName"];
     		$doneList[$i]["createDate"] = $done[$i]["createDate"];
     		$doneList[$i]["printDate"] = $done[$i]["printDate"];
+    		$doneList[$i]["remark"] = $done[$i]["remark"];
+    		
+    		//md5
+    		$doneList[$i]["tkey"] = md5(
+    				$done[$i]["xianJinShiShou"]
+    				.$done[$i]["yinHangShiShou"]
+    				.$done[$i]["save"]
+    				."100"//printState
+    				.$done[$i]["customName"]
+    				.$done[$i]["id"]
+    				.$done[$i]["goodsIDArray"]
+    				.$done[$i]["goodsNumArray"]
+    				.$done[$i]["goodsMoneyArray"]
+    				.$done[$i]["goodsSizeArray"]
+    				.date("Y-m-d H:i")
+    		);
     		
     		//得到商品名称
     		$tmp = $dbTmpOrder->getArrayWithSelf($done[$i]["goodsIDArray"]);
@@ -863,7 +879,7 @@ class OrderAction extends myAction
     	$totalNum = 0;
     	for ($i = 0; $i < count($tmp["id"]); $i++)
     	{
-    	$dbGoods->init($tmp["id"][$i]);
+    		$dbGoods->init($tmp["id"][$i]);
     			$orderInfo[$i]["goodsName"] = $dbGoods->getGoodsName();
     			$orderInfo[$i]["id"] = $tmp["id"]["$i"];
     			$orderInfo[$i]["num"] = $tmp["num"]["$i"];
@@ -887,6 +903,8 @@ class OrderAction extends myAction
     	$this->assign("list",$orderInfo);
     	$this->assign("totalJinE",round($totalJinE,2));
     	 
+    	
+    	
     	/*
     	* 付款信息
     	*/
@@ -907,6 +925,10 @@ class OrderAction extends myAction
     		$benCiQianFuKuanInfo = "<strong class='text-warning'>少  ".(0 - $benCiQianFuKuan)."</strong>";
     	$this->assign("benCiQianFuKuan",$benCiQianFuKuanInfo);
     						 
+    	//备注
+    	$this->assign("remark",$tmpOrderInfo["remark"]);
+    	
+    	
     	/*
     	* 用户信息
     	*/
