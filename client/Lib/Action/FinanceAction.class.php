@@ -199,7 +199,7 @@ class FinanceAction extends myAction
      */
     public function cost()
     {
-    	$this->assign("dateDisplay",$theDate);
+    	$this->assign("dateDisplay",date("Y-m-d H:i:s"));
     	$this->display();
     }
     
@@ -988,11 +988,64 @@ class FinanceAction extends myAction
     	
     	
     	/*
+    	 * 汇总表
+    	*/
+    	$objPHPExcel->createSheet();
+    	$objPHPExcel->getSheet(2)->setTitle($theDate."汇总表");
+    	$objActSheet = $objPHPExcel->setActiveSheetIndex(2);
+    	
+    	//制作表头
+    	foreach(range('A', 'Z') as $value)
+    	{
+    		$objActSheet->getColumnDimension($value)->setWidth(10);
+    		 
+    		$objActSheet->getStyle($value)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    		$objActSheet->getStyle($value)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    	}
+    	
+    	$objActSheet->getColumnDimension("E")->setWidth(13);
+    	$objActSheet->getColumnDimension("F")->setWidth(11);
+    	$objActSheet->getColumnDimension("G")->setWidth(13);
+    	 
+    	$objActSheet
+    	->setCellValue('A1', '序号')
+    	->setCellValue('B1', '商品编号')
+    	->setCellValue('C1', '商品名称')
+    	->setCellValue('D1', '规格')
+    	->setCellValue('E1', '销售总数量')
+    	->setCellValue('F1', '平均单价')
+    	->setCellValue('G1', '销售总金额');
+    	 
+    	$objActSheet->getStyle('A1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('B1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('C1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('D1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('E1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('F1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('G1')->getFont()->setSize(12)->setBold(true);
+    	
+    	$offset = 2;
+    	foreach($outputList as $key=>$value)
+    	{
+    		$objActSheet
+    		->setCellValue('A'.($offset+$key), $key+1)
+    		->setCellValue('B'.($offset+$key), $value["id"])
+    		->setCellValue('C'.($offset+$key), $value["name"])
+    		->setCellValue('D'.($offset+$key), $value["size"])
+    		->setCellValue('E'.($offset+$key), $value["num"])
+    		->setCellValue('F'.($offset+$key), $value["price"])
+    		->setCellValue('G'.($offset+$key), $value["totalPrice"]);
+    	}
+    	
+    	
+    	
+    	
+    	/*
     	 * 费用及营业额表
     	*/
     	$objPHPExcel->createSheet();
-    	$objPHPExcel->getSheet(2)->setTitle($theDate."费用及营业额报表");
-    	$objActSheet = $objPHPExcel->setActiveSheetIndex(2);
+    	$objPHPExcel->getSheet(3)->setTitle($theDate."费用及营业额报表");
+    	$objActSheet = $objPHPExcel->setActiveSheetIndex(3);
     	$baseOffset = 9;//费用表的表头所在的行号
     	 
     	//制作表头
@@ -1081,6 +1134,9 @@ class FinanceAction extends myAction
     	$objActSheet->getStyle('H1')->getFont()->setSize(12)->setBold(true);
     	$objActSheet->getStyle('I1')->getFont()->setSize(12)->setBold(true);
     	$objActSheet->getStyle('J1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('K1')->getFont()->setSize(12)->setBold(true);
+    	$objActSheet->getStyle('L1')->getFont()->setSize(12)->setBold(true);
+    	
     	//=================================制作表over====================================
     	
     	
